@@ -1,6 +1,6 @@
 # Innovation Hub Web
 
-El reparto de trabajo para Jean y Óscar está en [docs/REPARTO_JEAN_OSCAR.md](docs/REPARTO_JEAN_OSCAR.md).
+El reparto de trabajo para Jean y Óscar está en [docs/REPARTO_JEAN_OSCAR.md](docs/REPARTO_JEAN_OSCAR.md). También están en `docs/` el plan general de migración, la guía de paridad visual y la auditoría inicial de acceso a Roble.
 
 Cliente web de Innovation Hub (Grupo 10), construido con Next.js y TypeScript. La aplicación móvil permanece en el repositorio `Grupo-10-innovation-hub`; ambas usarán el mismo proyecto de Roble y el mismo `userId` para identificar a cada persona.
 
@@ -38,4 +38,4 @@ Bienvenida, Iniciar sesión, Registro y Explorar adaptan el prototipo web entreg
 - `docs/disenos-web.html`: prototipo visual de referencia; sus datos y botones son demostrativos.
 - `.github/workflows/ci.yml`: lint, prueba y compilación.
 
-El plan completo está en `MIGRACION_WEB.md` del repositorio móvil.
+El plan completo está en [docs/MIGRACION_WEB.md](docs/MIGRACION_WEB.md).
