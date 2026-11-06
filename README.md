@@ -24,7 +24,7 @@ npm run build
 
 ## Estado de la migración
 
-La primera pantalla Explorar y el adaptador de lectura de proyectos públicos están preparados. Inicio de sesión, perfil y escritura de datos aún no están conectados. El adaptador devuelve solo campos aptos para la tarjeta pública y solo acepta filas publicadas para «Toda la comunidad».
+La primera pantalla Explorar adapta el prototipo web entregado por el equipo (`docs/disenos-web.html`): barra lateral en escritorio, navegación inferior en móvil, buscador, pestañas, tarjetas y panel de filtros. En desarrollo muestra proyectos de ejemplo con una etiqueta visible para revisar el diseño. En producción no muestra esos ejemplos. Inicio de sesión, perfil, filtros de datos y escritura aún no están conectados. El adaptador devuelve solo campos aptos para la tarjeta pública y solo acepta filas publicadas para «Toda la comunidad».
 
 **Pendiente antes de datos reales:** resolver los permisos de lectura de Roble descritos en `ROBLE_PROJECTS_SETUP.md` del repositorio móvil. Filtrar filas en Next.js no evita que alguien consulte directamente la API de Roble. El acceso privado debe protegerse en el backend para los dos clientes.
 
@@ -33,6 +33,7 @@ La primera pantalla Explorar y el adaptador de lectura de proyectos públicos es
 - `src/app/`: rutas y presentación.
 - `src/lib/roble/`: adaptación de respuestas de Roble.
 - `tests/`: pruebas del contrato público.
+- `docs/disenos-web.html`: prototipo visual de referencia; sus datos y botones son demostrativos.
 - `.github/workflows/ci.yml`: lint, prueba y compilación.
 
 El plan completo está en `MIGRACION_WEB.md` del repositorio móvil.

@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Diseños web – Versión escritorio</title>
+<style>
+:root{
+  --primary:#4a2d9c; --primary-d:#3b2380; --navy:#14123a; --muted:#6b6a85;
+  --lav:#ebe6fb; --lav2:#ddd3fb; --bg:#f6f5fb; --line:#e4e2ee; --green:#2e7d4f; --green-bg:#dcefe2;
+  --gold:#d8c43a; --red:#d64545;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Roboto,"Segoe UI",system-ui,sans-serif;background:#1c1b2e;color:var(--navy);min-height:100vh}
+button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit}
+input,textarea{font-family:inherit}
+svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* ===== Visor ===== */
+.viewer-bar{position:sticky;top:0;z-index:50;background:#14132a;border-bottom:1px solid #2c2a4a;padding:12px 24px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.viewer-bar h1{font-size:15px;color:#fff;font-weight:600;margin-right:8px}
+.pills{display:flex;gap:6px;flex-wrap:wrap}
+.pill{padding:7px 12px;border-radius:999px;font-size:13px;color:#b9b7d6;background:#221f3f}
+.pill:hover{background:#2d2a52;color:#fff}
+.pill.on{background:#fff;color:var(--primary);font-weight:600}
+.stage{padding:28px 24px 60px;display:flex;justify-content:center}
+.browser{width:100%;max-width:1360px;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.45)}
+.chrome{height:40px;background:#eceaf4;display:flex;align-items:center;gap:8px;padding:0 14px}
+.dot{width:11px;height:11px;border-radius:50%;background:#c9c6dc}
+.url{flex:1;max-width:520px;margin:0 auto;background:#fff;border-radius:6px;height:26px;font-size:12px;color:var(--muted);display:flex;align-items:center;padding:0 12px}
+.screen{display:none;min-height:780px}
+.screen.on{display:block}
+.note{max-width:1360px;margin:14px auto 0;color:#9d9bc0;font-size:13px;text-align:center}
+
+/* ===== Botones / campos ===== */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:48px;padding:0 24px;border-radius:12px;font-weight:600;font-size:15px;transition:.15s}
+.btn.p{background:var(--primary);color:#fff;box-shadow:0 6px 16px rgba(74,45,156,.25)}
+.btn.p:hover{background:var(--primary-d)}
+.btn.o{border:1.5px solid var(--primary);color:var(--primary);background:#fff}
+.btn.o:hover{background:var(--lav)}
+.btn.s{background:var(--lav);color:var(--primary)}
+.btn.s:hover{background:var(--lav2)}
+.btn.sm{height:38px;padding:0 16px;font-size:14px;border-radius:10px}
+.btn.full{width:100%}
+label.f{display:block;font-size:14px;font-weight:600;margin:0 0 8px}
+.inp{width:100%;height:50px;border:1px solid var(--line);border-radius:12px;padding:0 16px;font-size:15px;background:#fff;color:var(--navy)}
+.inp.g{background:#f1f1f4;border-color:transparent}
+.inp:focus{outline:2px solid var(--primary);outline-offset:0}
+textarea.inp{height:130px;padding:14px 16px;resize:none}
+.field{margin-bottom:20px}
+.eyew{position:relative}
+.eyew svg{position:absolute;right:16px;top:15px;color:var(--muted)}
+.link{color:var(--primary);font-weight:500;font-size:14px}
+
+/* ===== Auth (split) ===== */
+.split{display:grid;grid-template-columns:1.05fr 1fr;min-height:780px}
+.split .art{background:linear-gradient(160deg,#f1ecff,#e3dbfb);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px;text-align:center;gap:28px}
+.split .art h2{font-size:30px;line-height:1.25;max-width:420px}
+.split .art p{color:var(--muted);max-width:380px;font-size:16px}
+.split .main{display:flex;align-items:center;justify-content:center;padding:48px;position:relative}
+.back{position:absolute;top:28px;left:28px;width:42px;height:42px;border-radius:50%;background:#f1f0f6;display:grid;place-items:center}
+.card-auth{width:100%;max-width:400px}
+.card-auth h1{font-size:30px;margin-bottom:8px}
+.card-auth .sub{color:var(--muted);margin-bottom:32px;font-size:16px}
+.stack{display:flex;flex-direction:column;gap:12px;margin-top:28px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px;color:var(--primary)}
+.brand .lg{width:34px;height:34px;border-radius:10px;background:var(--primary);display:grid;place-items:center;color:#fff}
+.shield{width:56px;height:56px;color:var(--primary);margin-bottom:12px}
+
+/* ===== App shell ===== */
+.app{display:grid;grid-template-columns:248px 1fr;min-height:780px;background:var(--bg)}
+.side{background:#fff;border-right:1px solid var(--line);padding:24px 16px;display:flex;flex-direction:column;gap:6px}
+.side .brand{padding:0 10px 24px}
+.nav{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;font-size:15px;color:var(--muted);font-weight:500;text-align:left;position:relative;width:100%}
+.nav:hover{background:#f3f1fa}
+.nav.on{background:var(--lav);color:var(--primary);font-weight:600}
+.nav .bdg{width:8px;height:8px;background:var(--primary);border-radius:50%;margin-left:auto}
+.side .sp{flex:1}
+.side .me{display:flex;align-items:center;gap:10px;padding:12px;border-top:1px solid var(--line);font-size:13px}
+.av{width:38px;height:38px;border-radius:50%;background:var(--lav);color:var(--primary);display:grid;place-items:center;font-weight:700;flex:none}
+.av.xl{width:96px;height:96px;font-size:38px}
+.me small{display:block;color:var(--muted);font-size:12px;word-break:break-all}
+.content{padding:28px 40px 48px;min-width:0}
+.topbar{display:flex;align-items:center;gap:16px;margin-bottom:28px}
+.topbar h1{font-size:28px;font-weight:600}
+.topbar .grow{flex:1}
+.search{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:12px;height:46px;padding:0 16px;color:var(--muted);width:360px}
+.search input{border:0;outline:0;flex:1;font-size:15px;background:none}
+.icbtn{width:46px;height:46px;border-radius:50%;background:var(--lav);color:var(--primary);display:grid;place-items:center}
+.icbtn:hover{background:var(--lav2)}
+.tabs{display:inline-flex;background:#ecebf4;border-radius:12px;padding:4px;gap:4px;margin-bottom:24px}
+.tabs button{padding:10px 26px;border-radius:9px;font-weight:600;font-size:14px;color:var(--muted)}
+.tabs button.on{background:var(--primary);color:#fff}
+.sub{color:var(--muted)}
+
+/* ===== Explorar ===== */
+.explore{display:grid;grid-template-columns:1fr;gap:24px}
+.explore.withf{grid-template-columns:1fr 300px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:18px}
+.create{grid-column:1/-1;display:flex;align-items:center;gap:18px;padding:22px 24px;border:1.5px dashed #b9a6ee;background:var(--lav2);border-radius:16px;text-align:left;width:100%}
+.create .pl{width:48px;height:48px;border-radius:50%;background:#8059d8;color:#fff;display:grid;place-items:center;flex:none}
+.create b{display:block;font-size:17px;margin-bottom:2px}
+.create span{font-size:14px;color:#3b3560}
+.pc{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:14px;transition:.15s;cursor:pointer;text-align:left}
+.pc:hover{box-shadow:0 10px 28px rgba(40,30,90,.1);transform:translateY(-2px)}
+.pc .row{display:flex;gap:14px;align-items:center}
+.leaf{width:52px;height:52px;border-radius:14px;background:var(--green-bg);color:var(--green);display:grid;place-items:center;flex:none}
+.leaf.lg{width:84px;height:84px;border-radius:20px}
+.leaf.lg svg{width:38px;height:38px}
+.pc h3{font-size:18px;font-weight:600}
+.pc p{font-size:14px;color:#4b4a63}
+.meta{display:flex;gap:8px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:6px;background:#f1f0f6;border-radius:999px;padding:6px 12px;font-size:13px;color:#4b4a63}
+.chip.pub{background:var(--lav);color:var(--primary);font-weight:500}
+.chip.ok{background:#e3f4ea;color:#1d7a41;font-weight:600}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px}
+.panel h4{font-size:15px;margin:0 0 12px;display:flex;justify-content:space-between;align-items:center}
+.panel h4 svg{color:var(--primary)}
+.opts{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+.opt{border:1px solid var(--line);border-radius:999px;padding:7px 14px;font-size:13px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.opt:before{content:"";width:6px;height:6px;border-radius:50%;background:#aaa}
+.opt.on{background:var(--lav);border:1.5px solid var(--primary);color:var(--primary);font-weight:600}
+.hide{display:none!important}
+
+/* ===== Mis proyectos ===== */
+.stats3{display:flex;justify-content:space-between;border-top:1px solid var(--line);padding-top:14px;text-align:center}
+.stats3 div{flex:1}
+.stats3 b{display:block;font-size:20px}
+.stats3 span{font-size:13px;color:var(--muted)}
+.pc .edit{margin-left:auto;color:var(--primary)}
+
+/* ===== Detalle proyecto ===== */
+.crumb{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:14px;margin-bottom:16px}
+.banner{background:var(--green-bg);border-radius:20px;height:150px;display:grid;place-items:center;color:var(--green);margin-bottom:-42px}
+.banner svg{width:52px;height:52px}
+.phead{display:flex;align-items:flex-end;gap:20px;padding:0 28px;margin-bottom:20px;position:relative}
+.phead .leaf{border:5px solid var(--bg);background:#cfe7d8}
+.phead h1{font-size:30px;margin-bottom:8px}
+.phead .acts{margin-left:auto;display:flex;gap:10px;align-items:center}
+.ptabs{display:flex;gap:6px;border-bottom:1px solid var(--line);margin-bottom:24px}
+.ptabs button{padding:14px 22px;font-weight:500;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-1px}
+.ptabs button.on{color:var(--primary);border-color:var(--primary);font-weight:700}
+.pdet{display:grid;grid-template-columns:1fr 340px;gap:24px;align-items:start}
+.tp{display:none}.tp.on{display:block}
+.task{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;display:grid;grid-template-columns:48px 1fr auto;gap:16px;align-items:center;margin-bottom:14px}
+.task .ic{width:48px;height:48px;border-radius:12px;background:var(--lav);color:var(--primary);display:grid;place-items:center}
+.task h3{font-size:17px;margin-bottom:4px}
+.task p{font-size:14px;color:#4b4a63;margin-bottom:6px}
+.task .d{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.task .r{display:flex;flex-direction:column;align-items:flex-end;gap:12px}
+.rolegrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.role{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:14px}
+.role .t{display:flex;gap:12px;align-items:center}
+.role .ic{width:44px;height:44px;border-radius:12px;background:var(--lav);color:var(--primary);display:grid;place-items:center}
+.role h3{font-size:16px}.role small{color:var(--muted);font-size:13px}
+
+/* ===== Notificaciones ===== */
+.nlist{max-width:860px}
+.ntabs{display:flex;gap:12px;margin-bottom:20px}
+.ntabs button{flex:1;max-width:240px;height:44px;border-radius:12px;background:#ecebf4;color:var(--muted);font-weight:600}
+.ntabs button.on{background:var(--lav);color:var(--primary)}
+.nt{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px 20px;display:flex;gap:16px;align-items:center;margin-bottom:12px}
+.nt.unread{background:#f6f3ff;border-color:#ddd3fb}
+.nt .ic{width:46px;height:46px;border-radius:12px;background:var(--lav);color:var(--primary);display:grid;place-items:center;flex:none}
+.nt h3{font-size:16px;margin-bottom:3px}
+.nt p{font-size:14px;color:#4b4a63}
+.nt small{font-size:12px;color:var(--muted)}
+.nt .u{margin-left:auto;width:10px;height:10px;border-radius:50%;background:var(--primary);flex:none}
+.nt .btns{margin-left:auto;display:flex;gap:8px}
+
+/* ===== Perfil ===== */
+.pgrid{display:grid;grid-template-columns:380px 1fr;gap:24px;align-items:start}
+.prof{text-align:center;padding:32px 24px}
+.prof .av{margin:0 auto 16px}
+.prof h2{font-size:22px}
+.prof p{color:var(--muted);margin:4px 0 18px}
+.kpis{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:16px;background:#fff;overflow:hidden}
+.kpi{padding:22px;display:flex;gap:14px;align-items:flex-start;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.kpi:nth-child(2n){border-right:0}.kpi:nth-last-child(-n+2){border-bottom:0}
+.kpi svg{color:var(--primary);width:26px;height:26px}
+.kpi b{font-size:26px;display:block;line-height:1.1}
+.kpi span{font-size:13px;color:var(--muted)}
+.menu{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;margin-top:20px}
+.menu button{display:flex;align-items:center;gap:16px;width:100%;padding:17px 22px;border-bottom:1px solid #f0eff6;font-size:15px;text-align:left}
+.menu button:last-child{border-bottom:0}
+.menu button:hover{background:#faf9fe}
+.menu svg:first-child{color:var(--primary)}
+.menu svg:last-child{margin-left:auto;color:var(--muted)}
+.sec{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.sec h3{font-size:18px}.sec a{color:#b8a62d;font-weight:600;font-size:14px;cursor:pointer}
+
+/* ===== Trayectoria ===== */
+.bar{display:grid;grid-template-columns:170px 1fr 52px;gap:16px;align-items:center;margin-bottom:18px;font-size:15px}
+.bar .tr{height:10px;border-radius:99px;background:#e4e0f3;overflow:hidden}
+.bar .tr i{display:block;height:100%;background:var(--primary);border-radius:99px}
+.bar span:last-child{text-align:right;color:var(--muted)}
+
+/* ===== Wizard ===== */
+.wiz{display:grid;grid-template-columns:340px 1fr;min-height:780px;background:#fff}
+.wl{background:#faf9fe;border-right:1px solid var(--line);padding:36px 32px}
+.wl h1{font-size:26px;margin:22px 0 6px}
+.wl>p{color:var(--muted);margin-bottom:32px;font-size:15px}
+.st{display:flex;gap:14px;position:relative;padding-bottom:30px;cursor:pointer}
+.st:not(:last-child):before{content:"";position:absolute;left:17px;top:38px;bottom:2px;width:2px;background:#dcd8ec}
+.st .n{width:36px;height:36px;border-radius:50%;background:#dcd8ec;color:#fff;display:grid;place-items:center;font-weight:700;flex:none;z-index:1}
+.st.on .n,.st.done .n{background:var(--primary)}
+.st b{display:block;font-size:15px}.st small{color:var(--muted);font-size:13px}
+.wr{padding:36px 56px;display:flex;flex-direction:column}
+.prog{display:flex;align-items:center;gap:16px;margin-bottom:32px}
+.prog .tr{flex:1;height:8px;background:#ecebf4;border-radius:99px;overflow:hidden}
+.prog .tr i{display:block;height:100%;background:var(--primary);transition:.3s}
+.prog span{font-size:13px;font-weight:700;color:var(--muted)}
+.wr h2{font-size:28px;margin-bottom:6px}
+.wr .lead{color:var(--muted);margin-bottom:28px}
+.wbody{flex:1;max-width:760px}
+.wfoot{display:flex;justify-content:space-between;max-width:760px;padding-top:24px;gap:12px}
+.wp{display:none}.wp.on{display:block}
+.upl{width:120px;height:120px;border-radius:24px;background:var(--green-bg);color:var(--green);display:grid;place-items:center;position:relative;margin-bottom:24px}
+.upl svg.i{width:38px;height:38px}
+.upl .cam{position:absolute;right:-8px;bottom:-8px;width:36px;height:36px;border-radius:50%;background:var(--primary);color:#fff;display:grid;place-items:center}
+.upl .cam svg{width:18px;height:18px}
+.cnt{display:flex;align-items:center;gap:12px}
+.cnt button{width:34px;height:34px;border-radius:50%;background:#f1f0f6;font-size:18px;font-weight:600}
+.cnt b{min-width:18px;text-align:center}
+.role.row{flex-direction:row;align-items:center;justify-content:space-between}
+.radio{display:flex;align-items:center;gap:16px;border:1.5px solid var(--line);border-radius:16px;padding:20px 22px;margin-bottom:14px;cursor:pointer;width:100%;text-align:left;background:#fff}
+.radio.on{background:#e6e1f2;border-color:var(--primary)}
+.radio .ic{color:var(--primary)}
+.radio b{display:block;font-size:16px}.radio small{color:var(--muted);font-size:13px}
+.radio .rb{margin-left:auto;width:24px;height:24px;border-radius:50%;border:1.5px solid #cfcbe3;display:grid;place-items:center;color:#fff;flex:none}
+.radio.on .rb{background:var(--primary);border-color:var(--primary)}
+.sum{background:#faf9fe;border:1px solid var(--line);border-radius:16px;padding:22px;display:grid;gap:14px}
+.sum div{display:flex;justify-content:space-between;font-size:15px;border-bottom:1px solid #eeecf6;padding-bottom:12px}
+.sum div:last-child{border:0;padding:0}
+.sum span{color:var(--muted)}
+.tcard{border:1px solid var(--line);border-radius:16px;padding:20px;margin-top:22px}
+.tcard .hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.addt{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:14px;padding:16px;border:1.5px dashed #a893e6;background:#e7e2f4;border-radius:14px;color:var(--primary);font-weight:600;width:100%}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.hero{max-width:300px;margin:0 auto}
+
+@media (max-width:1000px){.split,.app,.wiz,.pgrid,.pdet{grid-template-columns:1fr}.side{display:none}}
+</style>
+</head>
+<body>
+
+<!-- Iconos -->
+<svg width="0" height="0" style="position:absolute">
+<defs>
+<symbol id="compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></symbol>
+<symbol id="folder" viewBox="0 0 24 24"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><circle cx="12" cy="13" r="2"/><path d="M8.5 17c.6-1.4 1.8-2 3.5-2s2.900.6 3.500 2"/></symbol>
+<symbol id="folder0" viewBox="0 0 24 24"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></symbol>
+<symbol id="bell" viewBox="0 0 24 24"><path d="M6 9a6 6 0 1112 0c0 6 2 7 2 7H4s2-1 2-7"/><path d="M10 20a2 2 0 004 0"/></symbol>
+<symbol id="user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.500-6 8-6s8 2 8 6z"/></symbol>
+<symbol id="plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="sliders" viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></symbol>
+<symbol id="logout" viewBox="0 0 24 24"><path d="M10 4H6a2 2 0 00-2 2v12a2 2 0 002 2h4M15 8l4 4-4 4M19 12H9"/></symbol>
+<symbol id="search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></symbol>
+<symbol id="leaf" viewBox="0 0 24 24"><path d="M5 19c0-9 5-14 15-14 0 10-5 15-14 15"/><path d="M5 19c3-5 6-8 10-10"/></symbol>
+<symbol id="people" viewBox="0 0 24 24"><circle cx="12" cy="8" r="2.500"/><circle cx="5" cy="10" r="2"/><circle cx="19" cy="10" r="2"/><path d="M7 19c0-3 2-5 5-5s5 2 5 5zM1.500 17c0-2 1.500-3.500 3.500-3.500M22.500 17c0-2-1.500-3.500-3.500-3.500"/></symbol>
+<symbol id="cal" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M8 3v4M16 3v4"/></symbol>
+<symbol id="check" viewBox="0 0 24 24"><path d="M5 12.500l4.500 4.500L19 7"/></symbol>
+<symbol id="checkc" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.500l3 3 5-6"/></symbol>
+<symbol id="lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3M12 15v2"/></symbol>
+<symbol id="eye" viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+<symbol id="edit" viewBox="0 0 24 24"><path d="M4 20l1-4L16 5l3 3L8 19zM14 7l3 3"/></symbol>
+<symbol id="bulb" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 00-3.500 10.900c.7.600 1 1.300 1 2.100h5c0-.8.300-1.500 1-2.100A6 6 0 0012 3z"/></symbol>
+<symbol id="hist" viewBox="0 0 24 24"><path d="M3 12a9 9 0 109-9 9 9 0 00-7 3.500M3 4v4h4M12 8v4l3 2"/></symbol>
+<symbol id="chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></symbol>
+<symbol id="gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.400 15a1.700 1.700 0 00.3 1.800l.1.100a2 2 0 11-2.800 2.800l-.1-.1a1.700 1.700 0 00-1.800-.3 1.700 1.700 0 00-1 1.500V21a2 2 0 01-4 0v-.1a1.700 1.700 0 00-1.100-1.500 1.700 1.700 0 00-1.800.3l-.1.100a2 2 0 11-2.800-2.800l.1-.1a1.700 1.700 0 00.3-1.800 1.700 1.700 0 00-1.500-1H3a2 2 0 010-4h.1a1.700 1.700 0 001.500-1.100 1.700 1.700 0 00-.3-1.800l-.1-.1a2 2 0 112.800-2.800l.1.100a1.700 1.700 0 001.800.3H9a1.700 1.700 0 001-1.500V3a2 2 0 014 0v.1a1.700 1.700 0 001 1.500 1.700 1.700 0 001.800-.3l.1-.1a2 2 0 112.800 2.800l-.1.100a1.700 1.700 0 00-.3 1.800V9a1.700 1.700 0 001.500 1H21a2 2 0 010 4h-.1a1.700 1.700 0 00-1.500 1z"/></symbol>
+<symbol id="inbox" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 14h5l1 2h6l1-2h5"/></symbol>
+<symbol id="code" viewBox="0 0 24 24"><path d="M9 7l-5 5 5 5M15 7l5 5-5 5"/></symbol>
+<symbol id="palette" viewBox="0 0 24 24"><path d="M12 3a9 9 0 100 18c1.500 0 2-1 1.500-2s0-2 1.500-2h2a3 3 0 003-3c0-6-4-11-8-11z"/><circle cx="8" cy="11" r="1"/><circle cx="12" cy="7.500" r="1"/><circle cx="16" cy="11" r="1"/></symbol>
+<symbol id="mag" viewBox="0 0 24 24"><circle cx="10" cy="10" r="6"/><path d="M20 20l-5.500-5.500"/></symbol>
+<symbol id="mega" viewBox="0 0 24 24"><path d="M4 10v4h3l8 4V6L7 10zM18 9a4 4 0 010 6"/></symbol>
+<symbol id="dots" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.200"/><circle cx="12" cy="12" r="1.200"/><circle cx="19" cy="12" r="1.200"/></symbol>
+<symbol id="vdots" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.300"/><circle cx="12" cy="12" r="1.300"/><circle cx="12" cy="19" r="1.300"/></symbol>
+<symbol id="back" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+<symbol id="chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+<symbol id="close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+<symbol id="trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></symbol>
+<symbol id="clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+<symbol id="doc" viewBox="0 0 24 24"><path d="M7 3h7l4 4v14H7z"/><path d="M10 12h5M10 16h5"/></symbol>
+<symbol id="useradd" viewBox="0 0 24 24"><circle cx="10" cy="8" r="4"/><path d="M2 21c0-4 3.500-6 8-6M18 8v6M15 11h6"/></symbol>
+<symbol id="badge" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><circle cx="12" cy="10" r="2.500"/><path d="M8 17c.5-2 2-3 4-3s3.500 1 4 3"/></symbol>
+<symbol id="chart" viewBox="0 0 24 24"><path d="M6 20V10M12 20V4M18 20v-7"/></symbol>
+<symbol id="cam" viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.500"/></symbol>
+<symbol id="shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.500 8-8 9-4.500-1-8-4-8-9V6z"/><path d="M8.500 12l2.500 2.500 4.500-5"/></symbol>
+</defs>
+</svg>
+
+<div class="viewer-bar">
+  <h1>Versión web · Diseños</h1>
+  <div class="pills" id="pills"></div>
+</div>
+
+<div class="stage">
+ <div style="width:100%;max-width:1360px">
+  <div class="browser">
+    <div class="chrome"><span class="dot"></span><span class="dot"></span><span class="dot"></span><div class="url" id="url">tuapp.com/</div></div>
+
+    <!-- 1 BIENVENIDA -->
+    <section class="screen" id="bienvenida" data-title="Bienvenida" data-url="tuapp.com/">
+      <div class="split">
+        <div class="art">
+          <div class="brand"><span class="lg"><svg class="i"><use href="#leaf"/></svg></span>Tu App</div>
+          <svg class="hero" id="mascot1" viewBox="0 0 320 300" width="340"></svg>
+          <h2>Únete a proyectos que transforman ideas en impacto.</h2>
+        </div>
+        <div class="main">
+          <div class="card-auth" style="text-align:center">
+            <h1>¡Bienvenido!</h1>
+            <p class="sub">Elige cómo quieres empezar.</p>
+            <div class="stack">
+              <button class="btn p full" onclick="go('login')">Iniciar sesión</button>
+              <button class="btn o full" onclick="go('registro')">¿No tienes cuenta? Regístrate</button>
+              <button class="btn s full" onclick="go('explorar')">Continuar como visitante</button>
+              <span class="sub" style="font-size:13px">Explorar proyectos sin iniciar sesión</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2 LOGIN -->
+    <section class="screen" id="login" data-title="Iniciar sesión" data-url="tuapp.com/login">
+      <div class="split">
+        <div class="art">
+          <div class="brand"><span class="lg"><svg class="i"><use href="#leaf"/></svg></span>Tu App</div>
+          <svg class="hero" id="mascot2" viewBox="0 0 320 300" width="340"></svg>
+          <h2>Tu próxima gran idea empieza aquí.</h2>
+        </div>
+        <div class="main">
+          <button class="back" onclick="go('bienvenida')"><svg class="i"><use href="#back"/></svg></button>
+          <div class="card-auth">
+            <h1>Iniciar sesión</h1>
+            <p class="sub">Ingresa tus datos para continuar.</p>
+            <div class="field"><label class="f">Correo electrónico</label><input class="inp" placeholder="ejemplo@correo.com"></div>
+            <div class="field eyew"><label class="f">Contraseña</label><input class="inp" type="password" value="••••••••••••"><svg class="i"><use href="#eye"/></svg></div>
+            <p style="text-align:center;margin:-4px 0 28px"><a class="link">¿Olvidaste tu contraseña?</a></p>
+            <button class="btn p full" onclick="go('explorar')">Ingresar</button>
+            <p class="sub" style="text-align:center;margin-top:20px;font-size:14px">¿No tienes cuenta? <a class="link" style="cursor:pointer" onclick="go('registro')">Regístrate</a></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3 REGISTRO -->
+    <section class="screen" id="registro" data-title="Alta institucional" data-url="tuapp.com/registro">
+      <div class="split">
+        <div class="art">
+          <div class="brand"><span class="lg"><svg class="i"><use href="#leaf"/></svg></span>Tu App</div>
+          <svg class="hero" id="mascot3" viewBox="0 0 320 300" width="340"></svg>
+          <h2>Crea tu cuenta institucional y empieza a colaborar.</h2>
+        </div>
+        <div class="main">
+          <button class="back" onclick="go('bienvenida')"><svg class="i"><use href="#back"/></svg></button>
+          <div class="card-auth">
+            <svg class="i shield"><use href="#shield"/></svg>
+            <h1 style="font-size:26px">Crea tu cuenta institucional</h1>
+            <p class="sub" style="margin-bottom:24px">Alta institucional</p>
+            <div class="field"><input class="inp g" placeholder="Nombre completo"></div>
+            <div class="field"><input class="inp g" placeholder="Correo institucional"></div>
+            <div class="field"><input class="inp g" placeholder="Carrera o programa (opcional)"></div>
+            <div class="field eyew"><input class="inp g" type="password" placeholder="Contraseña"><svg class="i"><use href="#eye"/></svg></div>
+            <button class="btn p full" onclick="go('explorar')">Registrarme</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4 EXPLORAR -->
+    <section class="screen" id="explorar" data-title="Explorar" data-url="tuapp.com/explorar">
+      <div class="app">
+        <aside class="side" data-nav="explorar"></aside>
+        <main class="content">
+          <div class="topbar">
+            <div><h1>Explorar proyectos</h1><p class="sub">Descubre ideas y únete a las que te inspiren</p></div>
+            <div class="grow"></div>
+            <div class="search"><svg class="i"><use href="#search"/></svg><input placeholder="Buscar proyectos…"></div>
+            <button class="icbtn" title="Filtros" onclick="document.getElementById('ex').classList.toggle('withf')"><svg class="i"><use href="#sliders"/></svg></button>
+            <button class="icbtn" title="Cerrar sesión" onclick="go('bienvenida')"><svg class="i"><use href="#logout"/></svg></button>
+          </div>
+          <div class="tabs" id="extabs"><button class="on" data-f="all">Todos</button><button data-f="fol">Seguidos</button></div>
+          <div class="explore withf" id="ex">
+            <div class="grid">
+              <button class="create" onclick="go('crear')"><span class="pl"><svg class="i"><use href="#plus"/></svg></span><span><b>Crea otra idea</b><span>Comparte tu idea y encuentra personas que quieren construirla contigo</span></span></button>
+              <div class="pc" data-fol="1" onclick="go('detalle')"><div class="row"><span class="leaf"><svg class="i"><use href="#leaf"/></svg></span><div><h3>fecha larga</h3></div></div><p>Sin descripción todavía.</p></div>
+              <div class="pc" data-fol="0" onclick="go('detalle')"><div class="row"><span class="leaf"><svg class="i"><use href="#leaf"/></svg></span><div><h3>proyecto 1</h3></div></div><p>prueba 1</p></div>
+              <div class="pc" data-fol="0" onclick="go('detalle')"><div class="row"><span class="leaf"><svg class="i"><use href="#leaf"/></svg></span><div><h3>fecha</h3></div></div><p>Sin descripción todavía.</p></div>
+              <div class="pc" data-fol="0" onclick="go('detalle')"><div class="row"><span class="leaf"><svg class="i"><use href="#leaf"/></svg></span><div><h3>QuizPro</h3></div></div><p>Aplicación web para generar quizes con IA</p><div class="meta"><span class="chip"><svg class="i" style="width:15px;height:15px"><use href="#people"/></svg>5 miembros</span></div></div>
+            </div>
+            <aside class="panel" id="fpanel">
+              <h4 style="font-size:18px;margin-bottom:20px">Filtros <button onclick="document.getElementById('ex').classList.remove('withf')"><svg class="i"><use href="#close"/></svg></button></h4>
+              <h4>Fecha de creación <svg class="i"><use href="#cal"/></svg></h4>
+              <div class="opts"><span class="opt on">Todos</span><span class="opt">Últimos 7 días</span><span class="opt">Últimos 30 días</span><span class="opt">Más antiguos</span></div>
+              <h4>Disponibilidad de tareas <svg class="i"><use href="#checkc"/></svg></h4>
+              <div class="opts"><span class="opt on">Todas</span><span class="opt">Con tareas disponibles</span><span class="opt">Sin tareas disponibles</span></div>
+              <h4>Disponibilidad de miembros <svg class="i"><use href="#people"/></svg></h4>
+              <div class="opts"><span class="opt on">Todos</span><span class="opt">Con miembros disponibles</span><span class="opt">Sin miembros disponibles</span></div>
+              <h4>Rol del proyecto <svg class="i"><use href="#badge"/></svg></h4>
+              <div class="opts"><span class="opt on">Todos</span><span class="opt">Diseñador</span><span class="opt">Desarrollador</span><span class="opt">Líder</span><span class="opt">Comunicador</span><span class="opt">Otros</span></div>
+              <button class="btn p full sm" style="margin-bottom:10px">Aplicar filtros</button>
+              <button class="btn s full sm">Limpiar filtros</button>
+            </aside>
+          </div>
+        </main>
+      </div>
+    </section>
+
+    <!-- 5 MIS PROYECTOS -->
+    <section class="screen" id="proyectos" data-title="Mis proyectos" data-url="tuapp.com/mis-proyectos">
+      <div class="app">
+        <aside class="side" data-nav="proyectos"></aside>
+        <main class="content">
+          <div class="topbar"><div><h1>Mis proyectos</h1><p class="sub">Proyectos que creas</p></div><div class="grow"></div><button class="btn p sm" onclick="go('crear')"><svg class="i"><use href="#plus"/></svg>Nuevo proyecto</button></div>
+          <div class="tabs"><button class="on">Mis proyectos (2)</button><button>Mis borradores (0)</button></div>
+          <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(380px,1fr))">
+            <div class="pc" onclick="go('detalle')"><div class="row"><span class="leaf"><svg class="i"><use href="#leaf"/></svg></span><h3>fecha larga</h3><button class="edit" onclick="event.stopPropagation()"><svg class="i"><use href="#edit"/></svg></button></div><div class="meta"><span class="chip pub">Publicado</span></div><div class="stats3"><div><b>0</b><span>Miembros</span></div><div><b>1</b><span>Tareas</span></div><div><b>2</b><span>Solicitudes</span></div></div></div>
+            <div class="pc" onclick="go('detalle')"><div class="row"><span class="leaf"><svg class="i"><use href="#leaf"/></svg></span><div><h3>Fecha vencida</h3><p>Bla bla</p></div><button class="edit" onclick="event.stopPropagation()"><svg class="i"><use href="#edit"/></svg></button></div><div class="meta"><span class="chip pub">Publicado</span></div><div class="stats3"><div><b>0</b><span>Miembros</span></div><div><b>1</b><span>Tareas</span></div><div><b>1</b><span>Solicitudes</span></div></div></div>
+          </div>
+        </main>
+      </div>
+    </section>
+
+    <!-- 6 DETALLE -->
+    <section class="screen" id="detalle" data-title="Detalle de proyecto" data-url="tuapp.com/proyectos/quizpro">
+      <div class="app">
+        <aside class="side" data-nav="explorar"></aside>
+        <main class="content">
+          <div class="crumb"><button class="icbtn" style="width:38px;height:38px;background:#fff;border:1px solid var(--line)" onclick="go('explorar')"><svg class="i"><use href="#back"/></svg></button> Explorar proyectos / <b style="color:var(--navy)">QuizPro</b></div>
+          <div class="banner"><svg class="i"><use href="#leaf"/></svg></div>
+          <div class="phead">
+            <span class="leaf lg"><svg class="i"><use href="#leaf"/></svg></span>
+            <div><h1>QuizPro</h1><span class="chip"><svg class="i" style="width:15px;height:15px"><use href="#people"/></svg>5 miembros</span></div>
+            <div class="acts"><button class="icbtn" title="Seguir"><svg class="i"><use href="#bell"/></svg></button><button class="icbtn" style="background:#fff;border:1px solid var(--line)"><svg class="i"><use href="#vdots"/></svg></button></div>
+          </div>
+          <div class="ptabs" id="ptabs"><button class="on" data-t="d">Descripción</button><button data-t="t">Tareas</button><button data-t="m">Miembros</button><button data-t="a">Actividad</button></div>
+          <div class="pdet">
+            <div>
+              <div class="tp on" id="tp-d"><div class="panel"><p style="font-size:17px;line-height:1.6">Aplicación web para generar quises con IA</p></div></div>
+              <div class="tp" id="tp-t">
+                <h3 style="margin-bottom:14px;font-size:18px">Tareas del proyecto</h3>
+                <div class="task"><span class="ic"><svg class="i"><use href="#doc"/></svg></span><div><h3>Arquitectura del software</h3><p>Planear y coordinar el equipo en el desarrollo del programa.</p><span class="d"><svg class="i" style="width:15px;height:15px"><use href="#cal"/></svg>Postulaciones hasta: 15 nov 2026 · Se necesita 1</span></div><div class="r"><span class="chip ok">Disponible</span><button class="btn p sm">Postularme a una tarea</button></div></div>
+                <div class="task"><span class="ic"><svg class="i"><use href="#doc"/></svg></span><div><h3>Frontend</h3><p>Desarrollar los diseños innovadores propuestos por el equipo de diseño</p><span class="d"><svg class="i" style="width:15px;height:15px"><use href="#cal"/></svg>Postulaciones hasta: 1 dic 2026 · Se necesita 1</span></div><div class="r"><span class="chip ok">Disponible</span><button class="btn p sm">Postularme a una tarea</button></div></div>
+              </div>
+              <div class="tp" id="tp-m">
+                <h3 style="margin-bottom:14px;font-size:18px">Buscamos</h3>
+                <div class="rolegrid">
+                  <div class="role"><div class="t"><span class="ic"><svg class="i"><use href="#user"/></svg></span><div><h3>Testing</h3><small>1 miembro</small></div></div><span class="sub" style="font-size:13px;display:flex;gap:6px;align-items:center"><svg class="i" style="width:15px;height:15px"><use href="#cal"/></svg>Convocatoria abierta hasta: 11 dic 2026</span><button class="btn p sm">Unirme al equipo</button></div>
+                  <div class="role"><div class="t"><span class="ic"><svg class="i"><use href="#user"/></svg></span><div><h3>Diseñador/a</h3><small>1 miembro</small></div></div><span class="sub" style="font-size:13px;display:flex;gap:6px;align-items:center"><svg class="i" style="width:15px;height:15px"><use href="#cal"/></svg>Convocatoria abierta hasta: 11 dic 2026</span><button class="btn p sm">Unirme al equipo</button></div>
+                  <div class="role"><div class="t"><span class="ic"><svg class="i"><use href="#user"/></svg></span><div><h3>Desarrollador/a</h3><small>2 miembros</small></div></div><span class="sub" style="font-size:13px;display:flex;gap:6px;align-items:center"><svg class="i" style="width:15px;height:15px"><use href="#cal"/></svg>Convocatoria abierta hasta: 11 dic 2026</span><button class="btn p sm">Unirme al equipo</button></div>
+                  <div class="role"><div class="t"><span class="ic"><svg class="i"><use href="#user"/></svg></span><div><h3>Líder de proyecto</h3><small>1 miembro</small></div></div><span class="sub" style="font-size:13px;display:flex;gap:6px;align-items:center"><svg class="i" style="width:15px;height:15px"><use href="#cal"/></svg>Convocatoria abierta hasta: 11 dic 2026</span><button class="btn p sm">Unirme al equipo</button></div>
+                </div>
+              </div>
+              <div class="tp" id="tp-a"><div class="panel sub" style="text-align:center;padding:48px">Aún no hay actividad reciente en este proyecto.</div></div>
+            </div>
+            <aside style="display:flex;flex-direction:column;gap:16px;position:sticky;top:12px">
+              <div class="panel"><h4 style="font-size:17px">Información rápida</h4><div class="meta"><span class="chip"><svg class="i" style="width:15px;height:15px"><use href="#people"/></svg>5 miembros necesarios</span><span class="chip"><svg class="i" style="width:15px;height:15px"><use href="#clock"/></svg>Meses</span></div></div>
+              <button class="btn p full"><svg class="i"><use href="#chat"/></svg>Comentar</button>
+            </aside>
+          </div>
+        </main>
+      </div>
+    </section>
+
+    <!-- 7 NOTIFICACIONES -->
+    <section class="screen" id="notificaciones" data-title="Notificaciones" data-url="tuapp.com/notificaciones">
+      <div class="app">
+        <aside class="side" data-nav="notificaciones"></aside>
+        <main class="content">
+          <div class="topbar"><h1>Notificaciones</h1><div class="grow"></div><div class="search"><svg class="i"><use href="#search"/></svg><input placeholder="Buscar notificaciones…"></div><button class="icbtn"><svg class="i"><use href="#inbox"/></svg></button><button class="icbtn"><svg class="i"><use href="#sliders"/></svg></button></div>
+          <div class="nlist">
+            <div class="ntabs"><button class="on">Todas</button><button>No leídas</button></div>
+            <div class="nt unread"><span class="ic"><svg class="i"><use href="#useradd"/></svg></span><div><h3>Solicitud para unirse al equipo</h3><p>andra carolina quintero leon quiere unirse a tu proyecto fecha larga.</p><small>Hace 4 días</small></div><span class="u"></span></div>
+            <div class="nt unread"><span class="ic"><svg class="i"><use href="#chat"/></svg></span><div><h3>Comentario en tu proyecto</h3><p>Oscar Gil comentó en Fecha vencida.</p><small>Hace 4 días</small></div><span class="u"></span></div>
+            <div class="nt unread"><span class="ic"><svg class="i"><use href="#useradd"/></svg></span><div><h3>Solicitud para unirse al equipo</h3><p>Oscar Gil quiere unirse a tu proyecto fecha larga.</p><small>Hace 4 días</small></div><span class="u"></span></div>
+            <div class="nt unread"><span class="ic"><svg class="i"><use href="#badge"/></svg></span><div><h3>Nueva postulación a tarea</h3><p>andra carolina quintero leon se postuló a la tarea Ordenador de tareas.</p><small>Hace 13 días</small></div><span class="u"></span></div>
+            <div class="nt unread"><span class="ic"><svg class="i"><use href="#checkc"/></svg></span><div><h3>Solicitud aceptada</h3><p>Ya eres parte del proyecto fecha como Desarrollador/a.</p><small>Hace 13 días</small></div><span class="u"></span></div>
+          </div>
+        </main>
+      </div>
+    </section>
+
+    <!-- 8 PERFIL -->
+    <section class="screen" id="perfil" data-title="Perfil" data-url="tuapp.com/perfil">
+      <div class="app">
+        <aside class="side" data-nav="perfil"></aside>
+        <main class="content">
+          <div class="topbar"><h1>Perfil</h1></div>
+          <div class="pgrid">
+            <div>
+              <div class="panel prof"><div class="av xl">U</div><h2>Usuario Prueba</h2><p>Creador/a de proyectos</p><button class="btn o sm"><svg class="i" style="color:var(--gold);width:17px;height:17px"><use href="#edit"/></svg>Editar perfil</button></div>
+              <div class="menu">
+                <button onclick="go('proyectos')"><svg class="i"><use href="#folder0"/></svg>Mis proyectos<svg class="i"><use href="#chev"/></svg></button>
+                <button><svg class="i"><use href="#bulb"/></svg>Mis ideas<svg class="i"><use href="#chev"/></svg></button>
+                <button><svg class="i"><use href="#hist"/></svg>Historial de actividad<svg class="i"><use href="#chev"/></svg></button>
+                <button><svg class="i"><use href="#chat"/></svg>Mensajes<svg class="i"><use href="#chev"/></svg></button>
+                <button><svg class="i"><use href="#gear"/></svg>Configuración<svg class="i"><use href="#chev"/></svg></button>
+                <button onclick="go('notificaciones')"><svg class="i"><use href="#bell"/></svg>Notificaciones<svg class="i"><use href="#chev"/></svg></button>
+              </div>
+            </div>
+            <div>
+              <div class="sec"><h3>Resumen de trayectoria</h3><a onclick="go('trayectoria')">Ver más ›</a></div>
+              <div class="kpis">
+                <div class="kpi"><svg class="i"><use href="#folder0"/></svg><div><b>2</b><span>Proyectos completados</span></div></div>
+                <div class="kpi"><svg class="i"><use href="#checkc"/></svg><div><b>0</b><span>Tareas completadas</span></div></div>
+                <div class="kpi"><svg class="i"><use href="#people"/></svg><div><b>2</b><span>Participaciones en proyectos</span></div></div>
+                <div class="kpi"><svg class="i"><use href="#chart"/></svg><div><b>Medio</b><span>Compromiso en la plataforma</span></div></div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </section>
+
+    <!-- 9 TRAYECTORIA -->
+    <section class="screen" id="trayectoria" data-title="Trayectoria" data-url="tuapp.com/perfil/trayectoria">
+      <div class="app">
+        <aside class="side" data-nav="perfil"></aside>
+        <main class="content">
+          <div class="crumb"><button class="icbtn" style="width:38px;height:38px;background:#fff;border:1px solid var(--line)" onclick="go('perfil')"><svg class="i"><use href="#back"/></svg></button><h1 style="font-size:28px;color:var(--navy);font-weight:600">Resumen de trayectoria</h1></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start;max-width:1100px">
+            <div class="kpis">
+              <div class="kpi"><svg class="i"><use href="#folder0"/></svg><div><b>2</b><span>Proyectos completados</span></div></div>
+              <div class="kpi"><svg class="i"><use href="#checkc"/></svg><div><b>0</b><span>Tareas completadas</span></div></div>
+              <div class="kpi"><svg class="i"><use href="#people"/></svg><div><b>2</b><span>Participaciones en proyectos</span></div></div>
+              <div class="kpi"><svg class="i"><use href="#chart"/></svg><div><b>Medio</b><span>Compromiso en la plataforma</span></div></div>
+            </div>
+            <div class="panel">
+              <h4 style="font-size:18px;margin-bottom:22px">Tu desempeño</h4>
+              <div class="bar"><span>Colaboración</span><div class="tr"><i style="width:100%"></i></div><span>100%</span></div>
+              <div class="bar"><span>Cumplimiento</span><div class="tr"><i style="width:0%"></i></div><span>0%</span></div>
+              <div class="bar"><span>Calidad de aportes</span><div class="tr"><i style="width:67%"></i></div><span>67%</span></div>
+              <p class="sub" style="font-size:13px;line-height:1.6;margin-top:24px">Colaboración: participaciones, proyectos creados y comentarios. Cumplimiento: tareas asignadas que se completaron. Calidad de aportes: solicitudes tuyas que fueron aceptadas.</p>
+            </div>
+          </div>
+        </main>
+      </div>
+    </section>
+
+    <!-- 10 CREAR PROYECTO -->
+    <section class="screen" id="crear" data-title="Crear proyecto" data-url="tuapp.com/proyectos/nuevo">
+      <div class="wiz">
+        <div class="wl">
+          <button class="icbtn" style="width:40px;height:40px;background:#fff;border:1px solid var(--line)" onclick="go('explorar')"><svg class="i"><use href="#back"/></svg></button>
+          <h1>Crear proyecto</h1><p>Convierte tu idea en un proyecto real</p>
+          <div id="steps">
+            <div class="st on" data-s="0"><span class="n">1</span><div><b>Información básica</b><small>Nombre y descripción</small></div></div>
+            <div class="st" data-s="1"><span class="n">2</span><div><b>Equipo necesario</b><small>¿Qué miembros necesitas?</small></div></div>
+            <div class="st" data-s="2"><span class="n">3</span><div><b>Tiempo estimado</b><small>Define la duración del proyecto</small></div></div>
+            <div class="st" data-s="3"><span class="n">4</span><div><b>Audiencia</b><small>¿Quién puede ver tu proyecto?</small></div></div>
+            <div class="st" data-s="4"><span class="n">5</span><div><b>Revisar y publicar</b><small>Confirma la información</small></div></div>
+          </div>
+        </div>
+        <div class="wr">
+          <div class="prog"><div class="tr"><i id="pbar" style="width:25%"></i></div><span id="pnum">1/4</span></div>
+          <div class="wbody">
+            <div class="wp on">
+              <h2>Información básica</h2><p class="lead">Cuéntanos sobre tu proyecto</p>
+              <div class="upl"><svg class="i"><use href="#leaf"/></svg><span class="cam"><svg class="i"><use href="#cam"/></svg></span></div>
+              <div class="field"><label class="f">Nombre del proyecto</label><input class="inp g" value="QuizPro"></div>
+              <div class="field"><label class="f">Descripción</label><textarea class="inp g">Generación de quizzez</textarea></div>
+            </div>
+            <div class="wp">
+              <h2>Equipo necesario</h2><p class="lead">¿Qué miembros necesitas?</p>
+              <div class="rolegrid" id="roles"></div>
+              <div class="field" style="margin-top:22px;max-width:360px"><label class="f">Fecha límite para postularse al equipo</label><div class="inp" style="display:flex;align-items:center;gap:10px"><svg class="i" style="color:var(--primary)"><use href="#cal"/></svg>24 dic 2026</div></div>
+              <div class="tcard">
+                <div class="hd"><h3 style="font-size:18px">Información de tareas</h3></div><p class="sub" style="font-size:14px;margin-bottom:14px">Configura las tareas de tu proyecto</p>
+                <div style="border:1px solid var(--line);border-radius:14px;padding:18px">
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><b>Diseñar interfaz</b><span class="chip ok">Disponible</span></div>
+                  <div class="field"><label class="f" style="font-weight:500">Descripción</label><input class="inp g" placeholder="Describe qué hay que hacer"></div>
+                  <div class="two"><div><label class="f" style="font-weight:500">Personas necesarias</label><div class="cnt"><button>−</button><b>1</b><button>+</button></div></div><div><label class="f" style="font-weight:500">Disponible hasta</label><div style="display:flex;gap:10px;align-items:center"><div class="inp" style="display:flex;align-items:center;gap:10px"><svg class="i" style="color:var(--primary)"><use href="#cal"/></svg>27 nov 2026</div><svg class="i" style="color:var(--red)"><use href="#trash"/></svg></div></div></div>
+                </div>
+                <button class="addt"><svg class="i"><use href="#plus"/></svg>Agregar otra tarea</button>
+                <p class="sub" style="font-size:13px;text-align:center;margin-top:8px">Configura hasta cuándo pueden postularse.</p>
+              </div>
+            </div>
+            <div class="wp">
+              <h2>Tiempo estimado</h2><p class="lead">¿Cuánto tiempo crees que tomará?</p>
+              <div id="tiempo">
+                <button class="radio"><svg class="i ic"><use href="#cal"/></svg><div><b>Días</b><small>1 - 30 días</small></div><span class="rb"><svg class="i" style="width:14px;height:14px"><use href="#check"/></svg></span></button>
+                <button class="radio on"><svg class="i ic"><use href="#cal"/></svg><div><b>Semanas</b><small>1 - 12 semanas</small></div><span class="rb"><svg class="i" style="width:14px;height:14px"><use href="#check"/></svg></span></button>
+                <button class="radio"><svg class="i ic"><use href="#cal"/></svg><div><b>Meses</b><small>1 - 12 meses</small></div><span class="rb"><svg class="i" style="width:14px;height:14px"><use href="#check"/></svg></span></button>
+                <button class="radio"><svg class="i ic"><use href="#clock"/></svg><div><b>Años</b><small>Más de 1 año</small></div><span class="rb"><svg class="i" style="width:14px;height:14px"><use href="#check"/></svg></span></button>
+              </div>
+            </div>
+            <div class="wp">
+              <h2>Audiencia</h2><p class="lead">¿Quién puede ver tu proyecto?</p>
+              <div id="aud">
+                <button class="radio"><svg class="i ic"><use href="#lock"/></svg><div><b>Solo yo</b><small>Tu proyecto será privado, solo tú podrás verlo</small></div><span class="rb"><svg class="i" style="width:14px;height:14px"><use href="#check"/></svg></span></button>
+                <button class="radio on"><svg class="i ic"><use href="#people"/></svg><div><b>Toda la comunidad</b><small>Tu proyecto será visible para todos los usuarios</small></div><span class="rb"><svg class="i" style="width:14px;height:14px"><use href="#check"/></svg></span></button>
+              </div>
+            </div>
+            <div class="wp">
+              <h2>Revisar y publicar</h2><p class="lead">Confirma la información</p>
+              <div class="sum">
+                <div><span>Nombre</span><b>QuizPro</b></div>
+                <div><span>Descripción</span><b>Generación de quizzez</b></div>
+                <div><span>Equipo</span><b>1 Desarrollador · 1 Investigador · 1 Líder</b></div>
+                <div><span>Postulaciones hasta</span><b>24 dic 2026</b></div>
+                <div><span>Tiempo estimado</span><b>Semanas</b></div>
+                <div><span>Audiencia</span><b>Toda la comunidad</b></div>
+              </div>
+            </div>
+          </div>
+          <div class="wfoot"><button class="btn o" id="wprev" style="min-width:160px">Anterior</button><button class="btn p" id="wnext" style="min-width:200px">Siguiente</button></div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <p class="note">Pantallas adaptadas de móvil a escritorio (≥1200 px). Los botones y pestañas son interactivos para recorrer el flujo.</p>
+ </div>
+</div>
+
+<script>
+const screens=[...document.querySelectorAll('.screen')];
+const pills=document.getElementById('pills');
+screens.forEach(s=>{const b=document.createElement('button');b.className='pill';b.textContent=s.dataset.title;b.dataset.id=s.id;b.onclick=()=>go(s.id);pills.appendChild(b)});
+function go(id){
+  screens.forEach(s=>s.classList.toggle('on',s.id===id));
+  document.querySelectorAll('.pill').forEach(p=>p.classList.toggle('on',p.dataset.id===id));
+  document.getElementById('url').textContent=document.getElementById(id).dataset.url;
+  history.replaceState(null,'','#'+id); window.scrollTo({top:0});
+}
+/* Sidebar */
+const items=[['explorar','compass','Explorar'],['proyectos','folder','Mis proyectos'],['notificaciones','bell','Notificaciones'],['perfil','user','Perfil']];
+document.querySelectorAll('.side').forEach(el=>{
+  const cur=el.dataset.nav;
+  el.innerHTML=`<div class="brand"><span class="lg"><svg class="i"><use href="#leaf"/></svg></span>Tu App</div>`+
+  items.map(([id,ic,t])=>`<button class="nav ${id===cur?'on':''}" onclick="go('${id}')"><svg class="i"><use href="#${ic}"/></svg>${t}${id==='notificaciones'?'<span class="bdg"></span>':''}</button>`).join('')+
+  `<div class="sp"></div><div class="me"><span class="av">U</span><div><b>Usuario Prueba</b><small>prueba@uninorte.edu.co</small></div></div>`;
+});
+/* Mascota (ilustración simplificada) */
+const mascot=(acc)=>`<g fill="#fff" stroke="#14123a" stroke-width="2.200" stroke-linecap="round" stroke-linejoin="round">
+<path d="M70 120c-8-24 8-50 34-52 8-22 40-30 58-14 20-10 46 4 48 28 22 8 30 36 14 54 10 22-6 46-30 48-8 22-40 28-58 12-20 10-48-4-48-28-24-8-30-34-18-48z"/>
+<path d="M130 232v46l-18 14h-8M170 232v46l16 14h12" fill="none"/>
+<path d="M62 192c-18 4-34-2-40-14" fill="none"/>
+<path d="M232 140c14-4 22-8 34-12" fill="none"/></g>
+<circle cx="130" cy="148" r="5" fill="#14123a"/><circle cx="170" cy="148" r="5" fill="#14123a"/>
+<path d="M138 166c8 7 16 7 24 0" fill="none" stroke="#14123a" stroke-width="2.500" stroke-linecap="round"/>${acc}`;
+const lockAcc=`<g stroke="#14123a" stroke-width="2.200" fill="#fff"><rect x="262" y="104" width="38" height="46" rx="8"/><path d="M270 104v-10a11 11 0 0122 0v10" fill="none"/><path d="M281 120v10" stroke-width="4"/></g>`;
+const bulbAcc=`<g stroke="#14123a" stroke-width="2" fill="#fff"><circle cx="276" cy="112" r="14"/><path d="M270 128h12M272 133h8" fill="none"/><path d="M276 84v-6M258 90l-4-4M294 90l4-4" fill="none"/></g>`;
+document.getElementById('mascot1').innerHTML=mascot(lockAcc);
+document.getElementById('mascot2').innerHTML=mascot(lockAcc);
+document.getElementById('mascot3').innerHTML=mascot(bulbAcc);
+/* Explorar tabs */
+document.querySelectorAll('#extabs button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('#extabs button').forEach(x=>x.classList.toggle('on',x===b));
+  document.querySelectorAll('#explorar .pc').forEach(c=>c.classList.toggle('hide',b.dataset.f==='fol'&&c.dataset.fol!=='1'));
+});
+/* Detalle tabs */
+document.querySelectorAll('#ptabs button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('#ptabs button').forEach(x=>x.classList.toggle('on',x===b));
+  document.querySelectorAll('.tp').forEach(t=>t.classList.toggle('on',t.id==='tp-'+b.dataset.t));
+});
+/* Notificaciones tabs */
+document.querySelectorAll('.ntabs button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.ntabs button').forEach(x=>x.classList.toggle('on',x===b));
+});
+/* Roles */
+const roles=[['code','Desarrollador/a','Se encarga del desarrollo técnico',1],['palette','Diseñador/a','Apoya con la parte visual',0],['mag','Investigador/a','Busca y analiza información',1],['mega','Comunicador/a','Maneja la difusión del proyecto',0],['user','Líder de proyecto','Coordina el equipo',1],['dots','Otro','Especifica el rol',0]];
+document.getElementById('roles').innerHTML=roles.map(([ic,t,d,n])=>`<div class="role row"><div class="t"><span class="ic"><svg class="i"><use href="#${ic}"/></svg></span><div><h3>${t}</h3><small>${d}</small></div></div><div class="cnt"><button data-d="-1">−</button><b>${n}</b><button data-d="1">+</button></div></div>`).join('');
+document.querySelectorAll('#roles .cnt button').forEach(b=>b.onclick=()=>{const v=b.parentNode.querySelector('b');v.textContent=Math.max(0,+v.textContent+ +b.dataset.d)});
+/* Radios */
+['tiempo','aud'].forEach(id=>document.querySelectorAll('#'+id+' .radio').forEach(r=>r.onclick=()=>document.querySelectorAll('#'+id+' .radio').forEach(x=>x.classList.toggle('on',x===r))));
+/* Wizard */
+let step=0;const wps=[...document.querySelectorAll('.wp')],sts=[...document.querySelectorAll('.st')];
+function wz(n){step=Math.max(0,Math.min(4,n));
+  wps.forEach((p,i)=>p.classList.toggle('on',i===step));
+  sts.forEach((s,i)=>{s.classList.toggle('on',i===step);s.classList.toggle('done',i<step)});
+  document.getElementById('pbar').style.width=((Math.min(step,3)+1)/4*100)+'%';
+  document.getElementById('pnum').textContent=(Math.min(step,3)+1)+'/4';
+  document.getElementById('wnext').textContent=step===4?'Publicar proyecto':'Siguiente';
+  document.getElementById('wprev').style.visibility=step===0?'hidden':'visible';
+}
+document.getElementById('wnext').onclick=()=>step===4?go('proyectos'):wz(step+1);
+document.getElementById('wprev').onclick=()=>wz(step-1);
+sts.forEach(s=>s.onclick=()=>wz(+s.dataset.s));
+wz(0);
+go((location.hash||'#bienvenida').slice(1)||'bienvenida');
+</script>
+</body>
+</html>
