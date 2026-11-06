@@ -1,5 +1,7 @@
 # Innovation Hub Web
 
+El reparto de trabajo para Jean y Óscar está en [docs/REPARTO_JEAN_OSCAR.md](docs/REPARTO_JEAN_OSCAR.md).
+
 Cliente web de Innovation Hub (Grupo 10), construido con Next.js y TypeScript. La aplicación móvil permanece en el repositorio `Grupo-10-innovation-hub`; ambas usarán el mismo proyecto de Roble y el mismo `userId` para identificar a cada persona.
 
 ## Desarrollo local
@@ -24,7 +26,7 @@ npm run build
 
 ## Estado de la migración
 
-La primera pantalla Explorar adapta el prototipo web entregado por el equipo (`docs/disenos-web.html`): barra lateral en escritorio, navegación inferior en móvil, buscador, pestañas, tarjetas y panel de filtros. En desarrollo muestra proyectos de ejemplo con una etiqueta visible para revisar el diseño. En producción no muestra esos ejemplos. Inicio de sesión, perfil, filtros de datos y escritura aún no están conectados. El adaptador devuelve solo campos aptos para la tarjeta pública y solo acepta filas publicadas para «Toda la comunidad».
+Bienvenida, Iniciar sesión, Registro y Explorar adaptan el prototipo web entregado por el equipo (`docs/disenos-web.html`). Explorar tiene barra lateral en escritorio, navegación inferior en móvil, buscador, pestañas, tarjetas y panel de filtros. En desarrollo muestra proyectos de ejemplo con una etiqueta visible para revisar el diseño; en producción no muestra esos ejemplos. Los formularios de acceso y registro están deshabilitados hasta validar Roble. Perfil, filtros de datos y escritura aún no están conectados. El adaptador de proyectos devuelve solo campos aptos para la tarjeta pública y solo acepta filas publicadas para «Toda la comunidad».
 
 **Pendiente antes de datos reales:** resolver los permisos de lectura de Roble descritos en `ROBLE_PROJECTS_SETUP.md` del repositorio móvil. Filtrar filas en Next.js no evita que alguien consulte directamente la API de Roble. El acceso privado debe protegerse en el backend para los dos clientes.
 
