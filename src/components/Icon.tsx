@@ -1,4 +1,4 @@
-type IconName = "compass" | "folder" | "bell" | "user" | "plus" | "search" | "sliders" | "leaf" | "close";
+type IconName = "compass" | "folder" | "bell" | "user" | "plus" | "search" | "sliders" | "leaf" | "close" | "back" | "shield";
 
 export function Icon({ name, size = 20 }: { name: IconName; size?: number }) {
   const content = {
@@ -11,6 +11,8 @@ export function Icon({ name, size = 20 }: { name: IconName; size?: number }) {
     sliders: <><path d="M4 7h10m4 0h2M4 17h2m4 0h10" /><circle cx="16" cy="7" r="2" /><circle cx="8" cy="17" r="2" /></>,
     leaf: <><path d="M5 19c0-9 5-14 15-14 0 10-5 15-14 15" /><path d="M5 19c3-5 6-8 10-10" /></>,
     close: <path d="m6 6 12 12M18 6 6 18" />,
+    back: <path d="m14 5-7 7 7 7M7 12h13" />,
+    shield: <><path d="M12 2 4 5v6c0 5 3.2 9 8 11 4.8-2 8-6 8-11V5z" /><path d="m8.5 12 2.5 2.5 4.5-5" /></>,
   }[name];
 
   return <svg aria-hidden="true" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">{content}</svg>;

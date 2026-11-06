@@ -66,7 +66,7 @@ export function ExploreView({ result }: { result: ExploreResult }) {
         <div className="brand"><span className="brand-icon"><Icon name="leaf" /></span><span>Innovation Hub</span></div>
         <nav>
           {nav.map((item) => item.active
-            ? <Link className="nav-item selected" href="/" aria-current="page" key={item.label}><Icon name={item.icon} />{item.label}</Link>
+            ? <Link className="nav-item selected" href="/explorar" aria-current="page" key={item.label}><Icon name={item.icon} />{item.label}</Link>
             : <span className="nav-item unavailable" aria-disabled="true" key={item.label}><Icon name={item.icon} />{item.label}</span>)}
         </nav>
         <div className="side-spacer" />
@@ -115,7 +115,7 @@ export function ExploreView({ result }: { result: ExploreResult }) {
 
       <nav className="bottom-nav" aria-label="Navegación móvil">
         {nav.map((item) => item.active
-          ? <Link className="bottom-item selected" href="/" aria-current="page" aria-label={item.label} key={item.label}><Icon name={item.icon} size={26} /></Link>
+          ? <Link className="bottom-item selected" href="/explorar" aria-current="page" aria-label={item.label} key={item.label}><Icon name={item.icon} size={26} /></Link>
           : <span className="bottom-item unavailable" aria-label={`${item.label}, próximamente`} key={item.label}><Icon name={item.icon} size={26} /></span>)}
       </nav>
     </div>
