@@ -1,4 +1,4 @@
-type IconName = "compass" | "folder" | "bell" | "user" | "plus" | "search" | "sliders" | "leaf" | "close" | "back" | "shield";
+type IconName = "compass" | "folder" | "bell" | "user" | "plus" | "search" | "sliders" | "leaf" | "close" | "back" | "shield" | "chat" | "check" | "clock" | "gear" | "edit";
 
 export function Icon({ name, size = 20 }: { name: IconName; size?: number }) {
   const content = {
@@ -13,6 +13,11 @@ export function Icon({ name, size = 20 }: { name: IconName; size?: number }) {
     close: <path d="m6 6 12 12M18 6 6 18" />,
     back: <path d="m14 5-7 7 7 7M7 12h13" />,
     shield: <><path d="M12 2 4 5v6c0 5 3.2 9 8 11 4.8-2 8-6 8-11V5z" /><path d="m8.5 12 2.5 2.5 4.5-5" /></>,
+    chat: <path d="M4 5h16v12H8l-4 3z" />,
+    check: <path d="m5 12 4 4L19 6" />,
+    clock: <><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>,
+    gear: <><circle cx="12" cy="12" r="3" /><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M19 5l-1.5 1.5m-11 11L5 19" /></>,
+    edit: <><path d="M4 20h4l11-11-4-4L4 16z" /><path d="m13 7 4 4" /></>,
   }[name];
 
   return <svg aria-hidden="true" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">{content}</svg>;

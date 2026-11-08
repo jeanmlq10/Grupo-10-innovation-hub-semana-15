@@ -1,5 +1,7 @@
 # Reparto de la migración web entre Jean y Óscar
 
+> Plan histórico. Óscar informó que no podrá participar por problemas de conexión; Jean asumió la implementación web completa. El estado vigente está en `docs/ESTADO_PROYECTATE.md`.
+
 ## Alcance y punto de partida
 
 Flutter sigue funcionando en `Grupo-10-innovation-hub`. La web Next.js se desarrolla en este repositorio y usa **las mismas cuentas y los mismos datos de Roble**, identificados por `userId`. La referencia visual es `docs/disenos-web.html`; las pantallas y reglas móviles completan los flujos que el prototipo no muestra.

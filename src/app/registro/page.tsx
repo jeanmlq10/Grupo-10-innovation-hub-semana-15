@@ -3,7 +3,7 @@ import { Icon } from "@/components/Icon";
 
 export default function RegisterPage() {
   return (
-    <AuthShell headline="Crea tu cuenta institucional y empieza a colaborar." backHref="/" accessory="bulb">
+    <AuthShell headline="Crea tu cuenta institucional y empieza a colaborar." backHref="/">
       <div className="auth-shield"><Icon name="shield" size={50} /></div>
       <h1 className="auth-registration-title">Crea tu cuenta institucional</h1>
       <p className="auth-subtitle">Alta institucional</p>

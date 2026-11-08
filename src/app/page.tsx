@@ -1,17 +1,22 @@
 import Link from "next/link";
-import { AuthShell } from "@/components/AuthShell";
+import { BrandLogo } from "@/components/BrandLogo";
 
 export default function WelcomePage() {
   return (
-    <AuthShell headline="Únete a proyectos que transforman ideas en impacto." centered>
+    <main className="welcome-page">
+      <div className="welcome-inner">
       <h1>¡Bienvenido!</h1>
-      <p className="auth-subtitle">Elige cómo quieres empezar.</p>
+      <BrandLogo className="welcome-logo" />
+      <div className="welcome-actions">
+      <p>Únete a proyectos que transforman<br className="welcome-break" /> ideas en impacto.</p>
       <div className="auth-stack">
         <Link className="auth-button primary" href="/login">Iniciar sesión</Link>
         <Link className="auth-button outline" href="/registro">¿No tienes cuenta? Regístrate</Link>
         <Link className="auth-button soft" href="/explorar">Continuar como visitante</Link>
         <span className="auth-hint">Explorar proyectos sin iniciar sesión</span>
       </div>
-    </AuthShell>
+      </div>
+      </div>
+    </main>
   );
 }

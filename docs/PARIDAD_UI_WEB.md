@@ -1,5 +1,7 @@
 # Paridad visual y de experiencia: móvil → web
 
+**Actualización de identidad:** los tokens de color descritos más abajo documentan la versión anterior. La identidad vigente de Proyéctate y las dos capturas nuevas se registran en `docs/ESTADO_PROYECTATE.md`; sus logos y colores prevalecen para la implementación actual.
+
 Referencias: `docs/disenos-web.html` entregado por el equipo (prototipo web de diez pantallas) para escritorio; implementación Flutter de `semana_final/f_clean_template-main/` y capturas en `semana 6-Home/` del repositorio hermano `Grupo-10-innovation-hub` para móvil. Los datos y las acciones del HTML son ilustrativos, no contratos funcionales.
 
 ## Regla de diseño
