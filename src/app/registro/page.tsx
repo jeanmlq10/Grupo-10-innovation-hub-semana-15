@@ -1,5 +1,6 @@
 import { AuthShell } from "@/components/AuthShell";
 import { Icon } from "@/components/Icon";
+import Link from "next/link";
 
 export default function RegisterPage() {
   return (
@@ -15,6 +16,7 @@ export default function RegisterPage() {
         <button className="auth-button primary" type="button" disabled>Registrarme</button>
         <p className="auth-pending" role="status">El registro web estará disponible cuando validemos la conexión y los permisos de Roble.</p>
       </form>
+      <p className="auth-switch"><Link href="/verificar-correo">Ver vista de verificación (demo)</Link></p>
     </AuthShell>
   );
 }

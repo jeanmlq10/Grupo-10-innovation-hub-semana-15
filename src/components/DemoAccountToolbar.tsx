@@ -2,6 +2,7 @@
 
 import { actors, setActor, type DemoActor } from "@/lib/projects/demo-domain";
 import { resetDemoWorkspace, updateDemoWorkspace, useDemoWorkspace } from "@/lib/projects/demo-browser";
+import { resetDemoProfiles } from "@/lib/profile/demo-browser";
 
 export function DemoAccountToolbar({ compact = false }: { compact?: boolean }) {
   const state = useDemoWorkspace();
@@ -11,6 +12,6 @@ export function DemoAccountToolbar({ compact = false }: { compact?: boolean }) {
     <label><span className="sr-only">Cuenta de prueba</span><select value={state.actor} onChange={event => updateDemoWorkspace(current => setActor(current, event.target.value as DemoActor))}>
       {Object.entries(actors).map(([id, label]) => <option value={id} key={id}>{label}</option>)}
     </select></label>
-    <button type="button" onClick={() => { if (window.confirm("¿Restablecer los proyectos de demostración de este navegador?")) resetDemoWorkspace(); }}>Reiniciar</button>
+    <button type="button" onClick={() => { if (window.confirm("¿Restablecer proyectos y perfiles de demostración de este navegador?")) { resetDemoWorkspace(); resetDemoProfiles(); } }}>Reiniciar datos</button>
   </div>;
 }

@@ -15,7 +15,7 @@ export default function LoginPage() {
           <label htmlFor="password">Contraseña</label>
           <input id="password" type="password" autoComplete="current-password" placeholder="Tu contraseña" />
         </div>
-        <p className="auth-forgot">Recuperación de contraseña disponible próximamente</p>
+        <p className="auth-forgot"><Link href="/recuperar-contrasena">¿Olvidaste tu contraseña?</Link></p>
         <button className="auth-button primary" type="button" disabled>Ingresar</button>
         <p className="auth-pending" role="status">El acceso web estará disponible cuando validemos la conexión y los permisos de Roble.</p>
       </form>
