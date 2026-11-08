@@ -4,23 +4,26 @@ import { useState } from "react";
 import Link from "next/link";
 import { AppShell } from "@/components/AppShell";
 import { Icon } from "@/components/Icon";
-import { demoProjects } from "@/lib/demo/data";
+import { publicProjects } from "@/lib/projects/demo-domain";
+import { useDemoWorkspace } from "@/lib/projects/demo-browser";
 import type { PublishedProject } from "@/lib/roble/projects";
 
 type ExploreResult = { status: "pending" } | { status: "error" } | { status: "loaded"; projects: PublishedProject[] };
-type CardProject = { id: string; name: string; description: string; categories: string[]; members: number };
+type CardProject = { id: string; name: string; description: string; categories: string[]; members: number; followed: boolean };
 
 export function ExploreView({ result }: { result: ExploreResult }) {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("Todas");
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [tab, setTab] = useState<"todos" | "seguidos">("todos");
+  const state = useDemoWorkspace();
   const isDemo = result.status === "pending" && process.env.NODE_ENV === "development";
   const projects: CardProject[] = result.status === "loaded"
-    ? result.projects.map(project => ({ id: project.id, name: project.name, description: project.description, categories: project.categories, members: project.acceptedMembersCount }))
-    : isDemo ? demoProjects : [];
+    ? result.projects.map(project => ({ id: project.id, name: project.name, description: project.description, categories: project.categories, members: project.acceptedMembersCount, followed: false }))
+    : isDemo ? publicProjects(state).map(project => ({ id: project.id, name: project.name, description: project.description, categories: project.categories, members: project.members.length, followed: project.followers.includes(state.actor) })) : [];
   const categories = ["Todas", ...Array.from(new Set(projects.flatMap(project => project.categories)))];
   const visible = projects.filter(project =>
-    (category === "Todas" || project.categories.includes(category)) &&
+    (tab === "todos" || project.followed) && (category === "Todas" || project.categories.includes(category)) &&
     `${project.name} ${project.description} ${project.categories.join(" ")}`.toLocaleLowerCase("es").includes(query.trim().toLocaleLowerCase("es"))
   );
 
@@ -31,8 +34,8 @@ export function ExploreView({ result }: { result: ExploreResult }) {
       <label className="search-box"><Icon name="search" /><span className="sr-only">Buscar proyectos</span><input value={query} onChange={event => setQuery(event.target.value)} placeholder="Buscar proyectos…" /></label>
       <button className="icon-button" type="button" aria-label="Mostrar filtros" aria-expanded={filtersOpen} onClick={() => setFiltersOpen(!filtersOpen)}><Icon name="sliders" /></button>
     </header>
-    <div className="explore-tabs"><span className="active">Todos</span><span aria-disabled="true" title="Disponible al conectar la cuenta">Seguidos</span></div>
-    {isDemo && <p className="preview-note" role="status">Vista de diseño · Proyectos de ejemplo. Roble todavía no está conectado.</p>}
+    <div className="explore-tabs" role="tablist" aria-label="Proyectos"><button type="button" role="tab" aria-selected={tab === "todos"} className={tab === "todos" ? "active" : ""} onClick={() => setTab("todos")}>Todos</button><button type="button" role="tab" aria-selected={tab === "seguidos"} className={tab === "seguidos" ? "active" : ""} disabled={!isDemo} onClick={() => setTab("seguidos")}>Seguidos</button></div>
+    {isDemo && <p className="preview-note" role="status">Demostración local · Busca, sigue y crea proyectos de prueba en este navegador. Roble todavía no está conectado.</p>}
     <div className={filtersOpen ? "explore-layout with-filters" : "explore-layout"}>
       <div className="project-grid">
         <Link href="/proyectos/nuevo" className="create-card"><span className="create-plus"><Icon name="plus" size={25} /></span><span><strong>Crea otra idea</strong><small>Comparte tu idea y encuentra personas que quieren construirla contigo</small></span></Link>

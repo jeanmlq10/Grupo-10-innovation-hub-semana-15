@@ -14,12 +14,13 @@ Referencia visual recibida: dos capturas móviles de Bienvenida y «Comencemos»
 |---|---|
 | `/` | Bienvenida navegable con identidad nueva. |
 | `/login`, `/registro` | Formularios visuales; envío deshabilitado hasta integrar identidad de Roble. |
-| `/explorar` | Busca y filtra proyectos. Muestra ejemplos solo en desarrollo cuando Roble está desactivado. |
-| `/mis-proyectos` | Pestañas y tarjetas de ejemplo en desarrollo; cuenta real pendiente. |
-| `/proyectos/[id]` | Detalle de ejemplo con pestañas de descripción, tareas, miembros y actividad. Acciones privadas pendientes. |
+| `/explorar` | Busca y filtra proyectos públicos. En desarrollo lee proyectos de prueba persistentes en este navegador; los seguidos también funcionan localmente. |
+| `/mis-proyectos` | Lista por cuenta de prueba A/B, pestañas de publicados y borradores, edición y eliminación locales. |
+| `/proyectos/[id]` | Detalle de prueba con tareas, roles, comentarios, seguimiento y solicitudes. La cuenta creadora puede decidir y actualizar el estado de las tareas en el navegador. |
+| `/proyectos/[id]/editar` | Edición local del proyecto propio mediante el mismo asistente. |
 | `/notificaciones` | Lista de ejemplo, búsqueda, filtro y marcar leído solo en memoria de la página. |
 | `/perfil`, `/perfil/trayectoria` | Perfil, menú y estadísticas de ejemplo. |
-| `/proyectos/nuevo` | Asistente interactivo desde «Comencemos» hasta revisión. Valida nombre y descripción, permite roles y tareas; publicación deshabilitada. Los datos se conservan solo mientras la página sigue abierta. |
+| `/proyectos/nuevo` | Asistente interactivo desde «Comencemos» hasta revisión. Permite guardar borrador o publicar **solo en la demostración local**; persiste tras recargar el navegador. |
 | `/mensajes`, `/perfil/ajustes` | Estructura y estados vacíos para servicios privados aún no conectados. |
 
 ## Suposiciones de integración pendientes de comprobar
@@ -28,7 +29,9 @@ Referencia visual recibida: dos capturas móviles de Bienvenida y «Comencemos»
 2. `projects` representa proyectos publicados y borradores. Antes de activar lectura pública, Roble debe impedir por API que visitantes y otros usuarios lean borradores o tareas privadas. `ROBLE_PUBLIC_READ_ENABLED` sigue en `false`.
 3. Proyectos privados, solicitudes, perfiles, mensajes y notificaciones requieren autorización real del lado de Roble o de un servicio compartido por ambos clientes. Un filtro de pantalla no resuelve el acceso directo a la API.
 4. El contrato concreto de inicio de sesión, recuperación, Microsoft SSO, CORS, renovación de sesión y permisos se confirmará con dos cuentas controladas y acceso a la consola.
-5. Las vistas de demostración no escriben ni simulan una sesión real. En compilación de producción no se muestran tarjetas ni estadísticas ficticias.
+5. Las vistas de demostración no escriben en Roble ni representan una sesión real. Las cuentas A/B son identidades locales ficticias. En compilación de producción no se muestran proyectos ni estadísticas ficticias.
+
+La guía para recorrer creación, edición y participación local está en `docs/FLUJO_PROYECTOS_DEMO.md`.
 
 ## Siguiente integración
 

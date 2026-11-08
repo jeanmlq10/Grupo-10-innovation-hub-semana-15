@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import { BrandLogo } from "@/components/BrandLogo";
 import { Icon } from "@/components/Icon";
+import { DemoAccountToolbar } from "@/components/DemoAccountToolbar";
 
 const items = [
   { href: "/explorar", label: "Explorar", icon: "compass" as const },
@@ -23,9 +24,10 @@ export function AppShell({ children, backHref }: { children: ReactNode; backHref
         return <Link key={item.href} href={item.href} className={`nav-item ${active ? "selected" : ""}`} aria-current={active ? "page" : undefined}><Icon name={item.icon} />{item.label}</Link>;
       })}</nav>
       <div className="side-spacer" />
-      <div className="user-mini"><span className="avatar">D</span><span><strong>Vista de diseño</strong><small>Datos de ejemplo</small></span></div>
+      <DemoAccountToolbar compact />
     </aside>
     <main className="main-content">
+      <div className="mobile-demo-toolbar"><DemoAccountToolbar /></div>
       {backHref && <Link className="page-back" href={backHref}><Icon name="back" size={18} /> Volver</Link>}
       {children}
     </main>
