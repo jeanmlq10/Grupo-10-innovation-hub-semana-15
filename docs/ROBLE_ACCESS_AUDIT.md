@@ -1,6 +1,6 @@
 # Revisión inicial de acceso a datos de Roble
 
-Estado: revisión estática del código móvil y de `semana_final/f_clean_template-main/ROBLE_PROJECTS_SETUP.md` en el repositorio hermano `Grupo-10-innovation-hub`, más una prueba real de solo lectura realizada el **9 de noviembre de 2026** con una cuenta de prueba. La segunda cuenta fue creada y verificada desde la app móvil; falta ejecutar la comparación cruzada y obtener acceso a la consola para corregir permisos.
+Estado: revisión estática del código móvil y de `semana_final/f_clean_template-main/ROBLE_PROJECTS_SETUP.md` en el repositorio hermano `Grupo-10-innovation-hub`, más una prueba real de solo lectura realizada el **9 de noviembre de 2026** con una cuenta de prueba. La segunda cuenta fue creada y verificada desde la app móvil; se comprobó que muestra el mismo `userId` al entrar en la web. Falta ejecutar la comparación cruzada de permisos con las dos cuentas y obtener acceso a la consola para corregirlos. La secuencia propuesta está en [PLAN_PERMISOS_ROBLE.md](PLAN_PERMISOS_ROBLE.md).
 
 ## Resultado comprobado con una cuenta
 
@@ -33,7 +33,7 @@ El problema no se resuelve ocultando datos en Next.js: el cliente móvil ya usa 
 
 Usar solo cuentas y datos de prueba. Registrar el resultado de cada operación en una matriz, sin guardar tokens ni contraseñas en Git.
 
-El script de solo lectura `tools/audit_roble_access.mjs` automatiza estas consultas y muestra únicamente códigos HTTP y cantidades de filas relevantes. Necesita `ROBLE_BASE_URL`, `ROBLE_CONTRACT_ID`, `ROBLE_TEST_A_EMAIL` y `ROBLE_TEST_A_PASSWORD`; si se agregan `ROBLE_TEST_B_EMAIL` y `ROBLE_TEST_B_PASSWORD`, ejecuta además la comparación cruzada. Configurar las claves localmente sin subirlas a Git ni enviarlas por chat, y ejecutar `node tools/audit_roble_access.mjs`. Un resultado de cero puede ser inconcluso si no hay filas de prueba para ese caso. El script acepta HTTP 200 o 201 para el inicio de sesión, según la respuesta real observada.
+El script de solo lectura `tools/audit_roble_access.mjs` automatiza estas consultas y muestra únicamente códigos HTTP y cantidades de filas relevantes. Necesita `ROBLE_BASE_URL`, `ROBLE_CONTRACT_ID`, `ROBLE_TEST_A_EMAIL` y `ROBLE_TEST_A_PASSWORD`; si se agregan `ROBLE_TEST_B_EMAIL` y `ROBLE_TEST_B_PASSWORD`, ejecuta además la comparación cruzada. Configurar las claves localmente sin subirlas a Git ni enviarlas por chat, y ejecutar `node tools/audit_roble_access.mjs`. Devuelve código 1 si encuentra exposición y 2 si no puede concluir; cero filas sin datos de prueba no prueba seguridad. El script acepta HTTP 200 o 201 para el inicio de sesión, según la respuesta real observada.
 
 1. Con visitante, intentar leer `projects` y `project_tasks`; comprobar si aparecen filas de proyectos no publicados.
 2. Con usuario A, crear un borrador, un perfil privado, un mensaje para otro usuario y una notificación de prueba.

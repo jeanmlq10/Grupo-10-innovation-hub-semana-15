@@ -32,6 +32,8 @@ La nueva identidad visual usa los logos y colores oficiales recibidos en `proyec
 
 **Pendiente antes de datos reales:** la [auditoría de Roble](docs/ROBLE_ACCESS_AUDIT.md) confirmó el 9 de noviembre de 2026 que la API pública devuelve borradores y que una cuenta de prueba puede leer avisos de otros destinatarios. Filtrar filas en Next.js no evita que alguien consulte directamente la API. El acceso privado debe protegerse en el backend para los dos clientes.
 
+La [corrección de permisos y solicitud al administrador](docs/PLAN_PERMISOS_ROBLE.md) describe la matriz de acceso y la secuencia compatible con la app móvil. La cuenta probada mostró el mismo `userId` en móvil y web; no se guarda ese identificador en Git.
+
 ## Estructura
 
 - `src/app/`: rutas y presentación.
