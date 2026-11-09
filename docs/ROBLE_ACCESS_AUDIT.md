@@ -1,6 +1,21 @@
 # Revisión inicial de acceso a datos de Roble
 
-Estado: revisión estática del código móvil y de `semana_final/f_clean_template-main/ROBLE_PROJECTS_SETUP.md` en el repositorio hermano `Grupo-10-innovation-hub`. **Los permisos reales de la consola aún no se han probado con cuentas distintas.**
+Estado: revisión estática del código móvil y de `semana_final/f_clean_template-main/ROBLE_PROJECTS_SETUP.md` en el repositorio hermano `Grupo-10-innovation-hub`, más una prueba real de solo lectura realizada el **9 de noviembre de 2026** con una cuenta de prueba. La segunda cuenta fue creada y verificada desde la app móvil; falta ejecutar la comparación cruzada y obtener acceso a la consola para corregir permisos.
+
+## Resultado comprobado con una cuenta
+
+Se usó el contrato del repositorio móvil. No se guardaron credenciales, tokens, identificadores ni filas de Roble en el repositorio; solo se anotan códigos HTTP y cantidades.
+
+| Consulta | Resultado |
+|---|---|
+| Inicio de sesión y `auth/me` | HTTP 201 y 200; Roble devolvió un `userId`. |
+| `public-read` de `projects`, sin sesión | HTTP 200; 12 filas, **5 borradores**. |
+| `read` de `projects`, con la cuenta de prueba | HTTP 200; 12 filas, **5 borradores de otras cuentas**. |
+| `read` de `app_notifications`, con la cuenta de prueba | HTTP 200; 15 filas, **9 avisos dirigidos a otras cuentas**. |
+| `public-read` de `project_tasks` | HTTP 403. La lectura autenticada devolvió HTTP 200 y 8 filas. |
+| `read` de `user_profiles` y `direct_messages` | HTTP 404 en ambas; comprobar en consola si las tablas faltan o no son accesibles. |
+
+**Bloqueo de integración:** la API entrega datos que la interfaz móvil oculta. Mantener `ROBLE_PUBLIC_READ_ENABLED=false` y no conectar todavía las vistas privadas de la web a esas tablas. La corrección debe aplicarse en Roble o en un servicio que usen los dos clientes.
 
 ## Hallazgos que afectan la web y el móvil
 
@@ -18,7 +33,7 @@ El problema no se resuelve ocultando datos en Next.js: el cliente móvil ya usa 
 
 Usar solo cuentas y datos de prueba. Registrar el resultado de cada operación en una matriz, sin guardar tokens ni contraseñas en Git.
 
-El script de solo lectura `tools/audit_roble_access.mjs` automatiza estas consultas y muestra únicamente códigos HTTP y cantidades de filas relevantes. Necesita las variables de entorno `ROBLE_BASE_URL`, `ROBLE_CONTRACT_ID`, `ROBLE_TEST_A_EMAIL`, `ROBLE_TEST_A_PASSWORD`, `ROBLE_TEST_B_EMAIL` y `ROBLE_TEST_B_PASSWORD`. Configurarlas localmente sin subirlas a Git ni enviarlas por chat, y ejecutar `node tools/audit_roble_access.mjs`. Un resultado de cero puede ser inconcluso si no hay filas de prueba para ese caso.
+El script de solo lectura `tools/audit_roble_access.mjs` automatiza estas consultas y muestra únicamente códigos HTTP y cantidades de filas relevantes. Necesita `ROBLE_BASE_URL`, `ROBLE_CONTRACT_ID`, `ROBLE_TEST_A_EMAIL` y `ROBLE_TEST_A_PASSWORD`; si se agregan `ROBLE_TEST_B_EMAIL` y `ROBLE_TEST_B_PASSWORD`, ejecuta además la comparación cruzada. Configurar las claves localmente sin subirlas a Git ni enviarlas por chat, y ejecutar `node tools/audit_roble_access.mjs`. Un resultado de cero puede ser inconcluso si no hay filas de prueba para ese caso. El script acepta HTTP 200 o 201 para el inicio de sesión, según la respuesta real observada.
 
 1. Con visitante, intentar leer `projects` y `project_tasks`; comprobar si aparecen filas de proyectos no publicados.
 2. Con usuario A, crear un borrador, un perfil privado, un mensaje para otro usuario y una notificación de prueba.
@@ -34,4 +49,4 @@ El script de solo lectura `tools/audit_roble_access.mjs` automatiza estas consul
 
 ## Criterio de salida
 
-La web no se conecta a datos reales ni se publica mientras la prueba de usuario B pueda leer información privada de A directamente desde Roble. El repositorio web deja `ROBLE_PUBLIC_READ_ENABLED=false` por defecto hasta que la consulta pública de proyectos sea segura.
+La web no se conecta a datos reales ni se publica mientras cualquier cuenta pueda leer información privada ajena o un visitante pueda leer borradores directamente desde Roble. El repositorio web deja `ROBLE_PUBLIC_READ_ENABLED=false` por defecto hasta que la consulta pública de proyectos sea segura. También hay que verificar en consola las tablas que respondieron 404 y repetir la prueba con dos cuentas después de corregir los permisos.

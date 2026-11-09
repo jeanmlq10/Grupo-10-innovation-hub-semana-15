@@ -42,6 +42,6 @@ La prueba manual de mensajes y notificaciones está en `docs/FLUJO_COMUNICACIONE
 
 ## Siguiente integración
 
-Cuando llegue el acceso, ejecutar `docs/ROBLE_ACCESS_AUDIT.md` con dos cuentas de prueba, corregir permisos incompatibles con la app móvil y conectar primero identidad y lectura segura de proyectos. Luego conectar escrituras y vistas privadas, verificando cada flujo en ambos clientes.
+La primera prueba real de Roble con una cuenta ya confirmó borradores públicos y avisos de otros destinatarios accesibles mediante la API; los resultados están en `docs/ROBLE_ACCESS_AUDIT.md`. La segunda cuenta de prueba ya fue creada y verificada en la app móvil; falta ejecutar la comparación cruzada y obtener acceso a la consola para corregir permisos de forma compatible con ambos clientes. Después conectar identidad y lectura segura de proyectos, luego escrituras y vistas privadas, verificando cada flujo en móvil y web.
 
 La asignación a Óscar de `docs/REPARTO_JEAN_OSCAR.md` era el plan anterior; Jean asumió la implementación web completa mientras Óscar resuelve su conexión.

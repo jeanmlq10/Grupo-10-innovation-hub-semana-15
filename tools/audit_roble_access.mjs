@@ -4,11 +4,16 @@
 const required = [
   'ROBLE_BASE_URL', 'ROBLE_CONTRACT_ID',
   'ROBLE_TEST_A_EMAIL', 'ROBLE_TEST_A_PASSWORD',
-  'ROBLE_TEST_B_EMAIL', 'ROBLE_TEST_B_PASSWORD',
 ];
 const missing = required.filter((key) => !process.env[key]);
 if (missing.length) {
   console.error(`Faltan variables: ${missing.join(', ')}`);
+  process.exit(2);
+}
+const hasBEmail = Boolean(process.env.ROBLE_TEST_B_EMAIL);
+const hasBPassword = Boolean(process.env.ROBLE_TEST_B_PASSWORD);
+if (hasBEmail !== hasBPassword) {
+  console.error('La cuenta B necesita correo y contraseña, o ninguno de los dos.');
   process.exit(2);
 }
 
@@ -47,7 +52,7 @@ async function login(email, password) {
     method: 'POST', body: { email, password },
   });
   const token = signedIn.data?.accessToken;
-  if (signedIn.status !== 200 || typeof token !== 'string') {
+  if (![200, 201].includes(signedIn.status) || typeof token !== 'string') {
     throw new Error(`No se pudo iniciar sesión de prueba (HTTP ${signedIn.status})`);
   }
   const profile = await request(new URL('me', authBase), { token });
@@ -66,25 +71,23 @@ async function read(table, token, filters = {}, publicAccess = false) {
 }
 
 function print(label, response, matching) {
-  const count = response.status === 200 ? rows(response).filter(matching).length : 0;
+  const count = response.status === 200 ? rows(response).filter(matching).length : '—';
   console.log(`${label}: HTTP ${response.status}; filas relevantes ${count}`);
   return count;
 }
 
 try {
-  const [a, b] = await Promise.all([
-    login(process.env.ROBLE_TEST_A_EMAIL, process.env.ROBLE_TEST_A_PASSWORD),
-    login(process.env.ROBLE_TEST_B_EMAIL, process.env.ROBLE_TEST_B_PASSWORD),
-  ]);
-  if (a.userId === b.userId) throw new Error('Las cuentas A y B corresponden al mismo userId.');
+  const a = await login(process.env.ROBLE_TEST_A_EMAIL, process.env.ROBLE_TEST_A_PASSWORD);
+  const b = hasBEmail ? await login(process.env.ROBLE_TEST_B_EMAIL, process.env.ROBLE_TEST_B_PASSWORD) : null;
+  if (b && a.userId === b.userId) throw new Error('Las cuentas A y B corresponden al mismo userId.');
 
-  const [publicProjects, publicTasks, bProjects, bProfiles, bMessages, bNotifications] = await Promise.all([
+  const [publicProjects, publicTasks, aProjects, aProfiles, aMessages, aNotifications] = await Promise.all([
     read('projects', undefined, {}, true),
     read('project_tasks', undefined, {}, true),
-    read('projects', b.token),
-    read('user_profiles', b.token, { userId: a.userId }),
-    read('direct_messages', b.token),
-    read('app_notifications', b.token),
+    read('projects', a.token),
+    read('user_profiles', a.token, { userId: a.userId }),
+    read('direct_messages', a.token),
+    read('app_notifications', a.token),
   ]);
 
   const draftIds = new Set(rows(publicProjects)
@@ -94,13 +97,30 @@ try {
     (row) => row.isDraft === true || row.isDraft === 'true');
   print('Visitante lee tareas de borradores', publicTasks,
     (row) => draftIds.has(row.projectId));
-  print('B lee borradores de A', bProjects,
-    (row) => row._owner === a.userId && (row.isDraft === true || row.isDraft === 'true'));
-  print('B lee perfil de A', bProfiles, (row) => row.userId === a.userId);
-  print('B lee mensajes ajenos', bMessages,
-    (row) => row.fromUserId !== b.userId && row.toUserId !== b.userId);
-  print('B lee notificaciones ajenas', bNotifications,
-    (row) => row.recipientUserId !== b.userId);
+  print('A lee borradores de otras cuentas', aProjects,
+    (row) => row._owner && row._owner !== a.userId && (row.isDraft === true || row.isDraft === 'true'));
+  print('A lee avisos de otras cuentas', aNotifications,
+    (row) => row.recipientUserId && row.recipientUserId !== a.userId);
+  print('A lee su perfil', aProfiles, (row) => row.userId === a.userId);
+  print('A consulta mensajes', aMessages, () => true);
+
+  if (b) {
+    const [bProjects, bProfiles, bMessages, bNotifications] = await Promise.all([
+      read('projects', b.token),
+      read('user_profiles', b.token, { userId: a.userId }),
+      read('direct_messages', b.token),
+      read('app_notifications', b.token),
+    ]);
+    print('B lee borradores de A', bProjects,
+      (row) => row._owner === a.userId && (row.isDraft === true || row.isDraft === 'true'));
+    print('B lee perfil de A', bProfiles, (row) => row.userId === a.userId);
+    print('B lee mensajes ajenos', bMessages,
+      (row) => row.fromUserId && row.toUserId && row.fromUserId !== b.userId && row.toUserId !== b.userId);
+    print('B lee notificaciones ajenas', bNotifications,
+      (row) => row.recipientUserId && row.recipientUserId !== b.userId);
+  } else {
+    console.log('Prueba cruzada A/B pendiente: falta una segunda cuenta verificada.');
+  }
   console.log('Un resultado de 0 filas puede ser inconcluso si no hay datos de prueba para ese caso.');
 } catch (error) {
   console.error(`Auditoría incompleta: ${error instanceof Error ? error.message : 'error desconocido'}`);
