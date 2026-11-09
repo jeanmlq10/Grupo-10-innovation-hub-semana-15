@@ -14,7 +14,9 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Abrir `http://localhost:3000`. La consulta real a Roble permanece desactivada por defecto. No establecer `ROBLE_PUBLIC_READ_ENABLED=true` hasta verificar y corregir la lectura pública de borradores en Roble. El archivo `.env.local` no se versiona.
+Abrir `http://localhost:3000`. En desarrollo, `/login` autentica con la misma cuenta y contrato de Roble que usa la app móvil; `/cuenta` muestra el `userId` de Roble y permite cerrar sesión. Los tokens quedan solo en memoria del servidor de desarrollo y el navegador recibe una cookie protegida con un identificador aleatorio. Reiniciar el servidor termina la sesión. Este acceso está deshabilitado en compilaciones de producción.
+
+La lectura real de proyectos, perfiles, mensajes y avisos permanece desactivada. No establecer `ROBLE_PUBLIC_READ_ENABLED=true` hasta verificar y corregir la lectura pública de borradores en Roble. El archivo `.env.local` no se versiona. Ver [el flujo de identidad](docs/FLUJO_LOGIN_ROBLE.md).
 
 ## Comprobaciones
 
@@ -26,7 +28,7 @@ npm run build
 
 ## Estado de la migración
 
-La nueva identidad visual usa los logos y colores oficiales recibidos en `proyectate-identidad-visual.zip`. Ya hay rutas para las diez vistas principales del prototipo y para Mensajes y Configuración. Bienvenida y «Comencemos» se adaptaron a las nuevas capturas móviles. El [flujo de proyectos de demostración](docs/FLUJO_PROYECTOS_DEMO.md) permite crear borradores, publicarlos localmente, editarlos, seguirlos, comentar y revisar solicitudes con dos cuentas ficticias. La [guía de comunicaciones](docs/FLUJO_COMUNICACIONES_DEMO.md) cubre mensajes, avisos, leído y preferencias entre esas mismas cuentas. Esta persistencia vive solo en el navegador durante desarrollo. El inicio de sesión y la escritura real en Roble siguen pendientes.
+La nueva identidad visual usa los logos y colores oficiales recibidos en `proyectate-identidad-visual.zip`. Ya hay rutas para las diez vistas principales del prototipo y para Mensajes y Configuración. Bienvenida y «Comencemos» se adaptaron a las nuevas capturas móviles. El [flujo de proyectos de demostración](docs/FLUJO_PROYECTOS_DEMO.md) permite crear borradores, publicarlos localmente, editarlos, seguirlos, comentar y revisar solicitudes con dos cuentas ficticias. La [guía de comunicaciones](docs/FLUJO_COMUNICACIONES_DEMO.md) cubre mensajes, avisos, leído y preferencias entre esas mismas cuentas. Esta persistencia vive solo en el navegador durante desarrollo. El inicio de sesión real de desarrollo ya está conectado; la escritura real en Roble sigue pendiente.
 
 **Pendiente antes de datos reales:** la [auditoría de Roble](docs/ROBLE_ACCESS_AUDIT.md) confirmó el 9 de noviembre de 2026 que la API pública devuelve borradores y que una cuenta de prueba puede leer avisos de otros destinatarios. Filtrar filas en Next.js no evita que alguien consulte directamente la API. El acceso privado debe protegerse en el backend para los dos clientes.
 

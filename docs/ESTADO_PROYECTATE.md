@@ -13,7 +13,9 @@ Referencia visual recibida: dos capturas móviles de Bienvenida y «Comencemos»
 | Ruta | Estado actual |
 |---|---|
 | `/` | Bienvenida navegable con identidad nueva. |
-| `/login`, `/registro` | Formularios visuales; envío deshabilitado hasta integrar identidad de Roble. |
+| `/login` | Inicio de sesión real con Roble en desarrollo. Deshabilitado en producción hasta cerrar la auditoría de permisos. |
+| `/cuenta` | Consulta la identidad real en Roble (`userId`, correo y nombre) y permite cerrar sesión. No mezcla estos datos con la demostración A/B. |
+| `/registro` | Formulario visual; el alta web sigue deshabilitada. |
 | `/explorar` | Busca y filtra proyectos públicos. En desarrollo lee proyectos de prueba persistentes en este navegador; los seguidos también funcionan localmente. |
 | `/mis-proyectos` | Lista por cuenta de prueba A/B, pestañas de publicados y borradores, edición y eliminación locales. |
 | `/proyectos/[id]` | Detalle de prueba con tareas, roles, comentarios, seguimiento y solicitudes. La cuenta creadora puede decidir y actualizar el estado de las tareas en el navegador. |
@@ -31,7 +33,7 @@ Referencia visual recibida: dos capturas móviles de Bienvenida y «Comencemos»
 1. Móvil y web usan el mismo contrato de Roble y el `userId` devuelto por su identidad; el correo no vincula los datos.
 2. `projects` representa proyectos publicados y borradores. Antes de activar lectura pública, Roble debe impedir por API que visitantes y otros usuarios lean borradores o tareas privadas. `ROBLE_PUBLIC_READ_ENABLED` sigue en `false`.
 3. Proyectos privados, solicitudes, perfiles, mensajes y notificaciones requieren autorización real del lado de Roble o de un servicio compartido por ambos clientes. Un filtro de pantalla no resuelve el acceso directo a la API.
-4. El contrato concreto de inicio de sesión, recuperación, Microsoft SSO, CORS, renovación de sesión y permisos se confirmará con dos cuentas controladas y acceso a la consola.
+4. Se confirmó el contrato de inicio de sesión, `auth/me` y renovación de token con el SDK móvil y una cuenta de prueba. Recuperación, Microsoft SSO, permisos y comparación cruzada con dos cuentas siguen pendientes.
 5. Las vistas de demostración no escriben en Roble ni representan una sesión real. Las cuentas A/B son identidades locales ficticias. En compilación de producción no se muestran proyectos ni estadísticas ficticias.
 6. La privacidad de la demostración solo oculta datos en la interfaz. Antes de publicar perfiles y mensajes, Roble debe aplicar autorización por `userId` y controlar visibilidad, contacto y actividad en la API. Las preferencias actuales se guardan bajo `proyectate-profiles-demo-v1` y se borran junto a los proyectos con «Reiniciar datos».
 7. La trayectoria sigue la fórmula de la app móvil para colaboración, cumplimiento y calidad. «Proyectos completados» permanece en 0 porque el modelo de proyectos de esta demostración no tiene estado de finalización.
@@ -42,6 +44,6 @@ La prueba manual de mensajes y notificaciones está en `docs/FLUJO_COMUNICACIONE
 
 ## Siguiente integración
 
-La primera prueba real de Roble con una cuenta ya confirmó borradores públicos y avisos de otros destinatarios accesibles mediante la API; los resultados están en `docs/ROBLE_ACCESS_AUDIT.md`. La segunda cuenta de prueba ya fue creada y verificada en la app móvil; falta ejecutar la comparación cruzada y obtener acceso a la consola para corregir permisos de forma compatible con ambos clientes. Después conectar identidad y lectura segura de proyectos, luego escrituras y vistas privadas, verificando cada flujo en móvil y web.
+La primera prueba real de Roble con una cuenta ya confirmó borradores públicos y avisos de otros destinatarios accesibles mediante la API; los resultados están en `docs/ROBLE_ACCESS_AUDIT.md`. La segunda cuenta de prueba ya fue creada y verificada en la app móvil; falta ejecutar la comparación cruzada y obtener acceso a la consola para corregir permisos de forma compatible con ambos clientes. La identidad web ya se conecta en desarrollo; después siguen la lectura segura de proyectos, las escrituras y las vistas privadas, verificando cada flujo en móvil y web.
 
 La asignación a Óscar de `docs/REPARTO_JEAN_OSCAR.md` era el plan anterior; Jean asumió la implementación web completa mientras Óscar resuelve su conexión.
