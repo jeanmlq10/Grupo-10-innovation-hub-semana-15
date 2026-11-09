@@ -26,7 +26,7 @@ npm run build
 
 ## Estado de la migración
 
-La nueva identidad visual usa los logos y colores oficiales recibidos en `proyectate-identidad-visual.zip`. Ya hay rutas para las diez vistas principales del prototipo y para Mensajes y Configuración. Bienvenida y «Comencemos» se adaptaron a las nuevas capturas móviles. El [flujo de proyectos de demostración](docs/FLUJO_PROYECTOS_DEMO.md) permite crear borradores, publicarlos localmente, editarlos, seguirlos, comentar y revisar solicitudes con dos cuentas ficticias. Esta persistencia vive solo en el navegador durante desarrollo. El inicio de sesión y la escritura real en Roble siguen pendientes.
+La nueva identidad visual usa los logos y colores oficiales recibidos en `proyectate-identidad-visual.zip`. Ya hay rutas para las diez vistas principales del prototipo y para Mensajes y Configuración. Bienvenida y «Comencemos» se adaptaron a las nuevas capturas móviles. El [flujo de proyectos de demostración](docs/FLUJO_PROYECTOS_DEMO.md) permite crear borradores, publicarlos localmente, editarlos, seguirlos, comentar y revisar solicitudes con dos cuentas ficticias. La [guía de comunicaciones](docs/FLUJO_COMUNICACIONES_DEMO.md) cubre mensajes, avisos, leído y preferencias entre esas mismas cuentas. Esta persistencia vive solo en el navegador durante desarrollo. El inicio de sesión y la escritura real en Roble siguen pendientes.
 
 **Pendiente antes de datos reales:** resolver los permisos de lectura de Roble descritos en `ROBLE_PROJECTS_SETUP.md` del repositorio móvil. Filtrar filas en Next.js no evita que alguien consulte directamente la API de Roble. El acceso privado debe protegerse en el backend para los dos clientes.
 

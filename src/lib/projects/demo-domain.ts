@@ -1,6 +1,6 @@
 export type DemoActor = "demo-a" | "demo-b";
-export type ProjectTask = { id: string; title: string; description: string; requiredCount: number; acceptedCount: number; deadline: string; status: "available" | "in_progress" | "completed" };
-export type ProjectRequest = { id: string; projectId: string; applicantId: DemoActor; type: "team" | "task"; targetId: string; message: string; status: "pending" | "accepted" | "rejected"; createdAt: string };
+export type ProjectTask = { id: string; title: string; description: string; requiredCount: number; acceptedCount: number; deadline: string; status: "available" | "in_progress" | "completed"; statusUpdatedAt?: string };
+export type ProjectRequest = { id: string; projectId: string; applicantId: DemoActor; type: "team" | "task"; targetId: string; message: string; status: "pending" | "accepted" | "rejected"; createdAt: string; decidedAt?: string };
 export type ProjectComment = { id: string; authorId: DemoActor; text: string; createdAt: string };
 export type ProjectRecord = {
   id: string; ownerId: DemoActor; name: string; description: string; categories: string[];
@@ -46,7 +46,7 @@ export function saveProject(state: DemoState, input: ProjectInput, id: string, p
     const requestedCount = Math.floor(task.requiredCount);
     if (previous && requestedCount < previous.acceptedCount) throw new Error("La tarea necesita conservar los cupos ya aceptados.");
     const requiredCount = Math.max(1, Number.isFinite(requestedCount) ? requestedCount : 1);
-    return { ...task, title: task.title.trim(), description: task.description.trim(), requiredCount, acceptedCount: previous?.acceptedCount ?? 0, status: previous?.status ?? "available" as const };
+    return { ...task, title: task.title.trim(), description: task.description.trim(), requiredCount, acceptedCount: previous?.acceptedCount ?? 0, status: previous?.status ?? "available" as const, statusUpdatedAt: previous?.statusUpdatedAt };
   });
   const isDraft = !publish || input.audience === "Solo yo";
   const project: ProjectRecord = {
@@ -88,7 +88,7 @@ export function requestParticipation(state: DemoState, id: string, type: "team" 
   const request: ProjectRequest = { id: requestId, projectId: id, applicantId: state.actor, type, targetId, message: message.trim(), status: "pending", createdAt: timestamp };
   return { ...state, projects: state.projects.map(item => item.id === id ? { ...item, requests: [...item.requests, request] } : item) };
 }
-export function decideRequest(state: DemoState, projectId: string, requestId: string, decision: "accepted" | "rejected"): DemoState {
+export function decideRequest(state: DemoState, projectId: string, requestId: string, decision: "accepted" | "rejected", timestamp?: string): DemoState {
   const project = state.projects.find(item => item.id === projectId);
   if (!project || project.ownerId !== state.actor) throw new Error("Solo quien creó el proyecto puede decidir.");
   const request = project.requests.find(item => item.id === requestId);
@@ -99,16 +99,16 @@ export function decideRequest(state: DemoState, projectId: string, requestId: st
     if (available <= 0) throw new Error("No quedan cupos disponibles.");
   }
   const updated: ProjectRecord = {
-    ...project, requests: project.requests.map(item => item.id === requestId ? { ...item, status: decision } : item),
+    ...project, updatedAt: timestamp ?? project.updatedAt, requests: project.requests.map(item => item.id === requestId ? { ...item, status: decision, decidedAt: timestamp ?? item.createdAt } : item),
     members: decision === "accepted" ? [...project.members, request.applicantId] : project.members,
     acceptedRoleCounts: decision === "accepted" && request.type === "team" ? { ...project.acceptedRoleCounts, [request.targetId]: (project.acceptedRoleCounts[request.targetId] ?? 0) + 1 } : project.acceptedRoleCounts,
     tasks: decision === "accepted" && request.type === "task" ? project.tasks.map(task => task.id === request.targetId ? { ...task, acceptedCount: task.acceptedCount + 1 } : task) : project.tasks,
   };
   return { ...state, projects: state.projects.map(item => item.id === projectId ? updated : item) };
 }
-export function setTaskStatus(state: DemoState, projectId: string, taskId: string, status: ProjectTask["status"]): DemoState {
+export function setTaskStatus(state: DemoState, projectId: string, taskId: string, status: ProjectTask["status"], timestamp?: string): DemoState {
   const project = state.projects.find(item => item.id === projectId);
   if (!project || project.ownerId !== state.actor) throw new Error("Solo quien creó el proyecto puede actualizar tareas.");
   if (!project.tasks.some(task => task.id === taskId)) throw new Error("Tarea no encontrada.");
-  return { ...state, projects: state.projects.map(item => item.id === projectId ? { ...item, tasks: item.tasks.map(task => task.id === taskId ? { ...task, status } : task) } : item) };
+  return { ...state, projects: state.projects.map(item => item.id === projectId ? { ...item, updatedAt: timestamp ?? item.updatedAt, tasks: item.tasks.map(task => task.id === taskId ? { ...task, status, statusUpdatedAt: timestamp ?? task.statusUpdatedAt ?? item.updatedAt } : task) } : item) };
 }

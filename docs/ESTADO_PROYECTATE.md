@@ -18,13 +18,13 @@ Referencia visual recibida: dos capturas móviles de Bienvenida y «Comencemos»
 | `/mis-proyectos` | Lista por cuenta de prueba A/B, pestañas de publicados y borradores, edición y eliminación locales. |
 | `/proyectos/[id]` | Detalle de prueba con tareas, roles, comentarios, seguimiento y solicitudes. La cuenta creadora puede decidir y actualizar el estado de las tareas en el navegador. |
 | `/proyectos/[id]/editar` | Edición local del proyecto propio mediante el mismo asistente. |
-| `/notificaciones` | Lista de ejemplo, búsqueda, filtro y marcar leído solo en memoria de la página. |
+| `/notificaciones` | Avisos A/B por solicitudes, decisiones, comentarios, tareas completadas y mensajes; búsqueda, filtros y leído persistente por cuenta en el navegador. |
 | `/perfil`, `/perfil/editar`, `/perfil/trayectoria`, `/perfil/actividad` | Perfil editable y trayectoria calculada con las acciones de A/B. El historial usa proyectos, comentarios y solicitudes locales. |
 | `/proyectos/nuevo` | Asistente interactivo desde «Comencemos» hasta revisión. Permite guardar borrador o publicar **solo en la demostración local**; persiste tras recargar el navegador. |
 | `/perfil/ajustes`, `/perfil/privacidad`, `/perfil/ajustes/notificaciones` | Preferencias editables por cuenta ficticia y guardadas solo en el navegador. |
 | `/usuarios/[id]` | Vista pública de perfiles A/B: respeta visibilidad y actividad privada dentro de la demostración. |
 | `/recuperar-contrasena`, `/verificar-correo` | Vistas de formato y recorrido. No envían correo, verifican identidad ni restablecen contraseñas. |
-| `/mensajes` | Estructura vacía para servicio privado aún no conectado. |
+| `/mensajes`, `/mensajes/[id]` | Bandeja y chat directo A/B. Se inicia desde el perfil público, respeta quién acepta mensajes y conserva el historial y sus no leídos localmente. |
 
 ## Suposiciones de integración pendientes de comprobar
 
@@ -35,8 +35,10 @@ Referencia visual recibida: dos capturas móviles de Bienvenida y «Comencemos»
 5. Las vistas de demostración no escriben en Roble ni representan una sesión real. Las cuentas A/B son identidades locales ficticias. En compilación de producción no se muestran proyectos ni estadísticas ficticias.
 6. La privacidad de la demostración solo oculta datos en la interfaz. Antes de publicar perfiles y mensajes, Roble debe aplicar autorización por `userId` y controlar visibilidad, contacto y actividad en la API. Las preferencias actuales se guardan bajo `proyectate-profiles-demo-v1` y se borran junto a los proyectos con «Reiniciar datos».
 7. La trayectoria sigue la fórmula de la app móvil para colaboración, cumplimiento y calidad. «Proyectos completados» permanece en 0 porque el modelo de proyectos de esta demostración no tiene estado de finalización.
+8. Los avisos de la demo se derivan de acciones guardadas en proyectos y mensajes; silenciar una categoría los oculta de la bandeja y del contador mientras esté silenciada. Los estados de leído y los mensajes se guardan bajo `proyectate-comms-demo-v1`. No hay entrega por correo ni notificaciones push, y las categorías recordatorios/novedades no tienen eventos hasta la integración real.
 
 La guía para recorrer creación, edición y participación local está en `docs/FLUJO_PROYECTOS_DEMO.md`.
+La prueba manual de mensajes y notificaciones está en `docs/FLUJO_COMUNICACIONES_DEMO.md`.
 
 ## Siguiente integración
 
