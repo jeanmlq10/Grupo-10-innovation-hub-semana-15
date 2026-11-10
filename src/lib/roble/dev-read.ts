@@ -14,7 +14,7 @@ export async function devRobleRead<T>(
   if (process.env.NODE_ENV !== "development") return error("La consulta está disponible solo en desarrollo.", 503);
   const sessionId = request.cookies.get(devSessionCookie)?.value;
   const session = getDevSession(sessionId);
-  if (!session) return error("Inicia sesión para ver tus proyectos.", 401);
+  if (!session) return error("Inicia sesión para consultar Roble.", 401);
 
   try {
     const config = authConfig();

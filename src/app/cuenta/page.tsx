@@ -50,8 +50,10 @@ export default function AccountPage() {
         {user.email && <><dt>Correo</dt><dd>{user.email}</dd></>}
         <dt>ID de usuario en Roble</dt><dd className="account-user-id">{user.userId}</dd>
       </dl>
-      <p className="auth-pending">Ya puedes consultar tus proyectos reales en desarrollo, en modo de solo lectura. Los demás flujos siguen como demostración local mientras se corrigen los permisos de Roble.</p>
+      <p className="auth-pending">Ya puedes consultar tus proyectos, postulaciones y avisos reales en desarrollo, en modo de solo lectura. Los flujos de edición siguen como demostración local mientras se corrigen los permisos de Roble.</p>
       {process.env.NODE_ENV === "development" && <Link className="auth-button primary" href="/mis-proyectos/roble">Ver mis proyectos en Roble</Link>}
+      {process.env.NODE_ENV === "development" && <Link className="auth-button outline" href="/postulaciones/roble">Ver mis postulaciones</Link>}
+      {process.env.NODE_ENV === "development" && <Link className="auth-button outline" href="/notificaciones/roble">Ver mis avisos en Roble</Link>}
       <button className="auth-button outline account-logout" type="button" onClick={logout} disabled={busy}>{busy ? "Cerrando sesión…" : "Cerrar sesión"}</button>
       <p className="auth-switch"><Link href="/explorar">Explorar la demostración</Link></p>
     </>}
