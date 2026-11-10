@@ -138,7 +138,14 @@ a { color: inherit; text-decoration: none; }
 .roble-request-heading { align-items: center; display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; }
 .roble-request h3 { font-size: 16px; margin: 0; }
 .roble-request small { color: var(--muted); }
+.roble-request-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.roble-apply-form { border-top: 1px solid var(--line); display: grid; gap: 10px; padding-top: 14px; }
+.roble-apply-form h3 { font-size: 16px; margin: 0; }
+.roble-apply-form label { color: var(--primary); font-size: 13px; font-weight: 700; }
+.roble-apply-form textarea { border: 1px solid var(--line); border-radius: 10px; color: var(--primary); font: inherit; padding: 10px; resize: vertical; width: 100%; }
+.roble-apply-form textarea:focus-visible { outline: 2px solid var(--violet); }
 .roble-notification-row { cursor: default; }
+.notification-entry > .outline-action { margin: 0 0 12px 66px; }
 
 .explore-layout { display: grid; gap: 24px; grid-template-columns: minmax(0,1fr); }
 .explore-layout.with-filters { grid-template-columns: minmax(0,1fr) 300px; }
@@ -299,6 +306,7 @@ a { color: inherit; text-decoration: none; }
 .task-row { align-items: start; grid-template-columns: auto 1fr auto; }
 .task-row h3 { font-size: 15px; margin: 0 0 4px; }
 .task-row small { color: var(--muted); }
+.task-row > div { display: grid; gap: 8px; justify-items: start; }
 .role-card { display: flex !important; flex-direction: column; gap: 10px; }
 .role-card h3 { margin: 0; }
 .demo-action-note { color: var(--muted); font-size: 13px; }

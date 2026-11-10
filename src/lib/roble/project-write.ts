@@ -62,7 +62,7 @@ export function parseProjectWrite(value: unknown): ProjectWriteInput {
     teamDeadline, tasks: parsedTasks, publish };
 }
 
-async function writeRow(config: RobleAuthConfig, token: string, method: "POST" | "PUT" | "DELETE", endpoint: string, body: Row): Promise<Row> {
+export async function writeRobleRow(config: RobleAuthConfig, token: string, method: "POST" | "PUT" | "DELETE", endpoint: string, body: Row): Promise<Row> {
   const url = new URL(`/database/${encodeURIComponent(config.contractId)}/${endpoint}`, config.baseUrl);
   let response: Response;
   try {
@@ -121,7 +121,7 @@ export async function saveRobleProject(config: RobleAuthConfig, token: string, i
 
   let id = projectId;
   if (!id) {
-    const created = await writeRow(config, token, "POST", "insert-one", { tableName: "projects", record: {
+    const created = await writeRobleRow(config, token, "POST", "insert-one", { tableName: "projects", record: {
       ...fields, isDraft: true, createdBy: identity.userId, createdAt: new Date().toISOString(),
     } });
     id = string(created._id);
@@ -129,14 +129,14 @@ export async function saveRobleProject(config: RobleAuthConfig, token: string, i
   try {
     for (const task of savedTasks) {
       const previous = currentById.get(task.id);
-      if (previous) await writeRow(config, token, "PUT", "update", { tableName: "project_tasks", idColumn: "_id", idValue: task.id,
+      if (previous) await writeRobleRow(config, token, "PUT", "update", { tableName: "project_tasks", idColumn: "_id", idValue: task.id,
         updates: taskFields(id, task, previous) });
-      else await writeRow(config, token, "POST", "insert-one", { tableName: "project_tasks", record: taskFields(id, task) });
+      else await writeRobleRow(config, token, "POST", "insert-one", { tableName: "project_tasks", record: taskFields(id, task) });
     }
     for (const row of currentTasks) if (!savedTasks.some(task => task.id === row._id)) {
-      await writeRow(config, token, "DELETE", "delete", { tableName: "project_tasks", idColumn: "_id", idValue: row._id });
+      await writeRobleRow(config, token, "DELETE", "delete", { tableName: "project_tasks", idColumn: "_id", idValue: row._id });
     }
-    await writeRow(config, token, "PUT", "update", { tableName: "projects", idColumn: "_id", idValue: id, updates: fields });
+    await writeRobleRow(config, token, "PUT", "update", { tableName: "projects", idColumn: "_id", idValue: id, updates: fields });
     return id;
   } catch (cause) {
     if (cause instanceof ProjectWriteFailure) throw new ProjectWriteFailure(cause.status, `${cause.message} El proyecto puede tener cambios parciales; ábrelo para comprobarlo.`, id);

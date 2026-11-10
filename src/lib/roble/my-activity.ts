@@ -17,6 +17,7 @@ export type MyRobleRequest = {
   projectName: string;
   publicProject: boolean;
   role: string;
+  targetId: string;
   message: string;
   type: "team" | "task";
   status: "pending" | "accepted" | "rejected";
@@ -77,7 +78,9 @@ export function myRequestsFromRows(requestValues: unknown[], projectValues: unkn
     const rawStatus = decisionStatus || text(row.status);
     return {
       id, projectId, projectName: publicNames.get(projectId) ?? "Proyecto no público",
-      publicProject: publicNames.has(projectId), role: text(row.role), message: text(row.message),
+      publicProject: publicNames.has(projectId), role: text(row.role),
+      targetId: text(row.type) === "task" ? text(row.taskId) : text(row.teamRoleId) || text(row.role),
+      message: text(row.message),
       type: text(row.type) === "task" ? "task" as const : "team" as const,
       status: rawStatus === "accepted" ? "accepted" as const : rawStatus === "rejected" ? "rejected" as const : "pending" as const,
       createdAt: text(row.createdAt),

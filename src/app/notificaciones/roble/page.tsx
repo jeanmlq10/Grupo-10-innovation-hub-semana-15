@@ -26,6 +26,8 @@ export default function RobleNotificationsPage() {
   const [status, setStatus] = useState<"loading" | "ready" | "signed-out" | "error">("loading");
   const [search, setSearch] = useState("");
   const [unreadOnly, setUnreadOnly] = useState(false);
+  const [busyId, setBusyId] = useState("");
+  const [actionError, setActionError] = useState("");
 
   useEffect(() => {
     let active = true;
@@ -46,15 +48,29 @@ export default function RobleNotificationsPage() {
     (!query || [item.title, item.message, typeLabel(item.type)].some(value => value.toLocaleLowerCase("es").includes(query))));
   const unread = notifications.filter(item => !item.read).length;
 
+  const markRead = async (id: string) => {
+    if (busyId) return;
+    setBusyId(id); setActionError("");
+    try {
+      const response = await fetch(`/api/activity/notifications/${encodeURIComponent(id)}/read`, {
+        method: "POST", credentials: "same-origin", headers: { "Content-Type": "application/json" }, body: "{}",
+      });
+      const body: { error?: string } = await response.json();
+      if (!response.ok) throw new Error(body.error || "No se pudo marcar el aviso.");
+      setNotifications(current => current.map(item => item.id === id ? { ...item, read: true } : item));
+    } catch (cause) { setActionError(cause instanceof Error ? cause.message : "No se pudo marcar el aviso."); }
+    finally { setBusyId(""); }
+  };
+
   return <AppShell backHref="/notificaciones">
     <header className="topbar"><div className="page-intro"><h1>Mis avisos en Roble</h1><p>Notificaciones reales de tu cuenta móvil</p></div><div className="topbar-spacer" /><Link href="/notificaciones" className="outline-action">Ver demostración</Link></header>
-    <p className="preview-note">Consulta de solo lectura en desarrollo. Los avisos se filtran por destinatario; esta vista no cambia su estado de lectura en Roble.</p>
+    <p className="preview-note">Avisos reales de Roble en desarrollo. Puedes marcarlos como leídos con tu cuenta.</p>
     {status === "loading" && <div className="empty-panel" role="status"><Icon name="bell" size={36} /><h2>Consultando avisos…</h2></div>}
     {status === "signed-out" && <div className="empty-panel"><Icon name="user" size={36} /><h2>Inicia sesión para ver tus avisos</h2><Link href="/login" className="solid-action">Iniciar sesión</Link></div>}
     {status === "error" && <div className="empty-panel" role="alert"><Icon name="bell" size={36} /><h2>No pudimos consultar Roble</h2><p>Inténtalo de nuevo más tarde.</p></div>}
     {status === "ready" && <><div className="roble-filter-row"><div><label className="roble-search-label" htmlFor="roble-notification-search">Buscar avisos</label><input id="roble-notification-search" className="roble-project-search" type="search" value={search} onChange={event => setSearch(event.target.value)} placeholder="Título, mensaje o tipo" /></div></div>
       <div className="explore-tabs" role="tablist" aria-label="Filtrar avisos reales"><button type="button" role="tab" aria-selected={!unreadOnly} className={!unreadOnly ? "active" : ""} onClick={() => setUnreadOnly(false)}>Todos ({notifications.length})</button><button type="button" role="tab" aria-selected={unreadOnly} className={unreadOnly ? "active" : ""} onClick={() => setUnreadOnly(true)}>No leídos ({unread})</button></div>
-      <section className="surface-panel notification-list">{visible.length === 0 ? <div className="empty-panel"><Icon name="bell" size={30} /><h2>{notifications.length ? "No hay avisos con este filtro" : "Aún no tienes avisos en Roble"}</h2></div> : visible.map(item => <article className={`notification-entry ${item.read ? "" : "unread"}`} key={item.id}><div className="notification-row roble-notification-row"><span className="project-icon"><Icon name="bell" /></span><span><strong>{item.title || typeLabel(item.type)}</strong><span>{item.message}</span><small>{typeLabel(item.type)}{dateLabel(item.createdAt) ? ` · ${dateLabel(item.createdAt)}` : ""}</small></span>{!item.read && <i aria-label="No leída" />}</div></article>)}</section>
+      {actionError && <p role="alert" className="wizard-error">{actionError}</p>}<section className="surface-panel notification-list">{visible.length === 0 ? <div className="empty-panel"><Icon name="bell" size={30} /><h2>{notifications.length ? "No hay avisos con este filtro" : "Aún no tienes avisos en Roble"}</h2></div> : visible.map(item => <article className={`notification-entry ${item.read ? "" : "unread"}`} key={item.id}><div className="notification-row roble-notification-row"><span className="project-icon"><Icon name="bell" /></span><span><strong>{item.title || typeLabel(item.type)}</strong><span>{item.message}</span><small>{typeLabel(item.type)}{dateLabel(item.createdAt) ? ` · ${dateLabel(item.createdAt)}` : ""}</small></span>{!item.read && <i aria-label="No leída" />}</div>{!item.read && <button type="button" className="outline-action" disabled={!!busyId} onClick={() => markRead(item.id)}>{busyId === item.id ? "Guardando…" : "Marcar como leído"}</button>}</article>)}</section>
     </>}
   </AppShell>;
 }

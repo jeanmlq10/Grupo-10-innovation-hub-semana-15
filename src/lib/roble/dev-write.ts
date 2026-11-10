@@ -27,26 +27,38 @@ async function verifiedSession(request: NextRequest): Promise<{ config: RobleAut
   return { config, token: session.tokens.accessToken, identity };
 }
 
-export async function devRobleProjectWrite(request: NextRequest, projectId?: string): Promise<NextResponse> {
+export async function devRobleMutation(
+  request: NextRequest,
+  act: (context: { config: RobleAuthConfig; token: string; identity: RobleIdentity }, body: Record<string, unknown>) => Promise<Record<string, unknown>>,
+  successStatus = 200,
+): Promise<NextResponse> {
   if (process.env.NODE_ENV !== "development") return error("El guardado está disponible solo en desarrollo.", 503);
   const origin = request.headers.get("origin");
   if (origin && origin !== request.nextUrl.origin) return error("Solicitud no permitida.", 403);
   if (!request.headers.get("content-type")?.startsWith("application/json")) return error("Solicitud inválida.", 400);
   const bodyText = await request.text();
-  if (bodyText.length > 32_768) return error("El proyecto supera el tamaño permitido.", 413);
+  if (bodyText.length > 32_768) return error("La solicitud supera el tamaño permitido.", 413);
   let body: unknown;
   try { body = JSON.parse(bodyText); } catch { return error("Solicitud inválida.", 400); }
+  if (!body || typeof body !== "object" || Array.isArray(body)) return error("Solicitud inválida.", 400);
   try {
-    const input = parseProjectWrite(body);
-    const { config, token, identity } = await verifiedSession(request);
-    const id = await saveRobleProject(config, token, identity, input, projectId);
-    return NextResponse.json({ id, isDraft: !input.publish || input.audience === "Solo yo" }, { status: projectId ? 200 : 201, headers });
+    const context = await verifiedSession(request);
+    const result = await act(context, body as Record<string, unknown>);
+    return NextResponse.json(result, { status: successStatus, headers });
   } catch (cause) {
     if (cause instanceof ProjectWriteFailure) return error(cause.message, cause.status, cause.projectId);
     if ((cause instanceof RobleAuthFailure || cause instanceof RobleProjectReadFailure) && cause.status === 401) {
       deleteDevSession(request.cookies.get(devSessionCookie)?.value);
       return error("Tu sesión terminó. Inicia sesión de nuevo.", 401);
     }
-    return error("No pudimos completar el guardado en Roble. Revisa tus proyectos antes de reintentar.", 503);
+    return error("No pudimos completar la acción en Roble. Revisa el resultado antes de reintentar.", 503);
   }
+}
+
+export async function devRobleProjectWrite(request: NextRequest, projectId?: string): Promise<NextResponse> {
+  return devRobleMutation(request, async ({ config, token, identity }, body) => {
+    const input = parseProjectWrite(body);
+    const id = await saveRobleProject(config, token, identity, input, projectId);
+    return { id, isDraft: !input.publish || input.audience === "Solo yo" };
+  }, projectId ? 200 : 201);
 }

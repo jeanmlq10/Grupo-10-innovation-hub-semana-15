@@ -3,10 +3,12 @@ import { readRobleRows } from "./own-projects.ts";
 import { publishedProjectsFromResponse, type PublishedProject } from "./projects.ts";
 
 export type PublishedRobleDetail = PublishedProject & {
+  isMine: boolean;
+  canApply: boolean;
   duration: string;
   teamDeadline: string;
   roles: { name: string; needed: number; accepted: number }[];
-  tasks: { id: string; title: string; description: string; needed: number; accepted: number; status: string }[];
+  tasks: { id: string; title: string; description: string; needed: number; accepted: number; status: string; deadline: string }[];
 };
 
 function record(value: unknown): Record<string, unknown> | null {
@@ -24,7 +26,7 @@ function count(value: unknown): number {
   return Number.isFinite(number) && number > 0 ? Math.trunc(number) : 0;
 }
 
-export function publishedProjectDetailFromRows(projectValue: unknown, taskValues: unknown[]): PublishedRobleDetail | null {
+export function publishedProjectDetailFromRows(projectValue: unknown, taskValues: unknown[], viewerId = ""): PublishedRobleDetail | null {
   const row = record(projectValue);
   if (!row) return null;
   const project = publishedProjectsFromResponse([row])[0];
@@ -33,6 +35,8 @@ export function publishedProjectDetailFromRows(projectValue: unknown, taskValues
   const owner = text(row._owner);
   return {
     ...project,
+    isMine: !!viewerId && viewerId === owner,
+    canApply: row.canApply !== false && row.canApply !== "false",
     duration: text(row.duration),
     teamDeadline: text(row.teamDeadline),
     roles: Object.entries(teamRoles).flatMap(([name, value]) => count(value) > 0
@@ -41,7 +45,7 @@ export function publishedProjectDetailFromRows(projectValue: unknown, taskValues
       const task = record(item);
       if (!task || text(task.projectId) !== project.id || !owner || text(task._owner) !== owner) return [];
       const id = text(task._id), title = text(task.title);
-      return id && title ? [{ id, title, description: text(task.description), needed: count(task.requiredCount), accepted: count(task.acceptedCount), status: text(task.status) || "available" }] : [];
+      return id && title ? [{ id, title, description: text(task.description), needed: count(task.requiredCount), accepted: count(task.acceptedCount), status: text(task.status) || "available", deadline: text(task.deadline) }] : [];
     }),
   };
 }
@@ -51,7 +55,7 @@ export async function readPublishedProjects(config: RobleAuthConfig, accessToken
   return publishedProjectsFromResponse(rows);
 }
 
-export async function readPublishedProjectDetail(config: RobleAuthConfig, accessToken: string, id: string): Promise<PublishedRobleDetail | null> {
+export async function readPublishedProjectDetail(config: RobleAuthConfig, accessToken: string, id: string, viewerId = ""): Promise<PublishedRobleDetail | null> {
   if (!id.trim() || id.length > 100) return null;
   const rows = await readRobleRows(config, accessToken, "projects", { _id: id });
   const project = rows.find(item => {
@@ -60,5 +64,5 @@ export async function readPublishedProjectDetail(config: RobleAuthConfig, access
   });
   if (!project) return null;
   const tasks = await readRobleRows(config, accessToken, "project_tasks", { projectId: id });
-  return publishedProjectDetailFromRows(project, tasks);
+  return publishedProjectDetailFromRows(project, tasks, viewerId);
 }

@@ -24,6 +24,9 @@ function OwnRobleProject({ params }: { params: Promise<{ id: string }> }) {
   const [project, setProject] = useState<OwnRobleProjectDetail | null>(null);
   const [status, setStatus] = useState<"loading" | "ready" | "signed-out" | "missing" | "error">("loading");
   const [tab, setTab] = useState<Tab>("Descripción");
+  const [busyRequestId, setBusyRequestId] = useState("");
+  const [actionError, setActionError] = useState("");
+  const [actionSuccess, setActionSuccess] = useState("");
 
   useEffect(() => {
     let active = true;
@@ -42,6 +45,24 @@ function OwnRobleProject({ params }: { params: Promise<{ id: string }> }) {
 
   const pending = project?.requests.filter(request => request.status === "pending") ?? [];
 
+  const decide = async (requestId: string, decision: "accepted" | "rejected") => {
+    if (busyRequestId) return;
+    setBusyRequestId(requestId); setActionError(""); setActionSuccess("");
+    try {
+      const response = await fetch(`/api/projects/mine/${encodeURIComponent(id)}/requests/${encodeURIComponent(requestId)}/decision`, {
+        method: "POST", credentials: "same-origin", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ decision }),
+      });
+      const body: { error?: string } = await response.json();
+      if (!response.ok) throw new Error(body.error || "No se pudo resolver la solicitud.");
+      const refreshed = await fetch(`/api/projects/mine/${encodeURIComponent(id)}`, { credentials: "same-origin", cache: "no-store" });
+      if (!refreshed.ok) throw new Error("La decisión se guardó, pero no pudimos actualizar la vista. Recarga la página.");
+      const detail: { project: OwnRobleProjectDetail } = await refreshed.json();
+      setProject(detail.project);
+      setActionSuccess(decision === "accepted" ? "Solicitud aceptada. Revisa el equipo y los cupos." : "Solicitud rechazada.");
+    } catch (cause) { setActionError(cause instanceof Error ? cause.message : "No se pudo resolver la solicitud."); }
+    finally { setBusyRequestId(""); }
+  };
+
   return <AppShell backHref="/mis-proyectos/roble">
     <p className="preview-note">Datos reales de Roble · Guardado disponible solo en desarrollo.</p>
     {status === "loading" && <div className="empty-panel" role="status"><Icon name="folder" size={36} /><h1>Consultando proyecto…</h1></div>}
@@ -56,7 +77,7 @@ function OwnRobleProject({ params }: { params: Promise<{ id: string }> }) {
         {tab === "Descripción" && <div className="surface-panel"><h2>Sobre el proyecto</h2><p>{project.description || "Sin descripción todavía."}</p><div className="project-meta">{project.categories.map(category => <span className="category-chip" key={category}>{category}</span>)}</div>{project.duration && <p>Duración estimada: {project.duration}</p>}{project.teamDeadline && <p>Postulaciones al equipo hasta: {dateLabel(project.teamDeadline)}</p>}{project.createdAt && <p>Creado el {dateLabel(project.createdAt)}</p>}</div>}
         {tab === "Tareas" && <><h2>Tareas del proyecto</h2>{project.tasks.length === 0 ? <div className="empty-panel"><p>Este proyecto todavía no tiene tareas registradas.</p></div> : project.tasks.map(task => <article className="surface-panel task-row" key={task.id}><span className="project-icon"><Icon name="folder" /></span><div><h3>{task.title}</h3><p>{task.description || "Sin descripción."}</p><small>{Math.max(0, task.needed - task.accepted)} de {task.needed} cupos disponibles{task.deadline ? ` · Hasta ${dateLabel(task.deadline)}` : ""}</small></div><span className="badge success">{task.status === "completed" ? "Completada" : task.status === "in_progress" ? "En progreso" : "Disponible"}</span></article>)}</>}
         {tab === "Miembros" && <><h2>Equipo necesario</h2>{project.teamRoles.length === 0 ? <div className="empty-panel"><p>Este proyecto todavía no definió roles.</p></div> : <div className="content-grid">{project.teamRoles.map(role => <article className="surface-panel role-card" key={role.role}><Icon name="user" /><h3>{role.role}</h3><p>{Math.max(0, role.needed - role.accepted)} de {role.needed} cupos disponibles</p></article>)}</div>}{project.members.length > 0 && <div className="surface-panel"><h2>Miembros registrados</h2>{project.members.map(member => <p key={member.id}>{member.name}{member.role ? ` · ${member.role}` : ""}</p>)}</div>}</>}
-        {tab === "Solicitudes" && <><h2>Solicitudes recibidas</h2>{project.requests.length === 0 ? <div className="empty-panel"><p>Todavía no hay solicitudes para este proyecto.</p></div> : project.requests.map(request => <article className="surface-panel roble-request" key={request.id}><div className="roble-request-heading"><h3>{request.applicantName}</h3><span className="badge">{request.status === "accepted" ? "Aceptada" : request.status === "rejected" ? "Rechazada" : "Pendiente"}</span></div><p>{request.type === "task" ? "Postulación a tarea" : "Solicitud de equipo"}{request.role ? ` · ${request.role}` : ""}</p>{request.message && <p>{request.message}</p>}{request.createdAt && <small>{dateLabel(request.createdAt)}</small>}</article>)}</>}
+        {tab === "Solicitudes" && <><h2>Solicitudes recibidas</h2>{actionError && <p role="alert" className="wizard-error">{actionError}</p>}{actionSuccess && <p role="status" className="preview-note">{actionSuccess}</p>}{project.requests.length === 0 ? <div className="empty-panel"><p>Todavía no hay solicitudes para este proyecto.</p></div> : project.requests.map(request => <article className="surface-panel roble-request" key={request.id}><div className="roble-request-heading"><h3>{request.applicantName}</h3><span className="badge">{request.status === "accepted" ? "Aceptada" : request.status === "rejected" ? "Rechazada" : "Pendiente"}</span></div><p>{request.type === "task" ? "Postulación a tarea" : "Solicitud de equipo"}{request.role ? ` · ${request.role}` : ""}</p>{request.message && <p>{request.message}</p>}{request.createdAt && <small>{dateLabel(request.createdAt)}</small>}{request.status === "pending" && <div className="roble-request-actions"><button type="button" className="solid-action" disabled={!!busyRequestId} onClick={() => decide(request.id, "accepted")}>{busyRequestId === request.id ? "Guardando…" : "Aceptar"}</button><button type="button" className="outline-action" disabled={!!busyRequestId} onClick={() => decide(request.id, "rejected")}>Rechazar</button></div>}</article>)}</>}
       </section><aside className="surface-panel detail-aside"><h2>Información rápida</h2><div className="project-meta"><span className="category-chip">{project.members.length} miembros</span><span className="category-chip">{project.tasks.length} tareas</span><span className="category-chip">{pending.length} solicitudes pendientes</span></div><p>Este resumen proviene de la misma base usada por la app móvil.</p><Link href="/mis-proyectos/roble" className="outline-action">Ver todos mis proyectos</Link></aside></div>
     </>}
   </AppShell>;
