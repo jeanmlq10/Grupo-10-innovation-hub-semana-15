@@ -29,6 +29,9 @@ WHITE = (255, 255, 255)
 PAGE_W = 297
 PAGE_H = 210
 WX, WY, WW, WH = 12, 40, 273, 153
+BRAND_DIR = Path(__file__).resolve().parents[1] / "public" / "brand"
+LOGO_PATH = BRAND_DIR / "logo-proyectate.png"
+SYMBOL_PATH = BRAND_DIR / "logo-symbol.png"
 
 FLOWS = [
     ("Iniciar sesión", "Identidad compartida con la app móvil", [
@@ -106,6 +109,14 @@ def rect(pdf: FPDF, x: float, y: float, w: float, h: float, fill=WHITE, stroke=L
     pdf.rect(x, y, w, h, style="DF", round_corners=radius > 0, corner_radius=radius)
 
 
+def logo(pdf: FPDF, x: float, y: float, width: float) -> None:
+    pdf.image(str(LOGO_PATH), x=x, y=y, w=width, h=width * 477 / 1113)
+
+
+def mascot(pdf: FPDF, x: float, y: float, height: float) -> None:
+    pdf.image(str(SYMBOL_PATH), x=x, y=y, w=height * 359 / 473, h=height)
+
+
 def rule(pdf: FPDF, x: float, y: float, w: float, rgb=LINE) -> None:
     pdf.set_draw_color(*rgb)
     pdf.line(x, y, x + w, y)
@@ -178,9 +189,8 @@ def auth_shell(pdf: FPDF) -> tuple[float, float, float]:
     x, y, w, h = viewport(pdf)
     pdf.set_fill_color(*PALE)
     pdf.rect(x + 0.3, y, w * 0.49, h - 0.3, style="F")
-    txt(pdf, x + 18, y + 23, "PROYÉCTATE", 16, True, PURPLE, 105)
-    rect(pdf, x + 30, y + 47, 72, 52, SOFT, LINE, 4)
-    txt(pdf, x + 38, y + 64, "[símbolo de marca]", 10, False, VIOLET, 62)
+    logo(pdf, x + 30, y + 12, 76)
+    mascot(pdf, x + 50, y + 51, 50)
     txt(pdf, x + 17, y + 111, "Tu próxima gran idea empieza aquí.", 11, True, PURPLE, 115)
     return x + w * 0.55, y + 20, w * 0.39
 
@@ -188,7 +198,7 @@ def auth_shell(pdf: FPDF) -> tuple[float, float, float]:
 def app_shell(pdf: FPDF, active: str, heading: str, subtitle: str = "") -> tuple[float, float, float]:
     x, y, w, h = viewport(pdf)
     rect(pdf, x + 0.4, y, 49, h - 0.5, SOFT, LINE, 0)
-    txt(pdf, x + 6, y + 12, "PROYÉCTATE", 11, True, PURPLE, 38)
+    logo(pdf, x + 5, y + 7, 38)
     nav = ["Explorar", "Mis proyectos", "Notificaciones", "Mensajes", "Perfil"]
     for i, name in enumerate(nav):
         ny = y + 35 + i * 17
@@ -207,7 +217,7 @@ def app_shell(pdf: FPDF, active: str, heading: str, subtitle: str = "") -> tuple
 def wizard_shell(pdf: FPDF, step: int, heading: str, subtitle: str) -> tuple[float, float, float]:
     x, y, w, h = viewport(pdf)
     rect(pdf, x + 0.4, y, 65, h - 0.5, PALE, PALE, 0)
-    txt(pdf, x + 8, y + 12, "PROYÉCTATE", 11, True, PURPLE, 49)
+    logo(pdf, x + 8, y + 5, 49)
     txt(pdf, x + 8, y + 30, "Crear proyecto", 12, True, PURPLE, 50)
     labels = ["Comencemos", "Información básica", "Equipo necesario", "Tiempo estimado", "Audiencia", "Revisar y publicar"]
     for i, label in enumerate(labels, 1):
@@ -232,7 +242,7 @@ def wizard_shell(pdf: FPDF, step: int, heading: str, subtitle: str) -> tuple[flo
 
 def project_banner(pdf: FPDF, cx: float, cy: float, cw: float, title: str = "EcoCampus") -> None:
     rect(pdf, cx, cy, cw, 26, PALE, PALE, 3)
-    txt(pdf, cx + 6, cy + 5, "[imagen o símbolo del proyecto]", 8.5, False, VIOLET, cw - 12)
+    txt(pdf, cx + 6, cy + 5, "[portada del proyecto]", 8.5, False, VIOLET, cw - 12)
     txt(pdf, cx + 5, cy + 29, title, 14, True, PURPLE, cw * 0.6)
     pill(pdf, cx + cw - 37, cy + 29, "0 miembros", PALE, PURPLE, 35)
     txt(pdf, cx + 5, cy + 42, "Descripción   Tareas   Miembros   Actividad", 8.5, True, MUTED, cw - 10)
@@ -253,8 +263,7 @@ def draw_auth(pdf: FPDF, kind: str) -> None:
     if kind == "auth_welcome":
         x, y, w, h = viewport(pdf)
         txt(pdf, x + 97, y + 16, "¡Bienvenido!", 20, True, PURPLE, 100)
-        rect(pdf, x + 104, y + 44, 64, 38, PALE, PALE, 4)
-        txt(pdf, x + 115, y + 59, "[logo y mascota]", 10, False, VIOLET, 45)
+        logo(pdf, x + 91, y + 44, 91)
         txt(pdf, x + 74, y + 90, "Únete a proyectos que transforman ideas en impacto.", 10, False, MUTED, 145)
         btn(pdf, x + 91, y + 106, 91, 10, "Iniciar sesión", True)
         btn(pdf, x + 91, y + 119, 91, 10, "Regístrate")
@@ -320,8 +329,7 @@ def draw_wizard(pdf: FPDF, kind: str) -> None:
     step, heading, subtitle = variants[kind]
     cx, cy, cw = wizard_shell(pdf, step, heading, subtitle)
     if kind == "wizard_idea":
-        rect(pdf, cx + cw * 0.38, cy + 2, 43, 36, PALE, PALE, 3)
-        txt(pdf, cx + cw * 0.38 + 6, cy + 16, "[mascota]", 9, False, VIOLET, 32)
+        mascot(pdf, cx + (cw - 34) / 2, cy + 2, 43)
         field(pdf, cx + 10, cy + 45, cw - 20, "Nombre de tu idea", "Ej. EcoCampus", 13)
     elif kind == "wizard_basic":
         field(pdf, cx + 8, cy + 1, cw - 16, "Nombre del proyecto", "EcoCampus", 10)
@@ -578,6 +586,7 @@ def cover(pdf: FPDF) -> None:
     rect(pdf, 13, 18, 271, 47, PALE, PALE, 4)
     txt(pdf, 22, 26, "Wireframes diseñados por tareas", 24, True, PURPLE, 246)
     txt(pdf, 22, 48, "Proyéctate web · Grupo 10 · 9 de noviembre de 2026", 11, False, MUTED, 240)
+    logo(pdf, 225, 27, 47)
     txt(pdf, 13, 75, f"5 tareas · {TOTAL_SCREENS} pantallas diseñadas · 2 vistas de apoyo", 13, True, PURPLE, 270)
     page = 2
     for index, (name, purpose, screens) in enumerate(FLOWS, 1):

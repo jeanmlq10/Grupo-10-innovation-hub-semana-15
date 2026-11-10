@@ -2,6 +2,8 @@
 
 Estos **sí son wireframes dibujados para la entrega**, no capturas de la web. La colección usa la identidad visual de Proyéctate como referencia y muestra cinco tareas completas con estados principales, alternativas y resultados.
 
+La marca usa los recursos oficiales de `public/brand/`: el logo completo identifica la aplicación y el símbolo sin texto se usa cuando aparece la mascota.
+
 **Archivo para presentar:** [PDF vectorial de 34 páginas](WIREFRAMES_DISENADOS_POR_TAREAS_2026-11-09.pdf).
 
 **Fuente editable:** [`tools/build_wireframes_design_pdf.py`](../tools/build_wireframes_design_pdf.py).
