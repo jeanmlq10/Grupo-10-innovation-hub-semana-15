@@ -43,7 +43,7 @@ export function publishedProjectDetailFromRows(projectValue: unknown, taskValues
       ? [{ name, needed: count(value), accepted: count(acceptedCounts[name]) }] : []),
     tasks: taskValues.flatMap(item => {
       const task = record(item);
-      if (!task || text(task.projectId) !== project.id || !owner || text(task._owner) !== owner) return [];
+      if (!task || text(task.projectId) !== project.id || !owner || text(task._owner) !== owner || text(task.visibility) === "team") return [];
       const id = text(task._id), title = text(task.title);
       return id && title ? [{ id, title, description: text(task.description), needed: count(task.requiredCount), accepted: count(task.acceptedCount), status: text(task.status) || "available", deadline: text(task.deadline) }] : [];
     }),

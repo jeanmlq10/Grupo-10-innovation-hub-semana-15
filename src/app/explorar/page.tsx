@@ -1,7 +1,5 @@
-import { ExploreView } from "@/components/ExploreView";
-import { getPublishedProjects } from "@/lib/roble/projects";
+import { redirect } from "next/navigation";
 
-export default async function ExplorePage() {
-  const result = await getPublishedProjects();
-  return <ExploreView result={result} />;
+export default function ExplorePage() {
+  redirect("/explorar/roble");
 }

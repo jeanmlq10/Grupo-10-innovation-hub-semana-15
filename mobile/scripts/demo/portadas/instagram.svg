@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2A0057"/><stop offset="1" stop-color="#8A3FFC"/></linearGradient>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+  <circle cx="860" cy="170" r="120" fill="#7ED6FF" opacity="0.25"/>
+  <circle cx="150" cy="880" r="160" fill="#D9FF4D" opacity="0.18"/>
+  <!-- teléfono con feed -->
+  <rect x="300" y="150" width="424" height="740" rx="56" fill="#FFFFFF"/>
+  <rect x="330" y="200" width="364" height="44" rx="12" fill="#F0E7FF"/>
+  <circle cx="358" cy="222" r="14" fill="#8A3FFC"/>
+  <rect x="384" y="214" width="150" height="16" rx="8" fill="#CDB2FE"/>
+  <!-- foto principal -->
+  <rect x="330" y="262" width="364" height="300" rx="20" fill="#7ED6FF"/>
+  <circle cx="610" cy="330" r="38" fill="#D9FF4D"/>
+  <path d="M330 520 L440 400 L530 490 L590 440 L694 540 L694 542 Q694 562 674 562 L350 562 Q330 562 330 542 Z" fill="#2A0057"/>
+  <!-- acciones -->
+  <path d="M362 612 c-14-18 -42-8 -36 14 c4 14 36 34 36 34 s32-20 36-34 c6-22 -22-32 -36-14z" fill="#8A3FFC"/>
+  <path d="M430 596 h44 a12 12 0 0 1 12 12 v26 a12 12 0 0 1 -12 12 h-24 l-14 12 v-12 h-6 a12 12 0 0 1 -12-12 v-26 a12 12 0 0 1 12-12z" fill="none" stroke="#2A0057" stroke-width="7"/>
+  <rect x="330" y="680" width="260" height="16" rx="8" fill="#CDB2FE"/>
+  <rect x="330" y="710" width="200" height="16" rx="8" fill="#ECE6F5"/>
+  <!-- miniaturas -->
+  <rect x="330" y="748" width="112" height="112" rx="14" fill="#D9FF4D"/>
+  <rect x="456" y="748" width="112" height="112" rx="14" fill="#CDB2FE"/>
+  <rect x="582" y="748" width="112" height="112" rx="14" fill="#7ED6FF"/>
+  <!-- cámara flotante -->
+  <g transform="translate(700 600)">
+    <rect x="0" y="20" width="200" height="150" rx="34" fill="#D9FF4D"/>
+    <rect x="60" y="0" width="80" height="40" rx="12" fill="#D9FF4D"/>
+    <circle cx="100" cy="95" r="48" fill="#2A0057"/>
+    <circle cx="100" cy="95" r="26" fill="#7ED6FF"/>
+    <circle cx="165" cy="50" r="10" fill="#2A0057"/>
+  </g>
+  <!-- burbujas de mensaje -->
+  <g transform="translate(110 260)">
+    <rect width="150" height="96" rx="28" fill="#FFFFFF"/>
+    <path d="M40 92 l-10 34 l40-34z" fill="#FFFFFF"/>
+    <circle cx="45" cy="48" r="10" fill="#8A3FFC"/><circle cx="75" cy="48" r="10" fill="#8A3FFC"/><circle cx="105" cy="48" r="10" fill="#8A3FFC"/>
+  </g>
+</svg>

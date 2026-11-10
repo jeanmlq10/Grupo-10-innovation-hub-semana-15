@@ -38,7 +38,7 @@ export function publishedProjectsFromResponse(value: unknown): PublishedProject[
     if (!item || typeof item !== "object") return [];
     const row = item as Record<string, unknown>;
     const isPublished = row.isDraft === false || row.isDraft === "false";
-    if (!isPublished || text(row.audience) !== "Toda la comunidad") return [];
+    if (!isPublished || text(row.audience) !== "Toda la comunidad" || text(row.deletedAt)) return [];
     const id = text(row._id);
     const name = text(row.name);
     if (!id || !name) return [];

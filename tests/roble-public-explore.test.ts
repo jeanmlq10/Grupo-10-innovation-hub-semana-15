@@ -12,6 +12,7 @@ test("published detail excludes unrelated tasks and private backend fields", () 
     { _id: "task-b", projectId: "project-draft", title: "Secreta" },
     { _id: "task-c", _owner: "stranger", projectId: "project-public", title: "Falsa" },
     { _id: "task-d", projectId: "project-public", title: "Sin autor" },
+    { _id: "task-private", _owner: "owner-a", projectId: "project-public", title: "Contenido interno", visibility: "team" },
   ]);
   assert.deepEqual(detail?.roles, [{ name: "Diseñador/a", needed: 2, accepted: 1 }]);
   assert.deepEqual(detail?.tasks.map(task => task.title), ["Diseñar"]);
@@ -19,6 +20,7 @@ test("published detail excludes unrelated tasks and private backend fields", () 
   assert.equal(JSON.stringify(detail).includes("Secreta"), false);
   assert.equal(publishedProjectDetailFromRows(draft, []), null);
   assert.equal(publishedProjectDetailFromRows(privatePublished, []), null);
+  assert.equal(publishedProjectDetailFromRows({ ...published, deletedAt: "2026-11-10T12:00:00Z" }, []), null);
 });
 
 test("authenticated explore filters drafts and private projects even if API returns them", async () => {

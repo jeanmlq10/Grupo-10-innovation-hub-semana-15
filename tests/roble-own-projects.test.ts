@@ -7,6 +7,7 @@ const rows = { data: [
   { _id: "own-draft", _owner: "user-a", name: "Idea privada", isDraft: true, audience: "Solo yo" },
   { _id: "foreign-draft", _owner: "user-b", name: "Secreto ajeno", isDraft: true, audience: "Solo yo" },
   { _id: "unowned", name: "Sin dueño", isDraft: false, audience: "Toda la comunidad" },
+  { _id: "deleted", _owner: "user-a", name: "Borrado en móvil", deletedAt: "2026-11-10T12:00:00Z" },
 ] };
 
 test("owned project response omits foreign rows and private backend fields", () => {

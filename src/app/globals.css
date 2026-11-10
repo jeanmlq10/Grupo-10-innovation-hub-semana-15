@@ -107,6 +107,8 @@ a { color: inherit; text-decoration: none; }
 .nav-item.selected { background: var(--lavender); color: var(--primary); font-weight: 700; }
 .nav-item.unavailable { cursor: default; }
 .side-spacer { flex: 1; }
+.nav-account-link { border-top: 1px solid var(--line); color: var(--primary); font-size: 14px; font-weight: 700; padding: 16px 14px 4px; }
+.nav-account-link:hover { color: var(--accent); }
 .user-mini { align-items: center; border-top: 1px solid var(--line); display: flex; font-size: 13px; gap: 10px; padding: 12px; }
 .user-mini strong, .user-mini small { display: block; }
 .user-mini small { color: var(--muted); margin-top: 3px; }

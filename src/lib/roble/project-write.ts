@@ -102,10 +102,14 @@ export async function saveRobleProject(config: RobleAuthConfig, token: string, i
     const rows = await readRobleRows(config, token, "projects", { _id: projectId, _owner: identity.userId });
     existing = rows.map(object).find(row => row?._id === projectId && row._owner === identity.userId) ?? undefined;
     if (!existing) throw new ProjectWriteFailure(404, "Proyecto no disponible o no pertenece a tu cuenta.");
+    if (string(existing.deletedAt)) throw new ProjectWriteFailure(404, "Este proyecto fue eliminado en la app móvil.");
   }
   const fields = projectFields(input, identity, existing);
   const currentTasks = projectId ? (await readRobleRows(config, token, "project_tasks", { projectId })).map(object)
     .filter((row): row is Row => !!row && row.projectId === projectId && row._owner === identity.userId) : [];
+  if (currentTasks.some(row => string(row.visibility) === "team")) {
+    throw new ProjectWriteFailure(409, "Este proyecto tiene tareas internas. Edítalas desde la app móvil para conservar su privacidad.");
+  }
   const currentById = new Map(currentTasks.map(row => [String(row._id), row]));
   const savedTasks = input.tasks.filter(task => task.title);
   for (const task of savedTasks) {

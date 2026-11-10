@@ -1,3 +1,5 @@
-import { ProjectWizard } from "@/components/ProjectWizard";
+import { redirect } from "next/navigation";
 
-export default function NewProjectPage() { return <ProjectWizard />; }
+export default function NewProjectPage() {
+  redirect("/proyectos/roble/nuevo");
+}

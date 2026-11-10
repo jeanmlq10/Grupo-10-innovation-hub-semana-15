@@ -1,8 +1,13 @@
-# Proyéctate Web
+# Proyéctate · Web y móvil
+
+Este repositorio contiene la web Next.js en la raíz y la app Expo/React Native
+en [`mobile/`](mobile/). Ambos clientes usan el mismo contrato de Roble y las
+mismas cuentas. La [guía de entrega web y móvil](docs/ENTREGA_WEB_MOVIL.md)
+explica cómo ejecutarlos, comprobar los flujos compartidos y grabar el video.
 
 El estado actualizado de vistas, diseño y conexión a Roble está en [docs/ESTADO_PROYECTATE.md](docs/ESTADO_PROYECTATE.md). El reparto previo entre Jean y Óscar queda documentado en `docs/REPARTO_JEAN_OSCAR.md`; Jean asumió la implementación web completa.
 
-Cliente web de Proyéctate (Grupo 10), construido con Next.js y TypeScript. La aplicación móvil permanece en el repositorio `Grupo-10-innovation-hub`; ambas usarán el mismo proyecto de Roble y el mismo `userId` para identificar a cada persona.
+Cliente web de Proyéctate (Grupo 10), construido con Next.js y TypeScript. La nueva app móvil está en `mobile/`; la app Flutter original permanece en su repositorio histórico.
 
 ## Desarrollo local
 
@@ -18,7 +23,7 @@ Abrir `http://localhost:3000`. En desarrollo, `/login` autentica con la misma cu
 
 El [registro y la recuperación de contraseña](docs/FLUJOS_CUENTA_ROBLE.md) también funcionan en desarrollo: `/registro` envía el código institucional, `/verificar-correo` confirma la cuenta y permite reenviar el código, y `/recuperar-contrasena` lleva a `/restablecer-contrasena` con el token recibido. La web no persiste contraseñas ni códigos en archivos o almacenamiento del navegador.
 
-En desarrollo, después de iniciar sesión, **Mi cuenta → Ver mis proyectos en Roble** muestra los proyectos de la cuenta real, permite crear borradores, publicar y editar con el asistente de seis pasos. El proyecto se guarda primero como borrador, luego sus tareas y al final se publica; si falla una etapa, se muestra el ID para revisar el resultado parcial. **Explorar → Explorar proyectos reales en Roble** muestra proyectos publicados y permite solicitar un rol o una tarea. La persona creadora puede aceptar o rechazar desde su ficha; cada cuenta ve sus postulaciones y avisos, y puede marcar estos últimos como leídos. Las listas de la demostración A/B siguen separadas; perfiles y mensajes reales permanecen desactivados. No establecer `ROBLE_PUBLIC_READ_ENABLED=true` hasta verificar y corregir la lectura pública de borradores en Roble. El archivo `.env.local` no se versiona. Ver el [guion E2E manual](docs/E2E_MANUAL_ROBLE.md), la [guía de proyectos reales](docs/PRUEBA_PROYECTOS_ROBLE.md) y la [guía de actividad real](docs/PRUEBA_ACTIVIDAD_ROBLE.md).
+En desarrollo, después de iniciar sesión, la navegación principal usa Roble para explorar proyectos, crear y editar proyectos propios, gestionar postulaciones, ver avisos, consultar el perfil y enviar mensajes. El proyecto se guarda primero como borrador, luego sus tareas y al final se publica; si falla una etapa, se muestra el ID para revisar el resultado parcial. La web omite proyectos eliminados y tareas internas en vistas públicas. No establecer `ROBLE_PUBLIC_READ_ENABLED=true` hasta verificar y corregir la lectura pública de borradores en Roble. El archivo `.env.local` no se versiona. Ver el [guion E2E manual](docs/E2E_MANUAL_ROBLE.md) y la [guía de entrega](docs/ENTREGA_WEB_MOVIL.md).
 
 ## Comprobaciones
 
@@ -43,6 +48,7 @@ Los [wireframes nuevos dibujados para esas cinco tareas](docs/WIREFRAMES_DISENAD
 ## Estructura
 
 - `src/app/`: rutas y presentación.
+- `mobile/`: app Expo/React Native independiente, con sus propios paquetes.
 - `src/lib/roble/`: adaptación de respuestas de Roble.
 - `tests/`: pruebas del contrato público.
 - `docs/disenos-web.html`: prototipo visual de referencia; sus datos y botones son demostrativos.

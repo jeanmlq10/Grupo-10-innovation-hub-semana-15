@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7ED6FF"/><stop offset="1" stop-color="#E3F6FF"/></linearGradient>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+  <!-- copos -->
+  <g stroke="#FFFFFF" stroke-width="10" stroke-linecap="round">
+    <g transform="translate(180 180)"><line x1="-50" y1="0" x2="50" y2="0"/><line x1="-25" y1="-43" x2="25" y2="43"/><line x1="-25" y1="43" x2="25" y2="-43"/></g>
+    <g transform="translate(860 300)"><line x1="-36" y1="0" x2="36" y2="0"/><line x1="-18" y1="-31" x2="18" y2="31"/><line x1="-18" y1="31" x2="18" y2="-31"/></g>
+    <g transform="translate(820 860)"><line x1="-40" y1="0" x2="40" y2="0"/><line x1="-20" y1="-35" x2="20" y2="35"/><line x1="-20" y1="35" x2="20" y2="-35"/></g>
+  </g>
+  <!-- cono -->
+  <g transform="translate(400 260)">
+    <circle cx="0" cy="170" r="130" fill="#F0E7FF"/>
+    <circle cx="-90" cy="230" r="90" fill="#D9FF4D"/>
+    <circle cx="90" cy="230" r="90" fill="#CDB2FE"/>
+    <path d="M-130 260 Q-140 330 -110 300 Q-90 360 -60 300 Q-30 350 0 300 Q30 350 60 300 Q90 360 110 300 Q140 330 130 260" fill="#8A3FFC"/>
+    <path d="M-150 280 L0 700 L150 280 Z" fill="#F4C27A" stroke="#2A0057" stroke-width="10" stroke-linejoin="round"/>
+    <path d="M-100 360 L60 560 M-40 330 L100 470 M40 320 L120 400 M-120 420 L20 600" stroke="#2A0057" stroke-width="6" opacity="0.45"/>
+    <path d="M100 360 L-60 560 M40 330 L-100 470 M-40 320 L-120 400 M120 420 L-20 600" stroke="#2A0057" stroke-width="6" opacity="0.45"/>
+    <circle cx="-40" cy="120" r="10" fill="#2A0057"/><circle cx="35" cy="135" r="10" fill="#2A0057"/>
+  </g>
+  <!-- paleta -->
+  <g transform="translate(720 420) rotate(14)">
+    <rect x="-18" y="250" width="36" height="170" rx="18" fill="#F4C27A" stroke="#2A0057" stroke-width="8"/>
+    <rect x="-110" y="0" width="220" height="300" rx="100" fill="#D23A55" stroke="#2A0057" stroke-width="10"/>
+    <path d="M-110 120 Q0 160 110 120 L110 200 Q0 240 -110 200 Z" fill="#FFFFFF" opacity="0.85"/>
+    <circle cx="-40" cy="70" r="12" fill="#2A0057"/><circle cx="30" cy="50" r="12" fill="#2A0057"/>
+  </g>
+  <rect x="0" y="930" width="1024" height="94" fill="#2A0057"/>
+  <text x="512" y="992" font-family="Arial, Helvetica, sans-serif" font-size="54" font-weight="700" fill="#D9FF4D" text-anchor="middle" letter-spacing="6">POLAR CRAVING</text>
+</svg>

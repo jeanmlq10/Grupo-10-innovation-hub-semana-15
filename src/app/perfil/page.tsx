@@ -1,27 +1,47 @@
 "use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { AppShell } from "@/components/AppShell";
 import { Icon } from "@/components/Icon";
 import { ProfileAvatar } from "@/components/ProfileAvatar";
-import { useDemoWorkspace } from "@/lib/projects/demo-browser";
-import { useDemoProfiles } from "@/lib/profile/demo-browser";
-import { trajectory } from "@/lib/profile/demo-domain";
 
-const menu = [
-  { href: "/mis-proyectos", icon: "folder" as const, label: "Mis proyectos" },
-  { href: "/perfil/trayectoria", icon: "clock" as const, label: "Historial y trayectoria" },
-  { href: "/mensajes", icon: "chat" as const, label: "Mensajes" },
-  { href: "/perfil/ajustes", icon: "gear" as const, label: "Configuración" },
-  { href: "/notificaciones", icon: "bell" as const, label: "Notificaciones" },
-];
+type Profile = { name: string; username: string; bio: string; career: string; avatarIcon: string } | null;
+type Summary = { profile: Profile; stats: { projectsCreated: number; participations: number } };
+type Identity = { userId: string; name: string; email: string };
+
 export default function ProfilePage() {
-  const workspace = useDemoWorkspace(), profiles = useDemoProfiles();
-  const demo = process.env.NODE_ENV === "development";
-  const profile = demo ? profiles.profiles[workspace.actor] : null;
-  const stats = demo ? trajectory(workspace, workspace.actor) : null;
-  return <AppShell><header className="topbar"><div className="page-intro"><h1>Perfil</h1></div></header>
-    <p className="preview-note">{demo ? <>Demostración local · Estos datos viven solo en este navegador. <Link href="/cuenta">Ver mi identidad de Roble</Link>.</> : "Conecta tu cuenta de Roble para consultar tu perfil."}</p>
-    <div className="profile-grid"><div><section className="surface-panel profile-card">{profile ? <ProfileAvatar name={profile.name} avatarIcon={profile.avatarIcon} /> : <span className="profile-avatar">?</span>}<h2>{profile?.name ?? "Tu perfil"}</h2><p>{profile ? `@${profile.username}` : "Inicia sesión para ver tus datos"}</p>{profile?.career && <p>{profile.career}</p>}{profile?.bio && <p>{profile.bio}</p>}{profile && <Link className="outline-action" href="/perfil/editar"><Icon name="edit" size={17} /> Editar perfil</Link>}</section><nav className="profile-menu" aria-label="Opciones de perfil">{menu.map(item => <Link href={item.href} key={item.href}><Icon name={item.icon} />{item.label}<span>›</span></Link>)}</nav></div>
-      <section><div className="section-heading"><h2>Resumen de trayectoria</h2><Link href="/perfil/trayectoria">Ver más ›</Link></div><div className="stats-grid"><div className="stat-card"><Icon name="folder" /><strong>{stats?.projectsCreated ?? "—"}</strong><span>Proyectos creados</span></div><div className="stat-card"><Icon name="check" /><strong>{stats?.tasksCompleted ?? "—"}</strong><span>Tareas completadas</span></div><div className="stat-card"><Icon name="user" /><strong>{stats?.participations ?? "—"}</strong><span>Participaciones</span></div><div className="stat-card"><Icon name="clock" /><strong>{stats?.commitment ?? "—"}</strong><span>Compromiso</span></div></div><p className="profile-muted">Las cifras cambian con los proyectos y solicitudes de esta demostración.</p></section></div>
+  const [identity, setIdentity] = useState<Identity | null>(null);
+  const [summary, setSummary] = useState<Summary | null>(null);
+  const [status, setStatus] = useState<"loading" | "ready" | "signed-out" | "error">("loading");
+
+  useEffect(() => {
+    let active = true;
+    Promise.all([
+      fetch("/api/auth/session", { credentials: "same-origin", cache: "no-store" }),
+      fetch("/api/profile/me", { credentials: "same-origin", cache: "no-store" }),
+    ]).then(async ([auth, profile]) => {
+      if (!active) return;
+      if (auth.status === 401 || profile.status === 401) { setStatus("signed-out"); return; }
+      if (!auth.ok || !profile.ok) { setStatus("error"); return; }
+      const [authBody, profileBody] = await Promise.all([auth.json(), profile.json()]);
+      if (active) { setIdentity(authBody.user); setSummary(profileBody); setStatus("ready"); }
+    }).catch(() => { if (active) setStatus("error"); });
+    return () => { active = false; };
+  }, []);
+
+  const profile = summary?.profile;
+  const name = profile?.name || identity?.name || "Tu perfil";
+  return <AppShell><header className="topbar"><div className="page-intro"><h1>Perfil</h1><p>Tu información compartida con la app móvil</p></div></header>
+    {status === "loading" && <div className="empty-panel" role="status"><h2>Consultando tu perfil en Roble…</h2></div>}
+    {status === "signed-out" && <div className="empty-panel"><h2>Inicia sesión para ver tu perfil</h2><Link className="solid-action" href="/login">Iniciar sesión</Link></div>}
+    {status === "error" && <div className="empty-panel" role="alert"><h2>No pudimos consultar tu perfil</h2><p>Comprueba tu sesión y vuelve a intentarlo.</p></div>}
+    {status === "ready" && identity && summary && <div className="profile-grid"><div>
+      <section className="surface-panel profile-card"><ProfileAvatar name={name} avatarIcon={profile?.avatarIcon || "sprout"} /><h2>{name}</h2>
+        {profile?.username && <p>@{profile.username}</p>}{profile?.career && <p>{profile.career}</p>}{profile?.bio && <p>{profile.bio}</p>}
+        {!profile && <p>Completa tu perfil en la app móvil para mostrar más información.</p>}
+        <Link className="outline-action" href="/cuenta"><Icon name="user" size={17} /> Mi cuenta de Roble</Link></section>
+      <nav className="profile-menu" aria-label="Opciones de perfil"><Link href="/mis-proyectos/roble"><Icon name="folder" />Mis proyectos<span>›</span></Link><Link href="/postulaciones/roble"><Icon name="clock" />Mis postulaciones<span>›</span></Link><Link href="/mensajes"><Icon name="chat" />Mensajes<span>›</span></Link><Link href="/notificaciones/roble"><Icon name="bell" />Notificaciones<span>›</span></Link></nav>
+    </div><section><div className="section-heading"><h2>Resumen de trayectoria</h2></div><div className="stats-grid"><div className="stat-card"><Icon name="folder" /><strong>{summary.stats.projectsCreated}</strong><span>Proyectos publicados</span></div><div className="stat-card"><Icon name="user" /><strong>{summary.stats.participations}</strong><span>Participaciones</span></div></div><p className="profile-muted">Datos consultados en Roble para tu cuenta.</p></section></div>}
   </AppShell>;
 }

@@ -1,21 +1,40 @@
 "use client";
-import { useState } from "react";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { AppShell } from "@/components/AppShell";
 import { Icon } from "@/components/Icon";
-import { useDemoWorkspace } from "@/lib/projects/demo-browser";
-import { useDemoProfiles } from "@/lib/profile/demo-browser";
-import { useDemoComms } from "@/lib/comms/demo-browser";
-import { conversations } from "@/lib/comms/demo-domain";
+import type { RobleMessage } from "@/lib/roble/messages";
 
 export default function MessagesPage() {
+  const [messages, setMessages] = useState<RobleMessage[]>([]);
+  const [userId, setUserId] = useState("");
   const [query, setQuery] = useState("");
-  const workspace = useDemoWorkspace(), profiles = useDemoProfiles(), comms = useDemoComms();
-  const demo = process.env.NODE_ENV === "development";
-  const other = workspace.actor === "demo-a" ? "demo-b" : "demo-a";
-  const items = demo ? conversations(comms, workspace.actor, profiles).filter(item => `${item.name} ${item.last.text}`.toLocaleLowerCase("es").includes(query.toLocaleLowerCase("es"))) : [];
-  return <AppShell backHref="/perfil"><header className="topbar"><div className="page-intro"><h1>Mensajes</h1><p>Conversaciones con tu comunidad</p></div><div className="topbar-spacer" /><label className="search-box"><Icon name="search" /><span className="sr-only">Buscar conversaciones</span><input value={query} onChange={event => setQuery(event.target.value)} placeholder="Buscar conversaciones…" /></label></header>
-    <p className="preview-note">{demo ? "Demostración local · Los mensajes A/B se guardan solo en este navegador." : "Las conversaciones estarán disponibles al conectar tu cuenta de Roble."}</p>
-    <section className="surface-panel conversation-list">{items.length ? items.map(item => <Link href={`/mensajes/${item.other}`} className="conversation-row" key={item.other}><span className="conversation-avatar"><Icon name="user" /></span><span className="conversation-copy"><strong>{item.name}</strong><span>{item.last.fromUserId === workspace.actor ? "Tú: " : ""}{item.last.text}</span></span><span className="conversation-meta"><time>{new Date(item.last.createdAt).toLocaleDateString("es-CO")}</time>{item.unreadCount > 0 && <b aria-label={`${item.unreadCount} mensajes no leídos`}>{item.unreadCount}</b>}</span></Link>) : <div className="empty-panel"><Icon name="chat" size={36} /><h2>{demo && query ? "No hay conversaciones con esa búsqueda" : "Todavía no tienes conversaciones"}</h2><p>{demo ? "Empieza una conversación desde el perfil de otra persona." : "Podrás escribir a otros miembros cuando conectemos Roble."}</p>{demo && <Link href={`/usuarios/${other}`} className="outline-action">Ver perfil de {profiles.profiles[other].name}</Link>}</div>}</section>
+  const [status, setStatus] = useState<"loading" | "ready" | "signed-out" | "error">("loading");
+  useEffect(() => {
+    let active = true;
+    fetch("/api/messages", { credentials: "same-origin", cache: "no-store" }).then(async response => {
+      if (!active) return;
+      if (response.status === 401) { setStatus("signed-out"); return; }
+      if (!response.ok) { setStatus("error"); return; }
+      const body: { messages: RobleMessage[]; userId: string } = await response.json();
+      if (active) { setMessages(body.messages); setUserId(body.userId); setStatus("ready"); }
+    }).catch(() => { if (active) setStatus("error"); });
+    return () => { active = false; };
+  }, []);
+  const latest = new Map<string, RobleMessage>();
+  for (const message of messages) latest.set(message.fromUserId === userId ? message.toUserId : message.fromUserId, message);
+  const conversations = [...latest.entries()].reverse().filter(([, message]) => {
+    const name = message.fromUserId === userId ? message.toName : message.fromName;
+    return `${name} ${message.text}`.toLocaleLowerCase("es").includes(query.toLocaleLowerCase("es"));
+  });
+  return <AppShell><header className="topbar"><div className="page-intro"><h1>Mensajes</h1><p>Conversaciones de tu cuenta de Roble</p></div><div className="topbar-spacer" /><label className="search-box"><Icon name="search" /><span className="sr-only">Buscar conversaciones</span><input value={query} onChange={event => setQuery(event.target.value)} placeholder="Buscar conversaciones…" /></label></header>
+    {status === "loading" && <div className="empty-panel" role="status"><h2>Consultando mensajes…</h2></div>}
+    {status === "signed-out" && <div className="empty-panel"><h2>Inicia sesión para ver tus mensajes</h2><Link className="solid-action" href="/login">Iniciar sesión</Link></div>}
+    {status === "error" && <div className="empty-panel" role="alert"><h2>No pudimos consultar tus mensajes</h2><p>Comprueba tu sesión y vuelve a intentarlo.</p></div>}
+    {status === "ready" && <section className="surface-panel conversation-list">{conversations.length ? conversations.map(([other, message]) => {
+      const name = message.fromUserId === userId ? message.toName : message.fromName;
+      return <Link href={`/mensajes/${encodeURIComponent(other)}`} className="conversation-row" key={other}><span className="conversation-avatar"><Icon name="user" /></span><span className="conversation-copy"><strong>{name || "Usuario"}</strong><span>{message.fromUserId === userId ? "Tú: " : ""}{message.text}</span></span><span className="conversation-meta"><time>{message.createdAt ? new Date(message.createdAt).toLocaleDateString("es-CO") : ""}</time></span></Link>;
+    }) : <div className="empty-panel"><Icon name="chat" size={36} /><h2>Todavía no tienes conversaciones</h2><p>Cuando recibas un mensaje en la app móvil, aparecerá aquí con esta misma cuenta.</p></div>}</section>}
   </AppShell>;
 }

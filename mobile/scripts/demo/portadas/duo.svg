@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <rect width="1024" height="1024" fill="#F3FFC4"/>
+  <circle cx="390" cy="520" r="300" fill="#8A3FFC" opacity="0.9"/>
+  <circle cx="634" cy="520" r="300" fill="#7ED6FF" opacity="0.85"/>
+  <path d="M512 270 A300 300 0 0 1 512 770 A300 300 0 0 1 512 270 Z" fill="#2A0057"/>
+  <!-- personas -->
+  <g fill="#FFFFFF">
+    <circle cx="330" cy="440" r="56"/><path d="M250 640 Q250 520 330 520 Q410 520 410 640 Z"/>
+    <circle cx="694" cy="440" r="56"/><path d="M614 640 Q614 520 694 520 Q774 520 774 640 Z"/>
+  </g>
+  <!-- bombillo compartido -->
+  <g transform="translate(512 470)">
+    <circle cx="0" cy="-20" r="62" fill="#D9FF4D"/>
+    <rect x="-28" y="40" width="56" height="34" rx="8" fill="#FFFFFF"/>
+    <path d="M-20 -20 L0 10 L20 -20" stroke="#2A0057" stroke-width="8" fill="none"/>
+    <g stroke="#D9FF4D" stroke-width="10" stroke-linecap="round">
+      <line x1="0" y1="-120" x2="0" y2="-150"/><line x1="-80" y1="-90" x2="-100" y2="-110"/><line x1="80" y1="-90" x2="100" y2="-110"/>
+    </g>
+  </g>
+  <!-- piezas de rompecabezas -->
+  <g transform="translate(400 690)">
+    <path d="M0 0 h80 v24 a20 20 0 1 0 0 32 v24 h-80 z" fill="#D9FF4D" stroke="#2A0057" stroke-width="6"/>
+    <path d="M144 0 h-60 v24 a20 20 0 1 1 0 32 v24 h60 z" fill="#FFFFFF" stroke="#2A0057" stroke-width="6" transform="translate(84 0)"/>
+  </g>
+  <text x="512" y="930" font-family="Arial, Helvetica, sans-serif" font-size="88" font-weight="800" fill="#2A0057" text-anchor="middle" letter-spacing="12">DUO</text>
+</svg>

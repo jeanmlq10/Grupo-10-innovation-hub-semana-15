@@ -33,9 +33,9 @@ export default function RobleExplorePage() {
     (!query || [project.name, project.description, ...project.categories].some(value => value.toLocaleLowerCase("es").includes(query)))
   );
 
-  return <AppShell backHref="/explorar">
-    <header className="topbar"><div className="page-intro"><h1>Explorar en Roble</h1><p>Proyectos publicados por la comunidad</p></div><div className="topbar-spacer" /><Link href="/explorar" className="outline-action">Ver demostración</Link></header>
-    <p className="preview-note">Consulta real de solo lectura en desarrollo. Solo aparecen proyectos publicados para toda la comunidad. Inicia sesión con tu cuenta de la app móvil para consultarlos.</p>
+  return <AppShell>
+    <header className="topbar"><div className="page-intro"><h1>Explorar proyectos</h1><p>Descubre ideas y únete a las que te inspiren</p></div></header>
+    <p className="preview-note">Proyectos publicados en Roble con la misma cuenta de la app móvil.</p>
     {status === "loading" && <div className="empty-panel" role="status"><Icon name="search" size={36} /><h2>Consultando proyectos…</h2></div>}
     {status === "signed-out" && <div className="empty-panel"><Icon name="user" size={36} /><h2>Inicia sesión para explorar</h2><p>Usa la misma cuenta de la app móvil.</p><Link href="/login" className="solid-action">Iniciar sesión</Link></div>}
     {status === "error" && <div className="empty-panel" role="alert"><Icon name="folder" size={36} /><h2>No pudimos consultar Roble</h2><p>Inténtalo de nuevo más tarde.</p></div>}

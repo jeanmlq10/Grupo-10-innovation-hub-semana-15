@@ -39,6 +39,7 @@ export function ownProjectsFromResponse(value: unknown, userId: string): OwnRobl
   return data.flatMap(item => {
     const row = record(item);
     if (!row) return [];
+    if (text(row.deletedAt)) return [];
     const id = text(row._id), name = text(row.name);
     if (!id || !name) return [];
     if (!isOwnedBy(userId, { _id: id, _owner: text(row._owner) || null })) return [];

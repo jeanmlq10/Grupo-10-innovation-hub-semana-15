@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2A0057"/><stop offset="1" stop-color="#5A1BB0"/></linearGradient>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+  <!-- chispas -->
+  <g fill="#D9FF4D">
+    <path d="M512 90 l22 70 l70 22 l-70 22 l-22 70 l-22-70 l-70-22 l70-22z"/>
+    <path d="M820 230 l12 38 l38 12 l-38 12 l-12 38 l-12-38 l-38-12 l38-12z"/>
+    <path d="M200 250 l10 30 l30 10 l-30 10 l-10 30 l-10-30 l-30-10 l30-10z"/>
+  </g>
+  <!-- sombrero vueltiao -->
+  <g transform="translate(512 560)">
+    <ellipse cx="0" cy="60" rx="330" ry="80" fill="#F3FFC4"/>
+    <ellipse cx="0" cy="60" rx="330" ry="80" fill="none" stroke="#2A0057" stroke-width="10"/>
+    <ellipse cx="0" cy="60" rx="270" ry="62" fill="none" stroke="#2A0057" stroke-width="8" stroke-dasharray="26 18"/>
+    <ellipse cx="0" cy="60" rx="205" ry="46" fill="none" stroke="#2A0057" stroke-width="8"/>
+    <path d="M-150 55 Q-140 -150 0 -165 Q140 -150 150 55 Z" fill="#F3FFC4" stroke="#2A0057" stroke-width="10"/>
+    <path d="M-140 -10 Q0 -40 140 -10" fill="none" stroke="#2A0057" stroke-width="8" stroke-dasharray="22 14"/>
+    <path d="M-125 -75 Q0 -105 125 -75" fill="none" stroke="#2A0057" stroke-width="8" stroke-dasharray="22 14"/>
+    <path d="M-147 30 Q0 0 147 30" fill="none" stroke="#2A0057" stroke-width="12"/>
+  </g>
+  <!-- tambor -->
+  <g transform="translate(150 640)">
+    <path d="M0 0 L40 230 L180 230 L220 0 Z" fill="#8A3FFC"/>
+    <ellipse cx="110" cy="0" rx="110" ry="30" fill="#7ED6FF" stroke="#2A0057" stroke-width="8"/>
+    <path d="M10 40 L110 200 L210 40" fill="none" stroke="#D9FF4D" stroke-width="8"/>
+  </g>
+  <!-- maracas / millo -->
+  <g transform="translate(770 640) rotate(18)">
+    <rect x="-10" y="0" width="20" height="210" rx="10" fill="#D9FF4D"/>
+    <ellipse cx="0" cy="-20" rx="56" ry="70" fill="#7ED6FF" stroke="#2A0057" stroke-width="8"/>
+    <path d="M-40 -40 Q0 -60 40 -40" stroke="#2A0057" stroke-width="6" fill="none"/>
+  </g>
+  <!-- notas -->
+  <g fill="#7ED6FF">
+    <circle cx="300" cy="420" r="22"/><rect x="316" y="330" width="10" height="92"/>
+    <circle cx="745" cy="440" r="22"/><rect x="761" y="350" width="10" height="92"/><rect x="761" y="350" width="50" height="12"/>
+  </g>
+</svg>

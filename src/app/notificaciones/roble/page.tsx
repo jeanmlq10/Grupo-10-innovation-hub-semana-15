@@ -62,9 +62,9 @@ export default function RobleNotificationsPage() {
     finally { setBusyId(""); }
   };
 
-  return <AppShell backHref="/notificaciones">
-    <header className="topbar"><div className="page-intro"><h1>Mis avisos en Roble</h1><p>Notificaciones reales de tu cuenta móvil</p></div><div className="topbar-spacer" /><Link href="/notificaciones" className="outline-action">Ver demostración</Link></header>
-    <p className="preview-note">Avisos reales de Roble en desarrollo. Puedes marcarlos como leídos con tu cuenta.</p>
+  return <AppShell>
+    <header className="topbar"><div className="page-intro"><h1>Notificaciones</h1><p>Lo que ocurre en tus proyectos</p></div></header>
+    <p className="preview-note">Avisos de tu cuenta compartidos con la app móvil. Puedes marcarlos como leídos.</p>
     {status === "loading" && <div className="empty-panel" role="status"><Icon name="bell" size={36} /><h2>Consultando avisos…</h2></div>}
     {status === "signed-out" && <div className="empty-panel"><Icon name="user" size={36} /><h2>Inicia sesión para ver tus avisos</h2><Link href="/login" className="solid-action">Iniciar sesión</Link></div>}
     {status === "error" && <div className="empty-panel" role="alert"><Icon name="bell" size={36} /><h2>No pudimos consultar Roble</h2><p>Inténtalo de nuevo más tarde.</p></div>}

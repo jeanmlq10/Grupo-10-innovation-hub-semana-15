@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <rect width="1024" height="1024" fill="#14002E"/>
+  <!-- reflectores -->
+  <path d="M180 0 L60 760 L360 760 Z" fill="#7ED6FF" opacity="0.18"/>
+  <path d="M844 0 L664 760 L964 760 Z" fill="#D9FF4D" opacity="0.16"/>
+  <path d="M512 0 L380 760 L644 760 Z" fill="#8A3FFC" opacity="0.28"/>
+  <!-- escenario -->
+  <rect x="80" y="700" width="864" height="60" rx="10" fill="#8A3FFC"/>
+  <rect x="80" y="760" width="864" height="190" fill="#2A0057"/>
+  <path d="M80 120 Q200 300 120 700 L80 700 Z" fill="#D23A55"/>
+  <path d="M944 120 Q824 300 904 700 L944 700 Z" fill="#D23A55"/>
+  <rect x="60" y="100" width="904" height="40" rx="10" fill="#D23A55"/>
+  <!-- artistas -->
+  <g fill="#F0E7FF">
+    <circle cx="380" cy="480" r="42"/><path d="M330 700 L350 540 Q380 520 410 540 L430 700 Z"/>
+    <rect x="410" y="560" width="120" height="16" rx="8" transform="rotate(-30 410 560)"/>
+    <circle cx="640" cy="470" r="42"/><path d="M590 700 Q600 560 640 530 Q680 560 690 700 Z"/>
+    <path d="M690 560 L780 470" stroke="#F0E7FF" stroke-width="16" stroke-linecap="round"/>
+  </g>
+  <!-- notas y estrellas -->
+  <g fill="#D9FF4D">
+    <circle cx="250" cy="330" r="24"/><rect x="266" y="230" width="11" height="102"/><rect x="266" y="230" width="60" height="14"/>
+    <path d="M800 300 l16 50 l50 16 l-50 16 l-16 50 l-16-50 l-50-16 l50-16z"/>
+    <path d="M520 230 l10 30 l30 10 l-30 10 l-10 30 l-10-30 l-30-10 l30-10z"/>
+  </g>
+  <!-- boleto -->
+  <g transform="translate(560 800) rotate(-6)">
+    <path d="M0 0 H300 V40 a24 24 0 0 0 0 48 V128 H0 V88 a24 24 0 0 0 0-48 Z" fill="#D9FF4D"/>
+    <line x1="80" y1="10" x2="80" y2="118" stroke="#2A0057" stroke-width="6" stroke-dasharray="12 10"/>
+    <text x="190" y="80" font-family="Arial, Helvetica, sans-serif" font-size="40" font-weight="700" fill="#2A0057" text-anchor="middle">ARTFEST</text>
+  </g>
+  <!-- paleta de pintor -->
+  <g transform="translate(130 790)">
+    <path d="M0 60 Q0 0 90 0 Q200 0 200 70 Q200 120 150 110 Q120 100 110 130 Q100 160 60 150 Q0 140 0 60 Z" fill="#F0E7FF"/>
+    <circle cx="60" cy="50" r="16" fill="#D23A55"/><circle cx="110" cy="35" r="16" fill="#7ED6FF"/><circle cx="155" cy="60" r="16" fill="#D9FF4D"/>
+  </g>
+</svg>

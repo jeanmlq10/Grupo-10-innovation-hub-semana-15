@@ -12,8 +12,8 @@ export default function WelcomePage() {
       <div className="auth-stack">
         <Link className="auth-button primary" href="/login">Iniciar sesión</Link>
         <Link className="auth-button outline" href="/registro">¿No tienes cuenta? Regístrate</Link>
-        <Link className="auth-button soft" href="/explorar">Continuar como visitante</Link>
-        <span className="auth-hint">Explorar proyectos sin iniciar sesión</span>
+        <Link className="auth-button soft" href="/explorar">Explorar proyectos</Link>
+        <span className="auth-hint">Por ahora, los proyectos reales requieren iniciar sesión.</span>
       </div>
       </div>
       </div>

@@ -25,11 +25,13 @@
   },
   "include": [
     "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "tests/**/*.ts",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
-    "**/*.mts"
+    "*.mts",
+    "*.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "mobile"]
 }
