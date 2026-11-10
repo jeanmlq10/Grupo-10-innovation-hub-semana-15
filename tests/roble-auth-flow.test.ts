@@ -12,19 +12,19 @@ test("registration follows the mobile contract and institutional password rules"
   assert.equal(normalizeEmail("  Person@Uninorte.edu.co "), "person@uninorte.edu.co");
   assert.equal(institutionalEmail("person@uninorte.edu.co"), true);
   assert.equal(institutionalEmail("person@another.edu.co"), false);
-  assert.equal(validPassword("Password1!"), true);
+  assert.equal(validPassword("ExamplePass9!"), true);
   assert.equal(validPassword("password1!"), false);
   const original = globalThis.fetch;
   globalThis.fetch = async (input, init) => {
     assert.equal(String(input), "https://roble.example/auth/same-mobile-contract/signup");
     assert.deepEqual(JSON.parse(String(init?.body)), {
-      email: "person@uninorte.edu.co", password: "Password1!", name: "Persona",
+      email: "person@uninorte.edu.co", password: "ExamplePass9!", name: "Persona",
       extra: { career: "Ingeniería" },
     });
     return Response.json({ message: "code sent" }, { status: 201 });
   };
   try {
-    await beginRegistration(config, { email: "person@uninorte.edu.co", password: "Password1!", name: "Persona", career: "Ingeniería" });
+    await beginRegistration(config, { email: "person@uninorte.edu.co", password: "ExamplePass9!", name: "Persona", career: "Ingeniería" });
   } finally { globalThis.fetch = original; }
 });
 
