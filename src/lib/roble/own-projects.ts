@@ -50,10 +50,10 @@ export function ownProjectsFromResponse(value: unknown, userId: string): OwnRobl
   });
 }
 
-export async function readOwnProjects(config: RobleAuthConfig, accessToken: string, userId: string): Promise<OwnRobleProject[]> {
+export async function readRobleRows(config: RobleAuthConfig, accessToken: string, tableName: string, filters: Record<string, string> = {}): Promise<unknown[]> {
   const url = new URL(`/database/${encodeURIComponent(config.contractId)}/read`, config.baseUrl);
-  url.searchParams.set("tableName", "projects");
-  url.searchParams.set("_owner", userId);
+  url.searchParams.set("tableName", tableName);
+  for (const [key, value] of Object.entries(filters)) url.searchParams.set(key, value);
   let response: Response;
   try {
     response = await fetch(url, {
@@ -65,5 +65,13 @@ export async function readOwnProjects(config: RobleAuthConfig, accessToken: stri
   if (!response.ok) throw new RobleProjectReadFailure(503);
   let body: unknown;
   try { body = await response.json(); } catch { throw new RobleProjectReadFailure(502); }
-  return ownProjectsFromResponse(body, userId);
+  const data = Array.isArray(body) ? body : record(body)?.data;
+  if (!Array.isArray(data)) throw new RobleProjectReadFailure(502);
+  return data;
+}
+
+export async function readOwnProjects(config: RobleAuthConfig, accessToken: string, userId: string): Promise<OwnRobleProject[]> {
+  if (!userId.trim()) throw new RobleProjectReadFailure(401);
+  const rows = await readRobleRows(config, accessToken, "projects", { _owner: userId });
+  return ownProjectsFromResponse(rows, userId);
 }

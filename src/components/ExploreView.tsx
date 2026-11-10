@@ -35,7 +35,7 @@ export function ExploreView({ result }: { result: ExploreResult }) {
       <button className="icon-button" type="button" aria-label="Mostrar filtros" aria-expanded={filtersOpen} onClick={() => setFiltersOpen(!filtersOpen)}><Icon name="sliders" /></button>
     </header>
     <div className="explore-tabs" role="tablist" aria-label="Proyectos"><button type="button" role="tab" aria-selected={tab === "todos"} className={tab === "todos" ? "active" : ""} onClick={() => setTab("todos")}>Todos</button><button type="button" role="tab" aria-selected={tab === "seguidos"} className={tab === "seguidos" ? "active" : ""} disabled={!isDemo} onClick={() => setTab("seguidos")}>Seguidos</button></div>
-    {isDemo && <p className="preview-note" role="status">Demostración local · Busca, sigue y crea proyectos de prueba en este navegador. Roble todavía no está conectado.</p>}
+    {isDemo && <p className="preview-note" role="status">Demostración local · Busca, sigue y crea proyectos de prueba en este navegador. <Link href="/explorar/roble">Explorar proyectos reales en Roble ›</Link></p>}
     <div className={filtersOpen ? "explore-layout with-filters" : "explore-layout"}>
       <div className="project-grid">
         <Link href="/proyectos/nuevo" className="create-card"><span className="create-plus"><Icon name="plus" size={25} /></span><span><strong>Crea otra idea</strong><small>Comparte tu idea y encuentra personas que quieren construirla contigo</small></span></Link>
