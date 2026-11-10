@@ -1,5 +1,1 @@
-import { redirect } from "next/navigation";
-
-export default function NotificationsPage() {
-  redirect("/notificaciones/roble");
-}
+export { default } from "./roble/page";

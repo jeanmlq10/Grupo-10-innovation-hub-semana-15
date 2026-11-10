@@ -1,5 +1,1 @@
-import { redirect } from "next/navigation";
-
-export default function NewProjectPage() {
-  redirect("/proyectos/roble/nuevo");
-}
+export { default } from "../roble/nuevo/page";

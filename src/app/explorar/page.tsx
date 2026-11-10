@@ -1,5 +1,1 @@
-import { redirect } from "next/navigation";
-
-export default function ExplorePage() {
-  redirect("/explorar/roble");
-}
+export { default } from "./roble/page";
