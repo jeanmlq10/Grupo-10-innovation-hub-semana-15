@@ -2,9 +2,9 @@
 
 **Fecha de las capturas:** 9 de noviembre de 2026
 
-**Documento para presentar:** [PDF de evidencias, 16 páginas](EVIDENCIAS_FLUJOS_WEB_2026-11-09.pdf)
+**Documento para presentar:** [PDF de evidencias, 20 páginas](EVIDENCIAS_FLUJOS_WEB_2026-11-09.pdf)
 
-**Alcance:** 14 capturas del entorno local `localhost:3000`, organizadas en siete recorridos.
+**Alcance:** 18 capturas del entorno local `localhost:3000`, organizadas en ocho recorridos.
 
 | Página del PDF | Evidencia | Recorrido | Pantalla |
 | --- | --- | --- | --- |
@@ -22,9 +22,13 @@
 | 13 | E12 | Creación | 6/6 Revisar y publicar |
 | 14 | E13 | Detalle | PROYECTOPRUEBA y miembros |
 | 15 | E14 | Perfil | Cuenta de prueba A y trayectoria |
+| 16 | E15 | Colaboración A/B | B sigue el proyecto y envía solicitud de equipo |
+| 17 | E16 | Colaboración A/B | A recibe notificación de la solicitud |
+| 18 | E17 | Colaboración A/B | A ve el proyecto publicado y una solicitud |
+| 19 | E18 | Colaboración A/B | A ve las opciones Aceptar y Rechazar |
 
 Las capturas de registro e inicio de sesión muestran formularios, pero no un envío o ingreso completado. La identidad web se integra con Roble en desarrollo según [el estado del proyecto](ESTADO_PROYECTATE.md); esas imágenes por sí solas no prueban la autenticación.
 
-Los proyectos, miembros y métricas de las capturas pertenecen a la **demostración local** del navegador. No evidencian datos sincronizados con la aplicación móvil ni permisos corregidos en Roble. La página 16 del PDF resume lo probado y lo que aún falta demostrar.
+Los proyectos, miembros, solicitudes, notificaciones y métricas de las capturas pertenecen a la **demostración local** del navegador. Las nuevas imágenes muestran la solicitud de B y su llegada a A, pero terminan **antes de que A la acepte o rechace**; aún no muestran un miembro incorporado ni el aviso de respuesta a B. Tampoco evidencian datos sincronizados con la aplicación móvil ni permisos corregidos en Roble. La página 20 del PDF resume lo probado y lo que aún falta demostrar.
 
-El PDF se puede regenerar con `python3 tools/build_evidence_pdf.py --input-dir /ruta/a/las/capturas --output docs/EVIDENCIAS_FLUJOS_WEB_2026-11-09.pdf` usando las 14 capturas originales. El generador no altera esos archivos.
+El PDF se puede regenerar con `python3 tools/build_evidence_pdf.py --input-dir /ruta/a/las/capturas --output docs/EVIDENCIAS_FLUJOS_WEB_2026-11-09.pdf` usando las 18 capturas originales. El generador no altera esos archivos.

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Genera el PDF de evidencias web a partir de las 14 capturas entregadas.
+"""Genera el PDF de evidencias web a partir de las capturas entregadas.
 
 Uso: python3 tools/build_evidence_pdf.py --input-dir /ruta/a/capturas \
     --output docs/EVIDENCIAS_FLUJOS_WEB_2026-11-09.pdf
@@ -23,7 +23,6 @@ MUTED = (103, 94, 122)
 LIME = (217, 255, 77)
 PAGE_W = 297
 PAGE_H = 210
-TOTAL_PAGES = 16
 
 
 EVIDENCE = [
@@ -38,10 +37,16 @@ EVIDENCE = [
     ("E09", "Crear proyecto", "3/6 · Equipo y tareas", "/proyectos/nuevo", "9.13.43", "Se configuran cupos, fecha límite de postulación y tareas opcionales.", "En esta captura hay un cupo de diseño y uno de desarrollo."),
     ("E10", "Crear proyecto", "4/6 · Tiempo estimado", "/proyectos/nuevo", "9.13.49", "Se selecciona la duración aproximada del proyecto.", "La opción elegida en la captura es Meses."),
     ("E11", "Crear proyecto", "5/6 · Audiencia", "/proyectos/nuevo", "9.14.07", "Se elige entre visibilidad privada y toda la comunidad.", "La opción seleccionada en la captura es Toda la comunidad."),
-    ("E12", "Crear proyecto", "6/6 · Revisar y publicar", "/proyectos/nuevo", "9.14.14", "El resumen permite revisar los datos, guardar borrador o publicar la demo.", "Se ve la acción Publicar demo; la captura no muestra el clic."),
+    ("E12", "Crear proyecto", "6/6 · Revisar y publicar", "/proyectos/nuevo", "9.14.14", "El resumen permite revisar los datos, guardar borrador o publicar la demo.", "El clic no aparece aquí; E17 muestra el proyecto publicado posteriormente."),
     ("E13", "Detalle", "Proyecto y miembros", "/proyectos/[id]", "9.14.22", "El detalle de PROYECTOPRUEBA muestra roles, cupos y solicitudes pendientes.", "Los miembros y solicitudes son datos locales; no provienen de Roble."),
     ("E14", "Perfil", "Perfil y trayectoria", "/perfil", "9.14.33", "La cuenta de prueba A ve proyectos creados, tareas y participación.", "Las cifras se calculan con acciones de esta demostración local."),
+    ("E15", "Colaboración A/B", "B envía su solicitud", "/proyectos/[id]", "9.33.44", "B sigue PROYECTOPRUEBA y solicita el cupo de Diseñador/a.", "La confirmación indica solicitud enviada; queda pendiente en la demo local."),
+    ("E16", "Colaboración A/B", "A recibe el aviso", "/notificaciones", "9.33.51", "A ve una notificación no leída sobre la solicitud de B.", "El aviso se genera y guarda en este navegador, sin entrega de Roble."),
+    ("E17", "Colaboración A/B", "A ve la solicitud en su lista", "/mis-proyectos", "9.33.58", "PROYECTOPRUEBA figura publicado y muestra una solicitud.", "Se evidencia el resultado local de publicación y la solicitud pendiente."),
+    ("E18", "Colaboración A/B", "A puede decidir", "/proyectos/[id]", "9.34.04", "El detalle ofrece Aceptar o Rechazar la solicitud de B.", "La captura aún no muestra una decisión ni un miembro incorporado."),
 ]
+
+TOTAL_PAGES = len(EVIDENCE) + 2
 
 
 def set_color(pdf: FPDF, color: tuple[int, int, int]) -> None:
@@ -96,7 +101,7 @@ def cover(pdf: FPDF) -> None:
     pdf.ellipse(251, 28, 18, 18, style="F")
     line(pdf, 22, 23, 220, 12, "Flujos de la aplicación web", 25, True, PURPLE)
     line(pdf, 22, 42, 218, 9, "Documento visual de evidencias · Grupo 10", 14, False, PURPLE)
-    line(pdf, 22, 58, 220, 7, "14 capturas  ·  7 recorridos  ·  1 entorno de demostración", 10, True, VIOLET)
+    line(pdf, 22, 58, 220, 7, "18 capturas  ·  8 recorridos  ·  1 entorno de demostración", 10, True, VIOLET)
 
     line(pdf, 13, 79, 271, 8, "Recorridos documentados", 14, True, PURPLE)
     items = [
@@ -107,13 +112,14 @@ def cover(pdf: FPDF) -> None:
         ("07–12", "Creación", "Seis pasos hasta revisión y publicación demo"),
         ("13", "Detalle", "Roles y solicitudes de PROYECTOPRUEBA"),
         ("14", "Perfil", "Cuenta de prueba y trayectoria"),
+        ("15–18", "Colaboración A/B", "Solicitud de B y recepción por A"),
     ]
-    y = 91
+    y = 89
     for number, title, desc in items:
         line(pdf, 17, y, 26, 7, number, 10, True, VIOLET)
         line(pdf, 45, y, 50, 7, title, 10, True, PURPLE)
         line(pdf, 99, y, 177, 7, desc, 10, False, INK)
-        y += 12
+        y += 10.5
 
     box(pdf, 13, 174, 271, 22, "Alcance de esta evidencia", "Las capturas de proyectos, detalle y perfil muestran una demostración local. Los formularios de acceso muestran interfaz; por sí solos no prueban una autenticación completada.")
 
@@ -148,6 +154,7 @@ def closing(pdf: FPDF) -> None:
         "Se muestran pantallas navegables de acceso, exploración, gestión, detalle y perfil.",
         "El asistente de creación está representado en sus seis pasos completos.",
         "La edición de EcoCampus y el detalle de PROYECTOPRUEBA son recorridos distintos.",
+        "B envía una solicitud de equipo; A ve el aviso y los botones para decidir.",
     ]
     y = 38
     for item in bullets:
@@ -157,9 +164,9 @@ def closing(pdf: FPDF) -> None:
 
     line(pdf, 13, 106, 271, 10, "Qué falta demostrar", 17, True, PURPLE)
     missing = [
-        "Estas imágenes no muestran el registro verificado, el ingreso completado ni la pantalla de identidad de Roble.",
-        "Los proyectos, miembros y métricas mostrados son locales: aún no prueban sincronización entre móvil y web.",
-        "Faltan evidencias de dos cuentas reales, permisos corregidos en Roble y una comparación de los mismos datos en ambos clientes.",
+        "El recorrido A/B termina antes de Aceptar o Rechazar: falta mostrar el cambio en miembros y el aviso posterior a B.",
+        "No aparecen el registro verificado, el ingreso completado, la identidad de Roble ni el flujo de mensajes.",
+        "Los datos mostrados son locales. Faltan permisos corregidos y comparación de los mismos datos en móvil y web con dos cuentas reales.",
     ]
     y = 121
     for item in missing:
