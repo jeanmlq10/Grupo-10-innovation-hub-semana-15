@@ -21,7 +21,7 @@ En un proyecto local de Codex, agregar ambas carpetas desde **Editar proyecto �
 
 - App actual: `semana_final/f_clean_template-main/`, Flutter + GetX + SDK Dart de Roble. Ya incluye una compilación web y pruebas en Chrome que sirven como referencia.
 - Módulos: autenticación, proyectos, tareas, solicitudes, miembros, comentarios, seguidos, mensajes, notificaciones y perfil.
-- Tablas compartidas: `projects`, `project_tasks`, `project_requests`, `request_decisions`, `project_members`, `project_comments`, `project_follows`, `app_notifications`, `user_profiles` y `direct_messages`.
+- Tablas existentes confirmadas en la consola: `projects`, `project_tasks`, `project_requests`, `request_decisions`, `project_members`, `project_comments`, `project_follows` y `app_notifications`. El móvil también contempla `user_profiles` y `direct_messages`, pero no existen todavía en este contrato; la integración real de perfil y chat requiere definirlas y protegerlas, o acordar un servicio compartido.
 - La autenticación móvil incluye correo/contraseña, verificación, recuperación y Microsoft SSO. El retorno web de SSO se configura por entorno.
 - Las reglas de datos y permisos están documentadas en `semana_final/f_clean_template-main/ROBLE_PROJECTS_SETUP.md`.
 
