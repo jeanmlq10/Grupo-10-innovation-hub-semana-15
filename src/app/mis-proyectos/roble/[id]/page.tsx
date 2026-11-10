@@ -43,14 +43,14 @@ function OwnRobleProject({ params }: { params: Promise<{ id: string }> }) {
   const pending = project?.requests.filter(request => request.status === "pending") ?? [];
 
   return <AppShell backHref="/mis-proyectos/roble">
-    <p className="preview-note">Datos reales de Roble · Consulta de solo lectura disponible en desarrollo. Ninguna acción de esta pantalla modifica el proyecto.</p>
+    <p className="preview-note">Datos reales de Roble · Guardado disponible solo en desarrollo.</p>
     {status === "loading" && <div className="empty-panel" role="status"><Icon name="folder" size={36} /><h1>Consultando proyecto…</h1></div>}
     {status === "signed-out" && <div className="empty-panel"><Icon name="user" size={36} /><h1>Inicia sesión para continuar</h1><Link href="/login" className="solid-action">Iniciar sesión</Link></div>}
     {status === "missing" && <div className="empty-panel"><Icon name="folder" size={36} /><h1>Proyecto no disponible</h1><p>Solo puedes consultar proyectos de tu cuenta.</p><Link href="/mis-proyectos/roble" className="outline-action">Volver a mis proyectos</Link></div>}
     {status === "error" && <div className="empty-panel" role="alert"><Icon name="folder" size={36} /><h1>No pudimos consultar Roble</h1><p>Inténtalo de nuevo más tarde. Tus datos no se han modificado.</p><Link href="/mis-proyectos/roble" className="outline-action">Volver a mis proyectos</Link></div>}
     {status === "ready" && project && <>
       <div className="project-hero"><span className="project-hero-symbol"><Icon name="leaf" size={56} /></span></div>
-      <div className="detail-heading"><span className="project-icon"><Icon name="leaf" size={28} /></span><div><h1>{project.name}</h1><span className={`badge ${project.isDraft ? "" : "success"}`}>{project.isDraft ? "Borrador" : project.audience === "Toda la comunidad" ? "Publicado" : "Privado"}</span></div></div>
+      <div className="detail-heading"><span className="project-icon"><Icon name="leaf" size={28} /></span><div><h1>{project.name}</h1><span className={`badge ${project.isDraft ? "" : "success"}`}>{project.isDraft ? "Borrador" : project.audience === "Toda la comunidad" ? "Publicado" : "Privado"}</span></div><Link href={`/mis-proyectos/roble/${encodeURIComponent(id)}/editar`} className="outline-action">Editar proyecto</Link></div>
       <div className="detail-tabs" role="tablist" aria-label="Detalle del proyecto en Roble">{tabs.map(item => <button key={item} type="button" role="tab" aria-selected={tab === item} className={tab === item ? "active" : ""} onClick={() => setTab(item)}>{item}</button>)}</div>
       <div className="detail-grid"><section className="detail-main">
         {tab === "Descripción" && <div className="surface-panel"><h2>Sobre el proyecto</h2><p>{project.description || "Sin descripción todavía."}</p><div className="project-meta">{project.categories.map(category => <span className="category-chip" key={category}>{category}</span>)}</div>{project.duration && <p>Duración estimada: {project.duration}</p>}{project.teamDeadline && <p>Postulaciones al equipo hasta: {dateLabel(project.teamDeadline)}</p>}{project.createdAt && <p>Creado el {dateLabel(project.createdAt)}</p>}</div>}
