@@ -10,6 +10,8 @@ La corrección requiere **autorización del lado del servidor para cada lectura 
 
 ## Matriz mínima de autorización
 
+La especificación ejecutable inicial de esta matriz está en `src/lib/roble/access-policy.ts`, con pruebas A/B/visitante en `tests/roble-access-policy.test.ts`. Cubre lectura y edición de proyectos, lectura de tareas según el proyecto padre, lectura y decisión de solicitudes, y lectura/marcado de avisos por destinatario. **Todavía no está conectada a Roble**: solo surtirá efecto cuando un servicio del lado del servidor la use para cada operación y se retire el acceso directo amplio del rol `user`. El servicio debe derivar actor, postulante y destinatario de una sesión o acción verificada; no debe aceptar identificadores de usuario arbitrarios del cliente.
+
 | Datos | Lectura permitida | Escritura permitida |
 |---|---|---|
 | `projects` | Visitante: solo publicados para «Toda la comunidad» y campos públicos. Autor: también sus borradores. | Crear/editar/borrar: autor. La transición a publicado valida audiencia y datos en servidor. |
