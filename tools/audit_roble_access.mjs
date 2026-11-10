@@ -76,6 +76,10 @@ function print(label, response, matching) {
   return count;
 }
 
+function isPrivateProject(row) {
+  return row.isDraft === true || row.isDraft === 'true' || row.audience === 'Solo yo';
+}
+
 const exposures = [];
 const inconclusive = [];
 function privateLeak(label, count) {
@@ -88,31 +92,39 @@ try {
   const b = hasBEmail ? await login(process.env.ROBLE_TEST_B_EMAIL, process.env.ROBLE_TEST_B_PASSWORD) : null;
   if (b && a.userId === b.userId) throw new Error('Las cuentas A y B corresponden al mismo userId.');
 
-  const [publicProjects, publicTasks, aProjects, aProfiles, aMessages, aNotifications] = await Promise.all([
+  const [publicProjects, publicTasks, publicRequests, publicNotifications, publicMessages, aProjects, aProfiles, aMessages, aNotifications] = await Promise.all([
     read('projects', undefined, {}, true),
     read('project_tasks', undefined, {}, true),
+    read('project_requests', undefined, {}, true),
+    read('app_notifications', undefined, {}, true),
+    read('direct_messages', undefined, {}, true),
     read('projects', a.token),
     read('user_profiles', a.token, { userId: a.userId }),
     read('direct_messages', a.token),
     read('app_notifications', a.token),
   ]);
 
-  const draftIds = new Set([...rows(publicProjects), ...rows(aProjects)]
-    .filter((row) => row.isDraft === true || row.isDraft === 'true')
+  const privateProjectIds = new Set([...rows(publicProjects), ...rows(aProjects)]
+    .filter(isPrivateProject)
     .map((row) => row._id));
-  const publicDrafts = print('Visitante lee borradores', publicProjects,
-    (row) => row.isDraft === true || row.isDraft === 'true');
-  const publicDraftTasks = print('Visitante lee tareas de borradores', publicTasks,
-    (row) => draftIds.has(row.projectId));
-  const foreignDrafts = print('A lee borradores de otras cuentas', aProjects,
-    (row) => row._owner && row._owner !== a.userId && (row.isDraft === true || row.isDraft === 'true'));
+  const publicDrafts = print('Visitante lee proyectos privados o borradores', publicProjects, isPrivateProject);
+  const publicDraftTasks = print('Visitante lee tareas de proyectos privados conocidos', publicTasks,
+    (row) => privateProjectIds.has(row.projectId));
+  const publicRequestCount = print('Visitante lee solicitudes de equipo', publicRequests, () => true);
+  const publicNotificationCount = print('Visitante lee notificaciones', publicNotifications, () => true);
+  const publicMessageCount = print('Visitante lee mensajes directos', publicMessages, () => true);
+  const foreignDrafts = print('A lee proyectos privados de otras cuentas', aProjects,
+    (row) => row._owner && row._owner !== a.userId && isPrivateProject(row));
   const foreignNotifications = print('A lee avisos de otras cuentas', aNotifications,
     (row) => row.recipientUserId && row.recipientUserId !== a.userId);
-  privateLeak('borradores públicos', publicDrafts);
-  privateLeak('tareas de borradores públicas', publicDraftTasks);
-  privateLeak('borradores ajenos visibles para A', foreignDrafts);
+  privateLeak('proyectos privados o borradores públicos', publicDrafts);
+  privateLeak('tareas de proyectos privados públicas', publicDraftTasks);
+  privateLeak('solicitudes de equipo públicas', publicRequestCount);
+  privateLeak('notificaciones públicas', publicNotificationCount);
+  privateLeak('mensajes directos públicos', publicMessageCount);
+  privateLeak('proyectos privados ajenos visibles para A', foreignDrafts);
   privateLeak('avisos ajenos visibles para A', foreignNotifications);
-  if (draftIds.size === 0) inconclusive.push('no se encontró un borrador de prueba para comprobar tareas');
+  if (privateProjectIds.size === 0) inconclusive.push('no se encontró un proyecto privado de prueba para comprobar tareas');
   print('A lee su perfil', aProfiles, (row) => row.userId === a.userId);
   print('A consulta mensajes', aMessages, () => true);
   if (aProfiles.status === 404) inconclusive.push('user_profiles respondió 404');
@@ -125,8 +137,8 @@ try {
       read('direct_messages', b.token),
       read('app_notifications', b.token),
     ]);
-    privateLeak('borradores de A visibles para B', print('B lee borradores de A', bProjects,
-      (row) => row._owner === a.userId && (row.isDraft === true || row.isDraft === 'true')));
+    privateLeak('proyectos privados de A visibles para B', print('B lee proyectos privados de A', bProjects,
+      (row) => row._owner === a.userId && isPrivateProject(row)));
     print('B lee perfil de A', bProfiles, (row) => row.userId === a.userId);
     privateLeak('mensajes ajenos visibles para B', print('B lee mensajes ajenos', bMessages,
       (row) => row.fromUserId && row.toUserId && row.fromUserId !== b.userId && row.toUserId !== b.userId));
