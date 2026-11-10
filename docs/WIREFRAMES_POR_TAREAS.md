@@ -1,5 +1,7 @@
 # Proyéctate web: wireframes organizados por tareas
 
+**Wireframes nuevos dibujados para las cinco tareas:** [PDF vectorial](WIREFRAMES_DISENADOS_POR_TAREAS_2026-11-09.pdf) e [índice de diseño](WIREFRAMES_DISENADOS_POR_TAREAS.md). Este archivo organiza las capturas existentes como evidencia y no sustituye esos diseños.
+
 **Propósito:** presentar los recorridos que una persona realiza, en vez de entregar pantallas aisladas.
 
 **Documento para exponer:** [PDF visual organizado por las cinco tareas](WIREFRAMES_POR_TAREAS_2026-11-09.pdf).

@@ -36,7 +36,9 @@ La nueva identidad visual usa los logos y colores oficiales recibidos en `proyec
 
 La [corrección de permisos y solicitud al administrador](docs/PLAN_PERMISOS_ROBLE.md) describe la matriz de acceso y la secuencia compatible con la app móvil. La cuenta probada mostró el mismo `userId` en móvil y web; no se guarda ese identificador en Git.
 
-Para presentar los diseños según las cinco tareas solicitadas, usa la [guía de wireframes por tareas](docs/WIREFRAMES_POR_TAREAS.md) o su [PDF visual](docs/WIREFRAMES_POR_TAREAS_2026-11-09.pdf). Las [18 capturas completas](docs/EVIDENCIAS_FLUJOS_WEB_2026-11-09.pdf) están en un documento aparte.
+Para presentar las capturas existentes según las cinco tareas solicitadas, usa la [guía de evidencias por tareas](docs/WIREFRAMES_POR_TAREAS.md) o su [PDF visual](docs/WIREFRAMES_POR_TAREAS_2026-11-09.pdf). Las [18 capturas completas](docs/EVIDENCIAS_FLUJOS_WEB_2026-11-09.pdf) están en un documento aparte.
+
+Los [wireframes nuevos dibujados para esas cinco tareas](docs/WIREFRAMES_DISENADOS_POR_TAREAS.md) tienen su propio [PDF vectorial](docs/WIREFRAMES_DISENADOS_POR_TAREAS_2026-11-09.pdf). Las pantallas de gestión independiente de equipo están identificadas como propuesta, porque aún no son rutas de la aplicación.
 
 ## Estructura
 
