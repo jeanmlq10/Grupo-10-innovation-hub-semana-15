@@ -39,7 +39,7 @@ En `projects`, la lectura no está acotada por dueño y la tabla es pública: la
 
 La captura de **«Roles → Detalles del rol: user»** muestra seis permisos asignados: `all:create`, `all:read`, `all:execute`, `all:update`, `all:delete` y `all:all`. En el catálogo de «Permisos», `all:all` se describe como **«Acceso total»**; los otros permisos corresponden a crear, leer, ejecutar consultas, actualizar y borrar sobre el recurso `all`. No son permisos por tabla ni de alcance `own`. Esta configuración es incompatible con el aislamiento entre usuarios que necesitan móvil y web. La lectura cruzada real de proyectos y avisos ya está confirmada; no se probaron escrituras ajenas ni ejecución de consultas con una cuenta normal.
 
-La prioridad es coordinar con el administrador la retirada de los permisos globales del rol `user` y su sustitución por permisos mínimos y un acceso seguro compartido por ambos clientes. Hacerlo sin preparar los flujos de reemplazo podría interrumpir la app móvil. La web mantiene los datos reales desconectados; esta documentación no es una instrucción para cambiar interruptores en producción sin respaldo, plan de transición y pruebas A/B.
+La prioridad es coordinar con el administrador la retirada de los permisos globales del rol `user` y su sustitución por permisos mínimos y un acceso seguro compartido por ambos clientes. Hacerlo sin preparar los flujos de reemplazo podría interrumpir la app móvil. La web permite consultar proyectos propios en desarrollo, en modo de solo lectura y filtrados en su servidor; esto no protege la API directa de Roble. Esta documentación no es una instrucción para cambiar interruptores en producción sin respaldo, plan de transición y pruebas A/B.
 
 ## Resultado comprobado con una cuenta
 
@@ -54,7 +54,7 @@ Se usó el contrato del repositorio móvil. No se guardaron credenciales, tokens
 | `public-read` de `project_tasks` | HTTP 403. La lectura autenticada devolvió HTTP 200 y 8 filas. |
 | `read` de `user_profiles` y `direct_messages` | HTTP 404 en ambas; la lista completa de tablas de la consola confirma que no existen en este contrato. |
 
-**Bloqueo de integración:** la API entrega datos que la interfaz móvil oculta. Mantener `ROBLE_PUBLIC_READ_ENABLED=false` y no conectar todavía las vistas privadas de la web a esas tablas. La corrección debe aplicarse en Roble o en un servicio que usen los dos clientes.
+**Bloqueo de publicación:** la API entrega datos que la interfaz móvil oculta. Mantener `ROBLE_PUBLIC_READ_ENABLED=false`; la única lectura real adicional de la web es la consulta de proyectos propios en desarrollo y sin escrituras. La corrección debe aplicarse en Roble o en un servicio que usen los dos clientes.
 
 ## Hallazgos que afectan la web y el móvil
 
@@ -88,4 +88,4 @@ El script de solo lectura `tools/audit_roble_access.mjs` automatiza estas consul
 
 ## Criterio de salida
 
-La web no se conecta a datos reales ni se publica mientras cualquier cuenta pueda leer información privada ajena o un visitante pueda leer borradores directamente desde Roble. El repositorio web deja `ROBLE_PUBLIC_READ_ENABLED=false` por defecto hasta que la consulta pública de proyectos sea segura. Antes de integrar perfiles y mensajes hay que resolver las dos tablas ausentes; después se repite la prueba con dos cuentas tras corregir los permisos.
+La web solo consulta proyectos propios en desarrollo y no publica los flujos de datos reales mientras cualquier cuenta pueda leer información privada ajena o un visitante pueda leer borradores directamente desde Roble. El repositorio web deja `ROBLE_PUBLIC_READ_ENABLED=false` por defecto hasta que la consulta pública de proyectos sea segura. Antes de integrar perfiles y mensajes hay que resolver las dos tablas ausentes; después se repite la prueba con dos cuentas tras corregir los permisos.

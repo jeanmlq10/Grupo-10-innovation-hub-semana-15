@@ -18,7 +18,7 @@ Abrir `http://localhost:3000`. En desarrollo, `/login` autentica con la misma cu
 
 El [registro y la recuperación de contraseña](docs/FLUJOS_CUENTA_ROBLE.md) también funcionan en desarrollo: `/registro` envía el código institucional, `/verificar-correo` confirma la cuenta y permite reenviar el código, y `/recuperar-contrasena` lleva a `/restablecer-contrasena` con el token recibido. La web no persiste contraseñas ni códigos en archivos o almacenamiento del navegador.
 
-La lectura real de proyectos, perfiles, mensajes y avisos permanece desactivada. No establecer `ROBLE_PUBLIC_READ_ENABLED=true` hasta verificar y corregir la lectura pública de borradores en Roble. El archivo `.env.local` no se versiona. Ver [el flujo de identidad](docs/FLUJO_LOGIN_ROBLE.md).
+En desarrollo, después de iniciar sesión, **Mi cuenta → Ver mis proyectos en Roble** consulta en modo de solo lectura las filas del usuario autenticado. Las listas de la demostración A/B siguen separadas; perfiles, mensajes, avisos y escrituras reales permanecen desactivados. No establecer `ROBLE_PUBLIC_READ_ENABLED=true` hasta verificar y corregir la lectura pública de borradores en Roble. El archivo `.env.local` no se versiona. Ver [el flujo de identidad](docs/FLUJO_LOGIN_ROBLE.md).
 
 ## Comprobaciones
 
@@ -32,7 +32,7 @@ npm run build
 
 La nueva identidad visual usa los logos y colores oficiales recibidos en `proyectate-identidad-visual.zip`. Ya hay rutas para las diez vistas principales del prototipo y para Mensajes y Configuración. Bienvenida y «Comencemos» se adaptaron a las nuevas capturas móviles. El [flujo de proyectos de demostración](docs/FLUJO_PROYECTOS_DEMO.md) permite crear borradores, publicarlos localmente, editarlos, seguirlos, comentar y revisar solicitudes con dos cuentas ficticias. La [guía de comunicaciones](docs/FLUJO_COMUNICACIONES_DEMO.md) cubre mensajes, avisos, leído y preferencias entre esas mismas cuentas. Esta persistencia vive solo en el navegador durante desarrollo. El inicio de sesión real de desarrollo ya está conectado; la escritura real en Roble sigue pendiente.
 
-**Pendiente antes de datos reales:** la [auditoría de Roble](docs/ROBLE_ACCESS_AUDIT.md) confirmó el 9 de noviembre de 2026 que la API pública devuelve borradores y que una cuenta de prueba puede leer avisos de otros destinatarios. Filtrar filas en Next.js no evita que alguien consulte directamente la API. El acceso privado debe protegerse en el backend para los dos clientes.
+**Pendiente antes de publicar datos reales:** la [auditoría de Roble](docs/ROBLE_ACCESS_AUDIT.md) confirmó el 9 de noviembre de 2026 que la API pública devuelve borradores y que una cuenta de prueba puede leer avisos de otros destinatarios. La consulta de proyectos propios es solo una comprobación de desarrollo: filtrar filas en Next.js no evita que alguien consulte directamente la API. El acceso privado debe protegerse en el backend para los dos clientes.
 
 La [corrección de permisos y solicitud al administrador](docs/PLAN_PERMISOS_ROBLE.md) describe la matriz de acceso y la secuencia compatible con la app móvil. La cuenta probada mostró el mismo `userId` en móvil y web; no se guarda ese identificador en Git.
 

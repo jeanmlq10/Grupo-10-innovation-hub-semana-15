@@ -22,7 +22,7 @@ export default function MyProjectsPage() {
   };
   return <AppShell>
     <header className="topbar"><div className="page-intro"><h1>Mis proyectos</h1><p>Proyectos que creas</p></div><div className="topbar-spacer" /><Link href="/proyectos/nuevo" className="solid-action"><Icon name="plus" size={18} /> Nuevo proyecto</Link></header>
-    <p className="preview-note">Demostración local · Los proyectos y borradores de prueba se guardan solo en este navegador; Roble no recibe cambios.</p>
+    <p className="preview-note">Demostración local · Los proyectos y borradores de prueba se guardan solo en este navegador; Roble no recibe cambios. {process.env.NODE_ENV === "development" && <Link href="/mis-proyectos/roble">Ver mis proyectos reales en Roble ›</Link>}</p>
     {error && <p className="wizard-error" role="alert">{error}</p>}
     <div className="explore-tabs" role="tablist" aria-label="Estado de proyectos"><button type="button" role="tab" aria-selected={tab === "publicados"} className={tab === "publicados" ? "active" : ""} onClick={() => setTab("publicados")}>Mis proyectos ({published.length})</button><button type="button" role="tab" aria-selected={tab === "borradores"} className={tab === "borradores" ? "active" : ""} onClick={() => setTab("borradores")}>Mis borradores ({drafts.length})</button></div>
     {visible.length === 0 ? <div className="empty-panel"><Icon name="folder" size={36} /><h2>{tab === "borradores" ? "Aún no tienes borradores" : "Aún no tienes proyectos publicados"}</h2><p>Puedes crear una idea y guardarla para continuar más tarde.</p><Link href="/proyectos/nuevo" className="solid-action">Crear una idea</Link></div> :

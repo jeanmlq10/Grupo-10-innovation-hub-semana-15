@@ -7,9 +7,12 @@
  */
 export type ActorId = string | null;
 
-export type ProjectAccessRow = {
+export type OwnedRow = {
   _id: string;
   _owner: string | null;
+};
+
+export type ProjectAccessRow = OwnedRow & {
   isDraft: boolean | "true" | "false" | null;
   audience: string | null;
 };
@@ -26,18 +29,18 @@ function validId(value: string | null | undefined): value is string {
   return typeof value === "string" && value.trim().length > 0;
 }
 
-function ownsProject(actorId: ActorId, project: ProjectAccessRow): boolean {
-  return validId(actorId) && validId(project._owner) && actorId === project._owner;
+export function isOwnedBy(actorId: ActorId, row: OwnedRow): boolean {
+  return validId(actorId) && validId(row._id) && validId(row._owner) && actorId === row._owner;
 }
 
 export function canReadProject(actorId: ActorId, project: ProjectAccessRow): boolean {
   if (!validId(project._id)) return false;
-  if (ownsProject(actorId, project)) return true;
+  if (isOwnedBy(actorId, project)) return true;
   return (project.isDraft === false || project.isDraft === "false") && project.audience === "Toda la comunidad";
 }
 
 export function canChangeProject(actorId: ActorId, project: ProjectAccessRow): boolean {
-  return validId(project._id) && ownsProject(actorId, project);
+  return isOwnedBy(actorId, project);
 }
 
 export function canReadProjectChild(actorId: ActorId, child: ProjectChildAccessRow, project: ProjectAccessRow | null): boolean {
@@ -46,7 +49,7 @@ export function canReadProjectChild(actorId: ActorId, child: ProjectChildAccessR
 
 export function canReadParticipationRequest(actorId: ActorId, request: ParticipationRequestAccessRow, project: ProjectAccessRow | null): boolean {
   if (!validId(actorId) || !validId(request._id) || !project || !validId(project._id) || request.projectId !== project._id) return false;
-  return actorId === request.applicantUserId || ownsProject(actorId, project);
+  return actorId === request.applicantUserId || isOwnedBy(actorId, project);
 }
 
 export function canDecideParticipationRequest(actorId: ActorId, request: ParticipationRequestAccessRow, project: ProjectAccessRow | null): boolean {
