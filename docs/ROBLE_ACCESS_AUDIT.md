@@ -29,6 +29,12 @@ Las capturas posteriores del diagrama y de «Editar tabla» confirman que Roble 
 
 En el diagrama, `request_decisions` muestra `id` UUID, `requestId`, `status` y `decidedAt`, **sin `_owner` visible**. El repositorio móvil espera `_owner` para atribuir la decisión al creador del proyecto; al faltar en una fila, su código no aplica esa comprobación de autor. Hay que confirmar el esquema completo y el resultado real de la API antes de decidir cómo migrar o corregir las decisiones. Ninguna de estas capturas autoriza modificar filas o permisos.
 
+## Propiedad de filas confirmada en los escudos
+
+Las capturas de «Propiedad de las filas» para `projects` y `app_notifications` muestran la misma configuración: **eliminar solo lo propio activado, actualizar solo lo propio activado, leer solo lo propio desactivado, filas sin dueño compartidas, exposición de `_owner` a la aplicación activada e inserción anónima desactivada**. La consola aclara que los límites «own» solo afectan a roles que tengan permisos con alcance `own`; un permiso de alcance `editor` o `admin` sigue viendo todo. Falta revisar «Configuración → Permisos» para conocer el alcance efectivo del rol `user`.
+
+En `projects`, la lectura no está acotada por dueño y la tabla es pública: la API ya confirmó que entrega borradores. No se puede resolver activando a ciegas «leer solo lo propio», pues Explorar necesita ver proyectos publicados de otras personas. En `app_notifications`, la lectura tampoco está acotada y la API entregó avisos ajenos. Además, «actualizar solo lo propio» aparece activado, a diferencia de la configuración histórica recomendada en `ROBLE_PROJECTS_SETUP.md` del móvil: si el rol `user` tiene alcance `own`, el destinatario podría no poder marcar como leído un aviso creado por el remitente. Hay que probarlo con dos cuentas y comprobar los permisos del rol antes de cambiarlo.
+
 ## Resultado comprobado con una cuenta
 
 Se usó el contrato del repositorio móvil. No se guardaron credenciales, tokens, identificadores ni filas de Roble en el repositorio; solo se anotan códigos HTTP y cantidades.
