@@ -36,6 +36,8 @@ La nueva identidad visual usa los logos y colores oficiales recibidos en `proyec
 
 La [corrección de permisos y solicitud al administrador](docs/PLAN_PERMISOS_ROBLE.md) describe la matriz de acceso y la secuencia compatible con la app móvil. La cuenta probada mostró el mismo `userId` en móvil y web; no se guarda ese identificador en Git.
 
+Para presentar los diseños según las cinco tareas solicitadas, usa la [guía de wireframes por tareas](docs/WIREFRAMES_POR_TAREAS.md) o su [PDF visual](docs/WIREFRAMES_POR_TAREAS_2026-11-09.pdf). Las [18 capturas completas](docs/EVIDENCIAS_FLUJOS_WEB_2026-11-09.pdf) están en un documento aparte.
+
 ## Estructura
 
 - `src/app/`: rutas y presentación.

@@ -4,6 +4,8 @@
 
 **Documento para presentar:** [PDF de evidencias, 20 páginas](EVIDENCIAS_FLUJOS_WEB_2026-11-09.pdf)
 
+**Organización por tareas:** [guía de wireframes y evidencias](WIREFRAMES_POR_TAREAS.md) y [PDF resumido](WIREFRAMES_POR_TAREAS_2026-11-09.pdf).
+
 **Alcance:** 18 capturas del entorno local `localhost:3000`, organizadas en ocho recorridos.
 
 | Página del PDF | Evidencia | Recorrido | Pantalla |
