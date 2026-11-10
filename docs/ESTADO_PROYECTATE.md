@@ -15,7 +15,7 @@ Referencia visual recibida: dos capturas móviles de Bienvenida y «Comencemos»
 | `/` | Bienvenida navegable con identidad nueva. |
 | `/login` | Inicio de sesión real con Roble en desarrollo. Deshabilitado en producción hasta cerrar la auditoría de permisos. |
 | `/cuenta` | Consulta la identidad real en Roble (`userId`, correo y nombre) y permite cerrar sesión. No mezcla estos datos con la demostración A/B. |
-| `/registro` | Formulario visual; el alta web sigue deshabilitada. |
+| `/registro`, `/verificar-correo` | Registro institucional y verificación real con Roble en desarrollo; permite reenviar el código. Tras verificar, la persona inicia sesión con la misma cuenta en web y móvil. |
 | `/explorar` | Busca y filtra proyectos públicos. En desarrollo lee proyectos de prueba persistentes en este navegador; los seguidos también funcionan localmente. |
 | `/mis-proyectos` | Lista por cuenta de prueba A/B, pestañas de publicados y borradores, edición y eliminación locales. |
 | `/proyectos/[id]` | Detalle de prueba con tareas, roles, comentarios, seguimiento y solicitudes. La cuenta creadora puede decidir y actualizar el estado de las tareas en el navegador. |
@@ -25,7 +25,7 @@ Referencia visual recibida: dos capturas móviles de Bienvenida y «Comencemos»
 | `/proyectos/nuevo` | Asistente interactivo desde «Comencemos» hasta revisión. Permite guardar borrador o publicar **solo en la demostración local**; persiste tras recargar el navegador. |
 | `/perfil/ajustes`, `/perfil/privacidad`, `/perfil/ajustes/notificaciones` | Preferencias editables por cuenta ficticia y guardadas solo en el navegador. |
 | `/usuarios/[id]` | Vista pública de perfiles A/B: respeta visibilidad y actividad privada dentro de la demostración. |
-| `/recuperar-contrasena`, `/verificar-correo` | Vistas de formato y recorrido. No envían correo, verifican identidad ni restablecen contraseñas. |
+| `/recuperar-contrasena`, `/restablecer-contrasena` | Solicitud de recuperación y restablecimiento real con token de Roble en desarrollo. |
 | `/mensajes`, `/mensajes/[id]` | Bandeja y chat directo A/B. Se inicia desde el perfil público, respeta quién acepta mensajes y conserva el historial y sus no leídos localmente. |
 
 ## Suposiciones de integración pendientes de comprobar
@@ -33,7 +33,7 @@ Referencia visual recibida: dos capturas móviles de Bienvenida y «Comencemos»
 1. Móvil y web usan el mismo contrato de Roble y el `userId` devuelto por su identidad; el correo no vincula los datos.
 2. `projects` representa proyectos publicados y borradores. Antes de activar lectura pública, Roble debe impedir por API que visitantes y otros usuarios lean borradores o tareas privadas. `ROBLE_PUBLIC_READ_ENABLED` sigue en `false`.
 3. Proyectos privados, solicitudes, perfiles, mensajes y notificaciones requieren autorización real del lado de Roble o de un servicio compartido por ambos clientes. Un filtro de pantalla no resuelve el acceso directo a la API.
-4. Se confirmó el contrato de inicio de sesión, `auth/me` y renovación de token con el SDK móvil y una cuenta de prueba. Recuperación, Microsoft SSO, permisos y comparación cruzada con dos cuentas siguen pendientes.
+4. Se confirmó el contrato de inicio de sesión, `auth/me` y renovación de token con el SDK móvil y una cuenta de prueba. Los endpoints de registro, verificación y recuperación se integraron según el SDK móvil y se probaron con Roble simulado; falta una prueba manual del correo real. Microsoft SSO, permisos y comparación cruzada de datos con dos cuentas siguen pendientes.
 5. Las vistas de demostración no escriben en Roble ni representan una sesión real. Las cuentas A/B son identidades locales ficticias. En compilación de producción no se muestran proyectos ni estadísticas ficticias.
 6. La privacidad de la demostración solo oculta datos en la interfaz. Antes de publicar perfiles y mensajes, Roble debe aplicar autorización por `userId` y controlar visibilidad, contacto y actividad en la API. Las preferencias actuales se guardan bajo `proyectate-profiles-demo-v1` y se borran junto a los proyectos con «Reiniciar datos».
 7. La trayectoria sigue la fórmula de la app móvil para colaboración, cumplimiento y calidad. «Proyectos completados» permanece en 0 porque el modelo de proyectos de esta demostración no tiene estado de finalización.

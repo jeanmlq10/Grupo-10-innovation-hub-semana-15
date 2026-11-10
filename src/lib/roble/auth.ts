@@ -3,8 +3,8 @@ export type RobleTokens = { accessToken: string; refreshToken: string | null };
 export type RobleAuthConfig = { baseUrl: string; contractId: string };
 
 export class RobleAuthFailure extends Error {
-  readonly status: 401 | 429 | 502 | 503;
-  constructor(status: 401 | 429 | 502 | 503) { super("Error de autenticación de Roble"); this.status = status; }
+  readonly status: 400 | 401 | 409 | 429 | 502 | 503;
+  constructor(status: 400 | 401 | 409 | 429 | 502 | 503) { super("Error de autenticación de Roble"); this.status = status; }
 }
 
 export function authConfig(): RobleAuthConfig {

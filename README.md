@@ -16,6 +16,8 @@ npm run dev
 
 Abrir `http://localhost:3000`. En desarrollo, `/login` autentica con la misma cuenta y contrato de Roble que usa la app móvil; `/cuenta` muestra el `userId` de Roble y permite cerrar sesión. Los tokens quedan solo en memoria del servidor de desarrollo y el navegador recibe una cookie protegida con un identificador aleatorio. Reiniciar el servidor termina la sesión. Este acceso está deshabilitado en compilaciones de producción.
 
+El [registro y la recuperación de contraseña](docs/FLUJOS_CUENTA_ROBLE.md) también funcionan en desarrollo: `/registro` envía el código institucional, `/verificar-correo` confirma la cuenta y permite reenviar el código, y `/recuperar-contrasena` lleva a `/restablecer-contrasena` con el token recibido. La web no persiste contraseñas ni códigos en archivos o almacenamiento del navegador.
+
 La lectura real de proyectos, perfiles, mensajes y avisos permanece desactivada. No establecer `ROBLE_PUBLIC_READ_ENABLED=true` hasta verificar y corregir la lectura pública de borradores en Roble. El archivo `.env.local` no se versiona. Ver [el flujo de identidad](docs/FLUJO_LOGIN_ROBLE.md).
 
 ## Comprobaciones
