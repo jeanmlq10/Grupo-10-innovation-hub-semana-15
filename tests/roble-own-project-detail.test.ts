@@ -42,6 +42,17 @@ test("own detail joins only the verified project and exposes a minimal view", ()
   assert.equal(ownProjectDetailFromRows(project, "user-b", tasks, members, requests, decisions), null);
 });
 
+test("owner sees team-only task content only from their private row", () => {
+  const teamTask = { _id: "team-task", _owner: "user-a", projectId: "project-a", title: "", description: "", visibility: "team", requiredCount: 1 };
+  const privateRows = [
+    { taskId: "team-task", projectId: "project-a", _owner: "user-b", title: "Injected" },
+    { taskId: "team-task", projectId: "project-a", _owner: "user-a", title: "Plan interno", description: "Solo equipo" },
+  ];
+  const detail = ownProjectDetailFromRows(project, "user-a", [teamTask], [], [], [], privateRows);
+  assert.deepEqual(detail?.tasks.map(task => ({ title: task.title, visibility: task.visibility })), [{ title: "Plan interno", visibility: "team" }]);
+  assert.equal(ownProjectDetailFromRows(project, "user-a", [teamTask], [], [], [])?.tasks.length, 0);
+});
+
 test("foreign project stops before reading child tables, even if Roble ignores filters", async () => {
   const original = globalThis.fetch;
   const tables: string[] = [];

@@ -4,7 +4,7 @@
 
 - Ejecutar la web con `npm run dev` y el contrato `movil_flutter_dcaabc5f4e` en `.env.local`.
 - Usar dos cuentas reales distintas: **A**, creadora, y **B**, postulante. No escribir contraseñas, códigos ni tokens en capturas o evidencias.
-- Abrir A y B en perfiles de navegador separados. Tener la app Flutter disponible para comparar la misma cuenta y el mismo proyecto.
+- Abrir A y B en perfiles de navegador separados. Tener la app Expo/React Native de `mobile/` disponible para comparar la misma cuenta y el mismo proyecto.
 - Elegir un nombre único para el proyecto de prueba y registrar su ID desde la URL. No usar un proyecto con participantes reales.
 
 ## Recorrido principal
@@ -19,6 +19,10 @@
 | 6 | A marca el aviso recibido como leído en `/notificaciones/roble`. | Desaparece de **No leídos** incluso después de recargar; móvil refleja el mismo estado. |
 | 7 | B intenta postularse a la tarea disponible. A rechaza desde **Solicitudes**. | B ve **Rechazada** y recibe un aviso. La tarea sigue con su cupo libre. |
 | 8 | A edita el nombre o la descripción del proyecto. | B y móvil ven el cambio al recargar; la membresía y los cupos aceptados se conservan. |
+| 9 | A edita nombre, biografía y preferencias en `/perfil/editar`, `/perfil/privacidad` y `/perfil/ajustes/notificaciones`. | Móvil muestra los mismos campos al recargar. El perfil privado deja de aparecer para B en `/usuarios/[id]`. |
+| 10 | A vuelve a poner el perfil público. B abre el perfil desde el proyecto, envía un mensaje y A responde. | Ambos clientes muestran la conversación; al desactivar el contacto de A, B no puede iniciar otra conversación. |
+| 11 | B sigue el proyecto, comenta y responde a un comentario desde su ficha. | Móvil muestra el seguimiento y los comentarios. `/perfil/actividad` y `/perfil/trayectoria` de B reflejan sus acciones. |
+| 12 | A crea en móvil una tarea «solo equipo». | A ve el título en su ficha web. B no ve el contenido en la ficha pública ni puede postularse a esa tarea por la ruta web. La edición web del proyecto se bloquea para preservar el contenido interno. |
 
 ## Comprobaciones de aislamiento
 

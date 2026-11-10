@@ -9,6 +9,7 @@ export type OwnRobleTask = {
   accepted: number;
   deadline: string;
   status: "available" | "in_progress" | "completed";
+  visibility: "public" | "team";
 };
 
 export type OwnRobleMember = { id: string; name: string; role: string; joinedAt: string };
@@ -63,6 +64,7 @@ export function ownProjectDetailFromRows(
   membersValue: unknown[],
   requestsValue: unknown[],
   decisionsValue: unknown[],
+  privateTasksValue: unknown[] = [],
 ): OwnRobleProjectDetail | null {
   const projectRow = record(projectValue);
   if (!projectRow) return null;
@@ -74,6 +76,9 @@ export function ownProjectDetailFromRows(
   const requests = rowsForProject(requestsValue, projectId);
   const requestIds = new Set(requests.map(row => text(row._id)).filter(Boolean));
   const latestDecisions = new Map<string, Record<string, unknown>>();
+  const privateTasks = new Map(rowsForProject(privateTasksValue, projectId)
+    .filter(row => text(row._owner) === ownerId && text(row.taskId))
+    .map(row => [text(row.taskId), row]));
 
   for (const item of decisionsValue) {
     const decision = record(item);
@@ -95,11 +100,14 @@ export function ownProjectDetailFromRows(
     teamRoles: Object.entries(teamRoles).flatMap(([role, needed]) => count(needed) > 0
       ? [{ role, needed: count(needed), accepted: count(acceptedRoleCounts[role]) }] : []),
     tasks: rowsForProject(tasksValue, projectId).flatMap(row => {
-      const id = text(row._id), title = text(row.title);
+      const id = text(row._id), teamOnly = text(row.visibility) === "team";
+      const privateTask = teamOnly ? privateTasks.get(id) : undefined;
+      const title = teamOnly ? text(privateTask?.title) : text(row.title);
       if (!id || !title || text(row._owner) !== ownerId) return [];
       const status = text(row.status);
-      return [{ id, title, description: text(row.description), needed: count(row.requiredCount),
+      return [{ id, title, description: teamOnly ? text(privateTask?.description) : text(row.description), needed: count(row.requiredCount),
         accepted: count(row.acceptedCount), deadline: text(row.deadline),
+        visibility: teamOnly ? "team" as const : "public" as const,
         status: status === "completed" ? "completed" as const : status === "in_progress" ? "in_progress" as const : "available" as const }];
     }),
     members: rowsForProject(membersValue, projectId).flatMap(row => {
@@ -135,5 +143,7 @@ export async function readOwnProjectDetail(config: RobleAuthConfig, accessToken:
     readRobleRows(config, accessToken, "project_requests", { projectId }),
     readRobleRows(config, accessToken, "request_decisions"),
   ]);
-  return ownProjectDetailFromRows(project, ownerId, tasks, members, requests, decisions);
+  const hasTeamTasks = tasks.some(item => { const task = record(item); return task && text(task.projectId) === projectId && text(task._owner) === ownerId && text(task.visibility) === "team"; });
+  const privateTasks = hasTeamTasks ? await readRobleRows(config, accessToken, "project_task_private", { projectId }) : [];
+  return ownProjectDetailFromRows(project, ownerId, tasks, members, requests, decisions, privateTasks);
 }

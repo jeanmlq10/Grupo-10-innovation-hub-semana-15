@@ -91,6 +91,22 @@ test("a published project with applications closed rejects both role and task re
   } finally { restore(); }
 });
 
+test("deleted projects and internal tasks reject direct applications", async () => {
+  const deleted = { ...project, deletedAt: "2026-11-10T12:00:00Z" };
+  const internalTask = { _id: "task-internal", _owner: owner.userId, projectId: "project-a", title: "", visibility: "team", status: "available", requiredCount: 1, acceptedCount: 0 };
+  let writes = 0;
+  const data = { projects: [deleted], project_tasks: [internalTask] };
+  const restore = mockRows(data, () => { writes++; return Response.json({ _id: "unexpected" }); });
+  try {
+    await assert.rejects(() => submitRobleRequest(config, "token", applicant, "project-a", { type: "team", targetId: "Diseñador/a" }),
+      (error: unknown) => error instanceof ProjectWriteFailure && error.status === 404);
+    data.projects[0] = project as typeof deleted;
+    await assert.rejects(() => submitRobleRequest(config, "token", applicant, "project-a", { type: "task", targetId: "task-internal" }),
+      (error: unknown) => error instanceof ProjectWriteFailure && error.status === 409);
+    assert.equal(writes, 0);
+  } finally { restore(); }
+});
+
 test("owner acceptance creates a member, updates counts, then records the decision", async () => {
   const members: Record<string, unknown>[] = [];
   const writes: string[] = [];

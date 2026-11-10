@@ -60,8 +60,9 @@ Los secretos y contraseñas de prueba nunca se añaden al repositorio.
 5. Con la cuenta creadora, revisar Mis proyectos, solicitudes y notificaciones.
    Aceptar o rechazar una solicitud de prueba y verificar el cambio en el otro
    cliente. Evitar tocar datos reales que no sean de prueba.
-6. En web, abrir Perfil y Mensajes. Comparar nombre, biografía y una
-   conversación de prueba con la app móvil.
+6. En web, abrir Perfil y Mensajes. Editar nombre, biografía, privacidad y
+   preferencias de avisos; comparar los cambios y una conversación con móvil.
+   Comentar y seguir un proyecto de prueba; comprobar trayectoria y actividad.
 7. Explicar que los proyectos eliminados desde móvil no aparecen en web y que
    el detalle público web omite tareas marcadas `visibility=team`.
 8. Cerrar con lo verificado y los límites descritos a continuación.
@@ -83,6 +84,8 @@ Los secretos y contraseñas de prueba nunca se añaden al repositorio.
 - La web no muestra portadas ni adjuntos R2 ni permite editar tareas internas.
   Se evita así publicar por accidente su contenido. Para estas operaciones,
   usar la app móvil hasta completar la integración y la política de acceso.
+- La web sí muestra tareas internas al creador cuando el contenido está en
+  `project_task_private`; no las muestra en la ficha pública.
 - El contenido del PDF de pruebas incluye cuentas y contraseñas de referencia.
   Ese PDF no forma parte del repositorio ni del archivo de código.
 

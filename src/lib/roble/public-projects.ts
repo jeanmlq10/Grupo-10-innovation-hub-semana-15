@@ -3,6 +3,7 @@ import { readRobleRows } from "./own-projects.ts";
 import { publishedProjectsFromResponse, type PublishedProject } from "./projects.ts";
 
 export type PublishedRobleDetail = PublishedProject & {
+  ownerUserId: string;
   isMine: boolean;
   canApply: boolean;
   duration: string;
@@ -35,6 +36,7 @@ export function publishedProjectDetailFromRows(projectValue: unknown, taskValues
   const owner = text(row._owner);
   return {
     ...project,
+    ownerUserId: owner,
     isMine: !!viewerId && viewerId === owner,
     canApply: row.canApply !== false && row.canApply !== "false",
     duration: text(row.duration),

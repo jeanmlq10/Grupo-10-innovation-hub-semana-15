@@ -37,7 +37,7 @@ export async function sendRobleMessage(config: RobleAuthConfig, token: string, i
     throw new ProjectWriteFailure(400, "Revisa la persona destinataria y el mensaje.");
   }
   const profiles = await readRobleRows(config, token, "user_profiles", { userId: toUserId });
-  const recipient = profiles.map(row).find(item => item && text(item.userId) === toUserId);
+  const recipient = profiles.map(row).find(item => item && text(item.userId) === toUserId && text(item._owner) === toUserId);
   if (!recipient) throw new ProjectWriteFailure(404, "No encontramos el perfil de esa persona.");
   if (text(recipient.contactPermission) === "nobody") throw new ProjectWriteFailure(403, "Esta persona no recibe mensajes.");
   const created = await writeRobleRow(config, token, "POST", "insert-one", { tableName: "direct_messages", record: {

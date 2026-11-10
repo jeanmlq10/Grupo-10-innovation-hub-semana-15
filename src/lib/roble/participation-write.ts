@@ -45,7 +45,7 @@ export async function submitRobleRequest(config: RobleAuthConfig, token: string,
   }
   const p = await project(config, token, projectId);
   const owner = text(p._owner);
-  if ((p.isDraft !== false && p.isDraft !== "false") || p.audience !== "Toda la comunidad" || p.canApply === false || p.canApply === "false") {
+  if (text(p.deletedAt) || (p.isDraft !== false && p.isDraft !== "false") || p.audience !== "Toda la comunidad" || p.canApply === false || p.canApply === "false") {
     throw new ProjectWriteFailure(404, "Este proyecto no recibe solicitudes.");
   }
   if (owner === identity.userId) throw new ProjectWriteFailure(400, "No puedes postularte a tu propio proyecto.");
@@ -58,7 +58,7 @@ export async function submitRobleRequest(config: RobleAuthConfig, token: string,
   } else {
     const tasks = await rows(config, token, "project_tasks", { projectId });
     const task = tasks.find(item => item._id === targetId && item.projectId === projectId && item._owner === owner);
-    if (!task || text(task.status) !== "available" || count(task.requiredCount) <= count(task.acceptedCount) || !beforeDeadline(task.deadline)) {
+    if (!task || text(task.visibility) === "team" || !text(task.title) || text(task.status) !== "available" || count(task.requiredCount) <= count(task.acceptedCount) || !beforeDeadline(task.deadline)) {
       throw new ProjectWriteFailure(409, "La postulación a esta tarea ya cerró o no tiene cupos.");
     }
     role = text(task.title);
@@ -92,6 +92,7 @@ export async function decideRobleRequest(config: RobleAuthConfig, token: string,
   if (!validId(requestId) || (decision !== "accepted" && decision !== "rejected")) throw new ProjectWriteFailure(400, "Decisión inválida.");
   const p = await project(config, token, projectId);
   const owner = text(p._owner);
+  if (text(p.deletedAt)) throw new ProjectWriteFailure(404, "Este proyecto fue eliminado en la app móvil.");
   if (owner !== identity.userId) throw new ProjectWriteFailure(404, "Solo quien creó el proyecto puede resolver solicitudes.");
   const requests = await rows(config, token, "project_requests", { _id: requestId, projectId });
   const request = requests.find(item => item._id === requestId && item.projectId === projectId &&

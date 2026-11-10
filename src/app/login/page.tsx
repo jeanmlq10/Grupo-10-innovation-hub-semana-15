@@ -50,7 +50,7 @@ export default function LoginPage() {
         <p className="auth-forgot"><Link href="/recuperar-contrasena">¿Olvidaste tu contraseña?</Link></p>
         <button className="auth-button primary" type="submit" disabled={!enabled || pending}>{pending ? "Ingresando…" : "Ingresar"}</button>
         {error && <p className="auth-error" role="alert">{error}</p>}
-        <p className="auth-pending" role="status">{enabled ? "Acceso de desarrollo: verificaremos tu identidad con Roble. Los proyectos y mensajes reales siguen desactivados hasta corregir sus permisos." : "El acceso web estará disponible cuando validemos los permisos de Roble."}</p>
+        <p className="auth-pending" role="status">{enabled ? "Acceso de desarrollo: usarás la misma cuenta de Roble que en la app móvil. La publicación web espera la corrección de permisos del contrato." : "El acceso web estará disponible cuando validemos los permisos de Roble."}</p>
       </form>
       <p className="auth-switch">¿No tienes cuenta? <Link href="/registro">Regístrate</Link></p>
     </AuthShell>
