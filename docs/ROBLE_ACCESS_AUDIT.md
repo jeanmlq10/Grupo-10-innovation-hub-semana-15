@@ -21,6 +21,14 @@ La captura de «Estructura de Datos» muestra **10 tablas**. Solo `projects` tie
 
 `user_profiles` y `direct_messages` **no figuran** en la lista completa. Esto explica sus respuestas 404 y confirma que el perfil y la mensajería reales todavía necesitan una decisión de esquema antes de integrarse. El interruptor «Público» indica exposición anónima de tabla; no demuestra aislamiento entre usuarios autenticados. El caso de `app_notifications` lo confirma: está marcado como no público, pero una cuenta leyó nueve avisos ajenos. Falta abrir los iconos de escudo para ver las reglas precisas.
 
+## Diagrama y edición de columnas
+
+Las capturas posteriores del diagrama y de «Editar tabla» confirman que Roble asigna `_owner` **al usuario que inserta cada fila**, y que ese campo no se edita desde la aplicación. `projects` contiene `_id` UUID, `_owner` texto, `audience` texto e `isDraft` booleano; `categories`, `teamRoles` y `acceptedRoleCounts` son `jsonb`. La existencia de esos campos no impone por sí sola el filtro de publicación en `public-read`.
+
+`app_notifications` contiene tanto `_owner` como `recipientUserId`. El código móvil crea avisos para otra persona y consulta por `recipientUserId`; el remitente queda como `_owner` de la fila. Por eso «leer solo lo propio», si se basa en `_owner`, no expresa la regla «solo el destinatario lee». La captura de columnas muestra `recipientUserId` como texto y `read` como booleano, pero no muestra una regla de permisos. La configuración actual sigue pendiente de la pantalla del escudo.
+
+En el diagrama, `request_decisions` muestra `id` UUID, `requestId`, `status` y `decidedAt`, **sin `_owner` visible**. El repositorio móvil espera `_owner` para atribuir la decisión al creador del proyecto; al faltar en una fila, su código no aplica esa comprobación de autor. Hay que confirmar el esquema completo y el resultado real de la API antes de decidir cómo migrar o corregir las decisiones. Ninguna de estas capturas autoriza modificar filas o permisos.
+
 ## Resultado comprobado con una cuenta
 
 Se usó el contrato del repositorio móvil. No se guardaron credenciales, tokens, identificadores ni filas de Roble en el repositorio; solo se anotan códigos HTTP y cantidades.
