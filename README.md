@@ -2,6 +2,23 @@
 
 Proyéctate reúne ideas y personas para crear proyectos universitarios. Este repositorio contiene dos clientes que usan el **mismo contrato de Roble**:
 
+## Organización del repositorio
+
+```text
+.
+├── README.md                 # Guía general del proyecto
+├── .github/workflows/ci.yml # Integración continua de GitHub
+└── semana15/
+    ├── src/                  # Web Next.js
+    ├── mobile/               # App Expo / React Native
+    ├── docs/                 # Documentación y evidencias
+    ├── public/               # Recursos de marca
+    ├── tests/                # Pruebas web
+    └── package.json          # Comandos de desarrollo
+```
+
+La raíz de la **aplicación web** es `semana15/`; ejecuta allí los comandos de npm. El README permanece en la raíz del repositorio para que se vea al abrirlo en GitHub. `.github/` también permanece allí porque GitHub busca sus workflows en esa ubicación.
+
 | Carpeta | Aplicación | Cómo se abre |
 | --- | --- | --- |
 | `semana15/src/` | Web con Next.js y TypeScript | Navegador en `http://localhost:3000` |
@@ -30,7 +47,7 @@ Desde la raíz del repositorio:
 ```bash
 cd semana15
 npm ci
-cp .env.example .env.local
+cp -n .env.example .env.local
 npm run dev
 ```
 
