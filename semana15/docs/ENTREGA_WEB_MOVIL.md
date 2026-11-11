@@ -6,8 +6,8 @@ Hay **un repositorio Git** con dos clientes que comparten Roble:
 
 | Carpeta | Cliente | Se abre con |
 |---|---|---|
-| Raíz (`src/`) | Web Next.js | Navegador en `http://localhost:3000` |
-| `mobile/` | App Expo/React Native | Expo Go, emulador Android o simulador iOS |
+| `semana15/src/` | Web Next.js | Navegador en `http://localhost:3000` |
+| `semana15/mobile/` | App Expo/React Native | Expo Go, emulador Android o simulador iOS |
 
 Ambos usan el contrato `movil_flutter_dcaabc5f4e`. Una persona inicia sesión con
 la **misma cuenta** en cada cliente; los proyectos, solicitudes, notificaciones,
@@ -18,13 +18,14 @@ instala una compilación móvil. Tener un solo repositorio no hace que una URL
 de navegador se convierta automáticamente en la app instalada.
 
 La app Flutter original sigue disponible en su repositorio histórico. La
-carpeta `mobile/` contiene la nueva versión React Native que compartió Andrew.
+carpeta `semana15/mobile/` contiene la nueva versión React Native que compartió Andrew.
 
 ## Preparación
 
 Se recomienda Node.js 24 o superior. Desde la raíz:
 
 ```bash
+cd semana15
 npm ci
 cp .env.example .env.local
 npm run dev
@@ -33,6 +34,7 @@ npm run dev
 En otra terminal, desde la misma raíz:
 
 ```bash
+cd semana15
 npm ci --prefix mobile
 npm run mobile:start
 ```
@@ -46,7 +48,7 @@ Los secretos y contraseñas de prueba nunca se añaden al repositorio.
 
 ## Recorrido para la prueba manual y el video
 
-1. Mostrar la raíz y `mobile/` en el mismo repositorio. Enseñar las órdenes de
+1. Mostrar `semana15/` y `semana15/mobile/` en el mismo repositorio. Enseñar las órdenes de
    arranque de web y Expo y el mismo identificador de contrato en ambos
    `.env.example`.
 2. Abrir web y app móvil. Mostrar la identidad visual Proyéctate, el logo y
@@ -93,6 +95,7 @@ Los secretos y contraseñas de prueba nunca se añaden al repositorio.
 ## Verificación local
 
 ```bash
+cd semana15
 npm run lint
 npm test
 npm run build

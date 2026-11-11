@@ -1,6 +1,6 @@
 # Estado de Proyéctate · 10 de noviembre de 2026
 
-El repositorio reúne la web Next.js en la raíz y la app Expo/React Native en `mobile/`. Ambas usan el contrato de Roble `movil_flutter_dcaabc5f4e` y comparten la identidad por `userId`. La app Flutter anterior sigue como referencia histórica en su repositorio original.
+El repositorio reúne la web Next.js en `semana15/` y la app Expo/React Native en `semana15/mobile/`. Ambas usan el contrato de Roble `movil_flutter_dcaabc5f4e` y comparten la identidad por `userId`. La app Flutter anterior sigue como referencia histórica en su repositorio original.
 
 ## Web conectada a Roble en desarrollo
 
