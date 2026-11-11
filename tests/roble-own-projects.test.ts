@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { ownProjectsFromResponse, readOwnProjects, RobleProjectReadFailure } from "../src/lib/roble/own-projects.ts";
+import { ownProjectsFromResponse, readOwnProjects, readRobleRows, RobleProjectReadFailure } from "../src/lib/roble/own-projects.ts";
 
 const rows = { data: [
   { _id: "own-public", _owner: "user-a", name: "Huerta", description: "Proyecto", categories: ["Ambiente"], isDraft: false, audience: "Toda la comunidad", createdAt: "2026-11-09", applicantEmail: "private@example.com" },
@@ -38,5 +38,16 @@ test("Roble read requests only the current owner and still filters a broad API r
     assert.equal(new URL(requestedUrl).searchParams.get("tableName"), "projects");
     assert.equal(authorization, "Bearer token");
     assert.equal(cache, "no-store");
+  } finally { globalThis.fetch = original; }
+});
+
+test("Roble read preserves permission and rate-limit statuses", async () => {
+  const original = globalThis.fetch;
+  try {
+    for (const status of [401, 403, 429]) {
+      globalThis.fetch = async () => new Response(null, { status });
+      await assert.rejects(readRobleRows({ baseUrl: "https://roble.example", contractId: "contract" }, "token", "projects"),
+        (error: unknown) => error instanceof RobleProjectReadFailure && error.status === status);
+    }
   } finally { globalThis.fetch = original; }
 });

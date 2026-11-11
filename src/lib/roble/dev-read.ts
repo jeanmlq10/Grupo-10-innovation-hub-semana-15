@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { authConfig, readRobleIdentity, refreshRobleTokens, RobleAuthFailure, type RobleAuthConfig } from "./auth";
-import { deleteDevSession, devSessionCookie, getDevSession } from "./dev-session";
+import { authConfig, RobleAuthFailure, type RobleAuthConfig } from "./auth";
+import { deleteDevSession, devSessionCookie, getDevSession, refreshDevSession } from "./dev-session";
 import { RobleProjectReadFailure } from "./own-projects";
 
 const headers = { "Cache-Control": "no-store", Vary: "Cookie" };
@@ -18,25 +18,18 @@ export async function devRobleRead<T>(
 
   try {
     const config = authConfig();
-    let identity;
-    try { identity = await readRobleIdentity(config, session.tokens.accessToken); }
-    catch (cause) {
-      if (!(cause instanceof RobleAuthFailure) || cause.status !== 401 || !session.tokens.refreshToken) throw cause;
-      session.tokens = await refreshRobleTokens(config, session.tokens.refreshToken);
-      identity = await readRobleIdentity(config, session.tokens.accessToken);
-    }
-    if (identity.userId !== session.identity.userId) {
-      deleteDevSession(sessionId);
-      return error("Tu sesión terminó. Inicia sesión de nuevo.", 401);
-    }
-    session.identity = identity;
-
     let result;
-    try { result = await load(config, session.tokens.accessToken, identity.userId); }
+    try { result = await load(config, session.tokens.accessToken, session.identity.userId); }
     catch (cause) {
-      if (!(cause instanceof RobleProjectReadFailure) || cause.status !== 401 || !session.tokens.refreshToken) throw cause;
-      session.tokens = await refreshRobleTokens(config, session.tokens.refreshToken);
-      result = await load(config, session.tokens.accessToken, identity.userId);
+      if (!(cause instanceof RobleProjectReadFailure) || cause.status !== 401) throw cause;
+      const refreshed = await refreshDevSession(sessionId, session.tokens.accessToken, config);
+      try { result = await load(config, refreshed.tokens.accessToken, refreshed.identity.userId); }
+      catch (retryCause) {
+        if (retryCause instanceof RobleProjectReadFailure && retryCause.status === 401) {
+          return error("Roble rechazó el acceso a estos datos. Tu sesión sigue activa.", 403);
+        }
+        throw retryCause;
+      }
     }
     if (result === null) return error(notFoundMessage, 404);
     return NextResponse.json(result, { headers });
@@ -44,6 +37,12 @@ export async function devRobleRead<T>(
     if ((cause instanceof RobleAuthFailure || cause instanceof RobleProjectReadFailure) && cause.status === 401) {
       deleteDevSession(sessionId);
       return error("Tu sesión terminó. Inicia sesión de nuevo.", 401);
+    }
+    if (cause instanceof RobleProjectReadFailure && cause.status === 403) {
+      return error("Roble no permite consultar estos datos con tu cuenta. Tu sesión sigue activa.", 403);
+    }
+    if ((cause instanceof RobleAuthFailure || cause instanceof RobleProjectReadFailure) && cause.status === 429) {
+      return error("Roble limitó temporalmente las solicitudes. Espera antes de reintentar.", 429);
     }
     return error("No pudimos consultar Roble. Inténtalo más tarde.", 503);
   }

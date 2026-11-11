@@ -63,6 +63,8 @@ export async function readRobleRows(config: RobleAuthConfig, accessToken: string
     });
   } catch { throw new RobleProjectReadFailure(503); }
   if (response.status === 401) throw new RobleProjectReadFailure(401);
+  if (response.status === 403) throw new RobleProjectReadFailure(403);
+  if (response.status === 429) throw new RobleProjectReadFailure(429);
   if (!response.ok) throw new RobleProjectReadFailure(503);
   let body: unknown;
   try { body = await response.json(); } catch { throw new RobleProjectReadFailure(502); }

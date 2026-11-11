@@ -4,11 +4,14 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { AppShell } from "@/components/AppShell";
 import { Icon } from "@/components/Icon";
+import { RobleReadError } from "@/components/RobleReadError";
 import type { OwnRobleProject } from "@/lib/roble/own-projects";
 
 export default function MyRobleProjectsPage() {
   const [projects, setProjects] = useState<OwnRobleProject[]>([]);
   const [status, setStatus] = useState<"loading" | "ready" | "signed-out" | "error">("loading");
+  const [errorStatus, setErrorStatus] = useState(0);
+  const [attempt, setAttempt] = useState(0);
   const [tab, setTab] = useState<"publicados" | "borradores">("publicados");
   const [search, setSearch] = useState("");
 
@@ -18,13 +21,13 @@ export default function MyRobleProjectsPage() {
       .then(async response => {
         if (!active) return;
         if (response.status === 401) { setStatus("signed-out"); return; }
-        if (!response.ok) { setStatus("error"); return; }
+        if (!response.ok) { setErrorStatus(response.status); setStatus("error"); return; }
         const body: { projects: OwnRobleProject[] } = await response.json();
         if (active) { setProjects(body.projects); setStatus("ready"); }
       })
-      .catch(() => { if (active) setStatus("error"); });
+      .catch(() => { if (active) { setErrorStatus(0); setStatus("error"); } });
     return () => { active = false; };
-  }, []);
+  }, [attempt]);
 
   const published = projects.filter(project => !project.isDraft && project.audience === "Toda la comunidad");
   const drafts = projects.filter(project => project.isDraft || project.audience !== "Toda la comunidad");
@@ -39,7 +42,7 @@ export default function MyRobleProjectsPage() {
     <p className="preview-note">Tus proyectos y borradores guardados en Roble.</p>
     {status === "loading" && <div className="empty-panel" role="status"><Icon name="folder" size={36} /><h2>Consultando tus proyectos…</h2></div>}
     {status === "signed-out" && <div className="empty-panel"><Icon name="user" size={36} /><h2>Inicia sesión para continuar</h2><p>Usa tu cuenta de Proyéctate para ver tus proyectos de Roble.</p><Link href="/login" className="solid-action">Iniciar sesión</Link></div>}
-    {status === "error" && <div className="empty-panel" role="alert"><Icon name="folder" size={36} /><h2>No pudimos consultar Roble</h2><p>Inténtalo de nuevo más tarde. Tus proyectos no se han modificado.</p><Link href="/cuenta" className="outline-action">Volver a mi cuenta</Link></div>}
+    {status === "error" && <RobleReadError title="No pudimos cargar tus proyectos" icon="folder" status={errorStatus} onRetry={() => { setStatus("loading"); setAttempt(value => value + 1); }} />}
     {status === "ready" && <>
       <label className="roble-search-label" htmlFor="roble-project-search">Buscar entre mis proyectos</label>
       <input id="roble-project-search" className="roble-project-search" type="search" value={search} onChange={event => setSearch(event.target.value)} placeholder="Nombre, descripción o categoría" />

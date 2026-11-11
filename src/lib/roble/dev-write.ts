@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { authConfig, readRobleIdentity, refreshRobleTokens, RobleAuthFailure, type RobleAuthConfig, type RobleIdentity } from "./auth";
-import { deleteDevSession, devSessionCookie, getDevSession } from "./dev-session";
+import { authConfig, readRobleIdentity, RobleAuthFailure, type RobleAuthConfig, type RobleIdentity } from "./auth";
+import { deleteDevSession, devSessionCookie, getDevSession, refreshDevSession } from "./dev-session";
 import { RobleProjectReadFailure } from "./own-projects";
 import { parseProjectWrite, ProjectWriteFailure, saveRobleProject } from "./project-write";
 
@@ -9,21 +9,20 @@ const error = (message: string, status: number, projectId?: string) => NextRespo
 
 async function verifiedSession(request: NextRequest): Promise<{ config: RobleAuthConfig; token: string; identity: RobleIdentity }> {
   const id = request.cookies.get(devSessionCookie)?.value;
-  const session = getDevSession(id);
+  let session = getDevSession(id);
   if (!session) throw new ProjectWriteFailure(401, "Inicia sesión para guardar en Roble.");
   const config = authConfig();
   let identity: RobleIdentity;
   try { identity = await readRobleIdentity(config, session.tokens.accessToken); }
   catch (cause) {
-    if (!(cause instanceof RobleAuthFailure) || cause.status !== 401 || !session.tokens.refreshToken) throw cause;
-    session.tokens = await refreshRobleTokens(config, session.tokens.refreshToken);
+    if (!(cause instanceof RobleAuthFailure) || cause.status !== 401) throw cause;
+    session = await refreshDevSession(id, session.tokens.accessToken, config);
     identity = await readRobleIdentity(config, session.tokens.accessToken);
   }
   if (identity.userId !== session.identity.userId) {
     deleteDevSession(id);
     throw new ProjectWriteFailure(401, "Tu sesión terminó. Inicia sesión de nuevo.");
   }
-  session.identity = identity;
   return { config, token: session.tokens.accessToken, identity };
 }
 
@@ -47,7 +46,10 @@ export async function devRobleMutation(
     return NextResponse.json(result, { status: successStatus, headers });
   } catch (cause) {
     if (cause instanceof ProjectWriteFailure) return error(cause.message, cause.status, cause.projectId);
-    if ((cause instanceof RobleAuthFailure || cause instanceof RobleProjectReadFailure) && cause.status === 401) {
+    if (cause instanceof RobleProjectReadFailure && cause.status === 401) {
+      return error("Roble rechazó el acceso a estos datos. Tu sesión sigue activa.", 403);
+    }
+    if (cause instanceof RobleAuthFailure && cause.status === 401) {
       deleteDevSession(request.cookies.get(devSessionCookie)?.value);
       return error("Tu sesión terminó. Inicia sesión de nuevo.", 401);
     }

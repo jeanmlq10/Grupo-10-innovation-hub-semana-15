@@ -5,6 +5,7 @@ import Link from "next/link";
 import { AppShell } from "@/components/AppShell";
 import { Icon } from "@/components/Icon";
 import { ProfileAvatar } from "@/components/ProfileAvatar";
+import { RobleReadError } from "@/components/RobleReadError";
 
 type Profile = { name: string; username: string; bio: string; career: string; avatarIcon: string } | null;
 type Summary = { profile: Profile; stats: { projectsCreated: number; participations: number } };
@@ -14,6 +15,8 @@ export default function ProfilePage() {
   const [identity, setIdentity] = useState<Identity | null>(null);
   const [summary, setSummary] = useState<Summary | null>(null);
   const [status, setStatus] = useState<"loading" | "ready" | "signed-out" | "error">("loading");
+  const [errorStatus, setErrorStatus] = useState(0);
+  const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
     let active = true;
@@ -23,19 +26,19 @@ export default function ProfilePage() {
     ]).then(async ([auth, profile]) => {
       if (!active) return;
       if (auth.status === 401 || profile.status === 401) { setStatus("signed-out"); return; }
-      if (!auth.ok || !profile.ok) { setStatus("error"); return; }
+      if (!auth.ok || !profile.ok) { setErrorStatus(!auth.ok ? auth.status : profile.status); setStatus("error"); return; }
       const [authBody, profileBody] = await Promise.all([auth.json(), profile.json()]);
       if (active) { setIdentity(authBody.user); setSummary(profileBody); setStatus("ready"); }
-    }).catch(() => { if (active) setStatus("error"); });
+    }).catch(() => { if (active) { setErrorStatus(0); setStatus("error"); } });
     return () => { active = false; };
-  }, []);
+  }, [attempt]);
 
   const profile = summary?.profile;
   const name = profile?.name || identity?.name || "Tu perfil";
   return <AppShell><header className="topbar"><div className="page-intro"><h1>Perfil</h1><p>Tu información compartida con la app móvil</p></div></header>
     {status === "loading" && <div className="empty-panel" role="status"><h2>Consultando tu perfil en Roble…</h2></div>}
     {status === "signed-out" && <div className="empty-panel"><h2>Inicia sesión para ver tu perfil</h2><Link className="solid-action" href="/login">Iniciar sesión</Link></div>}
-    {status === "error" && <div className="empty-panel" role="alert"><h2>No pudimos consultar tu perfil</h2><p>Comprueba tu sesión y vuelve a intentarlo.</p></div>}
+    {status === "error" && <RobleReadError title="No pudimos cargar tu perfil" icon="user" status={errorStatus} onRetry={() => { setStatus("loading"); setAttempt(value => value + 1); }} />}
     {status === "ready" && identity && summary && <div className="profile-grid"><div>
       <section className="surface-panel profile-card"><ProfileAvatar name={name} avatarIcon={profile?.avatarIcon || "sprout"} /><h2>{name}</h2>
         {profile?.username && <p>@{profile.username}</p>}{profile?.career && <p>{profile.career}</p>}{profile?.bio && <p>{profile.bio}</p>}

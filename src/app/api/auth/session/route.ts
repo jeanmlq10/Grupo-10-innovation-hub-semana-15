@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { authConfig, loginToRoble, logoutFromRoble, readRobleIdentity, refreshRobleTokens, RobleAuthFailure } from "@/lib/roble/auth";
+import { authConfig, loginToRoble, logoutFromRoble, RobleAuthFailure } from "@/lib/roble/auth";
 import { createDevSession, deleteDevSession, devSessionCookie, devSessionMaxAge, getDevSession } from "@/lib/roble/dev-session";
 
 const headers = { "Cache-Control": "no-store", Vary: "Cookie" };
@@ -49,25 +49,7 @@ export async function GET(request: NextRequest) {
   const id = request.cookies.get(devSessionCookie)?.value;
   const session = getDevSession(id);
   if (!session) return clearCookie(NextResponse.json({ error: "Inicia sesión para ver tu cuenta." }, { status: 401, headers }));
-  try {
-    const config = authConfig();
-    let identity;
-    try { identity = await readRobleIdentity(config, session.tokens.accessToken); }
-    catch (error) {
-      if (!(error instanceof RobleAuthFailure) || error.status !== 401 || !session.tokens.refreshToken) throw error;
-      session.tokens = await refreshRobleTokens(config, session.tokens.refreshToken);
-      identity = await readRobleIdentity(config, session.tokens.accessToken);
-    }
-    if (identity.userId !== session.identity.userId) throw new RobleAuthFailure(401);
-    session.identity = identity;
-    return NextResponse.json({ user: identity }, { headers });
-  } catch (error) {
-    if (error instanceof RobleAuthFailure && error.status === 401) {
-      deleteDevSession(id);
-      return clearCookie(NextResponse.json({ error: "Tu sesión terminó. Inicia sesión de nuevo." }, { status: 401, headers }));
-    }
-    return fail(error);
-  }
+  return NextResponse.json({ user: session.identity }, { headers });
 }
 
 export async function DELETE(request: NextRequest) {
