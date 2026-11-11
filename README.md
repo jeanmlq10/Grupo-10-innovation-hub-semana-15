@@ -2,6 +2,10 @@
 
 Proyéctate reúne ideas y personas para crear proyectos universitarios. Este repositorio contiene dos clientes que usan el **mismo contrato de Roble**:
 
+## Video de la entrega
+
+[Ver la demo de los cambios de Flutter a React Native en YouTube](https://youtu.be/9NJa4Hqf84k).
+
 ## Organización del repositorio
 
 ```text
