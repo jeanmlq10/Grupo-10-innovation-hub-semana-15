@@ -23,6 +23,8 @@
 | 10 | A vuelve a poner el perfil público. B abre el perfil desde el proyecto, envía un mensaje y A responde. | Ambos clientes muestran la conversación; al desactivar el contacto de A, B no puede iniciar otra conversación. |
 | 11 | B sigue el proyecto, comenta y responde a un comentario desde su ficha. | Móvil muestra el seguimiento y los comentarios. `/perfil/actividad` y `/perfil/trayectoria` de B reflejan sus acciones. |
 | 12 | A crea en móvil una tarea «solo equipo». | A ve el título en su ficha web. B no ve el contenido en la ficha pública ni puede postularse a esa tarea por la ruta web. La edición web del proyecto se bloquea para preservar el contenido interno. |
+| 13 | A cambia una tarea de **Disponible** a **En progreso** y luego a **Completada** desde la ficha web. | El mismo estado aparece en móvil al recargar y en la trayectoria del participante aceptado, si lo hay. |
+| 14 | Con un proyecto de prueba sin usuarios reales, A pulsa **Eliminar proyecto** y confirma. | Desaparece de sus listas y del catálogo en web y móvil; B no puede abrir ni solicitar acceso por URL directa. La fila queda marcada con `deletedAt` en Roble. |
 
 ## Comprobaciones de aislamiento
 

@@ -8,7 +8,7 @@ El repositorio reúne la web Next.js en la raíz y la app Expo/React Native en `
 | --- | --- | --- |
 | Cuenta | `/`, `/registro`, `/verificar-correo`, `/login`, `/recuperar-contrasena`, `/restablecer-contrasena`, `/cuenta` | Registro, verificación, sesión y recuperación usan Roble. |
 | Explorar | `/explorar`, `/explorar/roble`, `/explorar/roble/[id]` | Catálogo y detalle de proyectos publicados, tareas públicas, búsqueda y filtros. Incluye postulación, comentarios, respuestas y seguimiento. |
-| Crear y gestionar | `/mis-proyectos`, `/mis-proyectos/roble`, `/proyectos/nuevo`, `/mis-proyectos/roble/[id]` | Borradores y publicación, edición, cupos, solicitudes y decisiones. Las tareas solo equipo se reconstruyen para quien creó el proyecto desde `project_task_private`. La web bloquea la edición de proyectos con tareas internas para no perder su privacidad. |
+| Crear y gestionar | `/mis-proyectos`, `/mis-proyectos/roble`, `/proyectos/nuevo`, `/mis-proyectos/roble/[id]` | Borradores y publicación, edición, cupos, solicitudes y decisiones. El creador puede cambiar el progreso de tareas y eliminar lógicamente un proyecto, igual que móvil. Las tareas solo equipo se reconstruyen para quien creó el proyecto desde `project_task_private`. La web bloquea la edición de proyectos con tareas internas para no perder su privacidad. |
 | Participación | `/postulaciones/roble`, `/notificaciones`, `/notificaciones/roble` | Estado de solicitudes y avisos de Roble; permite marcar avisos como leídos. |
 | Perfil | `/perfil`, `/perfil/editar`, `/perfil/privacidad`, `/perfil/ajustes/notificaciones`, `/perfil/trayectoria`, `/perfil/actividad`, `/usuarios/[id]` | Consulta y edición de `user_profiles`; trayectoria y actividad calculadas desde Roble. El perfil público respeta visibilidad, contacto y actividad privada dentro de la web. |
 | Mensajes | `/mensajes`, `/mensajes/[id]` | Lectura y envío de mensajes directos en Roble. |
@@ -19,7 +19,7 @@ Las rutas de demostración profunda `/proyectos/[id]` y `/proyectos/[id]/editar`
 
 - La app móvil muestra imágenes y documentos R2. La web aún no muestra portadas ni adjuntos y no permite cargarlos.
 - La web muestra las tareas internas al creador, pero no permite editarlas. Los miembros del equipo siguen usando móvil para consultarlas.
-- La web no gestiona asignación y progreso de tareas, ni eliminación de proyectos o perfil. Móvil sí cubre estos flujos.
+- La web permite cambiar el progreso de tareas y eliminar proyectos, pero aún no gestiona asignaciones individuales ni eliminación del perfil.
 - El perfil web usa los mismos campos que móvil; no gestiona foto de perfil porque móvil todavía ofrece iconos.
 - Los recordatorios automáticos y adjuntos de chat siguen pendientes también en móvil (`mobile/PENDIENTES.md`).
 - El asistente web no incorpora imagen ni documentos de proyecto y las tareas creadas desde web son públicas. Las tareas internas se crean desde móvil.
