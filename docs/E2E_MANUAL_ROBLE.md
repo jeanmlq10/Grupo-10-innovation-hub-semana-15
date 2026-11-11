@@ -25,6 +25,7 @@
 | 12 | A crea en móvil una tarea «solo equipo». | A ve el título en su ficha web. B no ve el contenido en la ficha pública ni puede postularse a esa tarea por la ruta web. La edición web del proyecto se bloquea para preservar el contenido interno. |
 | 13 | A cambia una tarea de **Disponible** a **En progreso** y luego a **Completada** desde la ficha web. | El mismo estado aparece en móvil al recargar y en la trayectoria del participante aceptado, si lo hay. |
 | 14 | Con un proyecto de prueba sin usuarios reales, A pulsa **Eliminar proyecto** y confirma. | Desaparece de sus listas y del catálogo en web y móvil; B no puede abrir ni solicitar acceso por URL directa. La fila queda marcada con `deletedAt` en Roble. |
+| 15 | A carga en móvil una portada y un documento PDF para un proyecto de prueba. Abre su ficha en web; B intenta verla antes y después de ser aceptado como integrante. | La portada aparece en la web. El documento es visible para A y para B solo después de aceptar su pertenencia al equipo. Las URLs de Roble son temporales y pueden requerir recargar la ficha. |
 
 ## Comprobaciones de aislamiento
 

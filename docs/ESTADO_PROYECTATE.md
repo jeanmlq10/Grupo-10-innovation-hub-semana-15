@@ -17,7 +17,7 @@ Las rutas de demostración profunda `/proyectos/[id]` y `/proyectos/[id]/editar`
 
 ## Diferencias conocidas respecto a móvil
 
-- La app móvil muestra imágenes y documentos R2. La web aún no muestra portadas ni adjuntos y no permite cargarlos.
+- La web muestra portadas R2 de proyectos accesibles y documentos al creador o a integrantes verificados. La carga de archivos continúa en móvil.
 - La web muestra las tareas internas al creador, pero no permite editarlas. Los miembros del equipo siguen usando móvil para consultarlas.
 - La web permite cambiar el progreso de tareas y eliminar proyectos, pero aún no gestiona asignaciones individuales ni eliminación del perfil.
 - El perfil web usa los mismos campos que móvil; no gestiona foto de perfil porque móvil todavía ofrece iconos.

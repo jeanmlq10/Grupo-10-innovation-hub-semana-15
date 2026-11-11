@@ -224,6 +224,11 @@ a { color: inherit; text-decoration: none; }
 .task-actions .solid-action { font-size: 12px; padding: 7px 10px; }
 .task-status-label { color: var(--muted); display: grid; font-size: 12px; gap: 4px; }
 .task-status-label select { background: #fff; border: 1px solid var(--line); border-radius: 8px; color: var(--primary); padding: 6px; }
+.project-cover-image { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
+.project-documents { margin: 18px 0; }
+.project-documents ul { margin: 10px 0 0; padding-left: 20px; }
+.project-documents li { margin: 8px 0; overflow-wrap: anywhere; }
+.project-documents a { color: var(--primary); font-weight: 700; }
 .demo-success { background: #f3ffc4; border-radius: 10px; color: var(--primary); font-size: 13px; margin: 0 0 16px; padding: 12px 16px; }
 .demo-message-label, .comment-form label { color: var(--primary); display: grid; font-size: 13px; font-weight: 700; gap: 8px; }
 .demo-message-label textarea, .comment-form textarea { border: 1px solid var(--line); border-radius: 9px; color: var(--primary); font: inherit; padding: 10px; resize: vertical; width: 100%; }

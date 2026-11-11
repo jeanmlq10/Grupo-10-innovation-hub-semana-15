@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AppShell } from "@/components/AppShell";
 import { Icon } from "@/components/Icon";
+import { RobleProjectFiles } from "@/components/RobleProjectFiles";
 import type { OwnRobleProjectDetail } from "@/lib/roble/own-project-detail";
 
 const tabs = ["Descripción", "Tareas", "Miembros", "Solicitudes"] as const;
@@ -102,7 +103,7 @@ function OwnRobleProject({ params }: { params: Promise<{ id: string }> }) {
     {status === "missing" && <div className="empty-panel"><Icon name="folder" size={36} /><h1>Proyecto no disponible</h1><p>Solo puedes consultar proyectos de tu cuenta.</p><Link href="/mis-proyectos/roble" className="outline-action">Volver a mis proyectos</Link></div>}
     {status === "error" && <div className="empty-panel" role="alert"><Icon name="folder" size={36} /><h1>No pudimos consultar Roble</h1><p>Inténtalo de nuevo más tarde. Tus datos no se han modificado.</p><Link href="/mis-proyectos/roble" className="outline-action">Volver a mis proyectos</Link></div>}
     {status === "ready" && project && <>
-      <div className="project-hero"><span className="project-hero-symbol"><Icon name="leaf" size={56} /></span></div>
+      <RobleProjectFiles projectId={id} />
       <div className="detail-heading"><span className="project-icon"><Icon name="leaf" size={28} /></span><div><h1>{project.name}</h1><span className={`badge ${project.isDraft ? "" : "success"}`}>{project.isDraft ? "Borrador" : project.audience === "Toda la comunidad" ? "Publicado" : "Privado"}</span></div><Link href={`/mis-proyectos/roble/${encodeURIComponent(id)}/editar`} className="outline-action">Editar proyecto</Link></div>
       {actionError && <p role="alert" className="wizard-error">{actionError}</p>}{actionSuccess && <p role="status" className="preview-note">{actionSuccess}</p>}
       <div className="detail-tabs" role="tablist" aria-label="Detalle del proyecto en Roble">{tabs.map(item => <button key={item} type="button" role="tab" aria-selected={tab === item} className={tab === item ? "active" : ""} onClick={() => setTab(item)}>{item}</button>)}</div>
@@ -112,6 +113,7 @@ function OwnRobleProject({ params }: { params: Promise<{ id: string }> }) {
         {tab === "Miembros" && <><h2>Equipo necesario</h2>{project.teamRoles.length === 0 ? <div className="empty-panel"><p>Este proyecto todavía no definió roles.</p></div> : <div className="content-grid">{project.teamRoles.map(role => <article className="surface-panel role-card" key={role.role}><Icon name="user" /><h3>{role.role}</h3><p>{Math.max(0, role.needed - role.accepted)} de {role.needed} cupos disponibles</p></article>)}</div>}{project.members.length > 0 && <div className="surface-panel"><h2>Miembros registrados</h2>{project.members.map(member => <p key={member.id}>{member.name}{member.role ? ` · ${member.role}` : ""}</p>)}</div>}</>}
         {tab === "Solicitudes" && <><h2>Solicitudes recibidas</h2>{project.requests.length === 0 ? <div className="empty-panel"><p>Todavía no hay solicitudes para este proyecto.</p></div> : project.requests.map(request => <article className="surface-panel roble-request" key={request.id}><div className="roble-request-heading"><h3>{request.applicantName}</h3><span className="badge">{request.status === "accepted" ? "Aceptada" : request.status === "rejected" ? "Rechazada" : "Pendiente"}</span></div><p>{request.type === "task" ? "Postulación a tarea" : "Solicitud de equipo"}{request.role ? ` · ${request.role}` : ""}</p>{request.message && <p>{request.message}</p>}{request.createdAt && <small>{dateLabel(request.createdAt)}</small>}{request.status === "pending" && <div className="roble-request-actions"><button type="button" className="solid-action" disabled={!!busyRequestId} onClick={() => decide(request.id, "accepted")}>{busyRequestId === request.id ? "Guardando…" : "Aceptar"}</button><button type="button" className="outline-action" disabled={!!busyRequestId} onClick={() => decide(request.id, "rejected")}>Rechazar</button></div>}</article>)}</>}
       </section><aside className="surface-panel detail-aside"><h2>Información rápida</h2><div className="project-meta"><span className="category-chip">{project.members.length} miembros</span><span className="category-chip">{project.tasks.length} tareas</span><span className="category-chip">{pending.length} solicitudes pendientes</span></div><p>Este resumen proviene de la misma base usada por la app móvil.</p><Link href="/mis-proyectos/roble" className="outline-action">Ver todos mis proyectos</Link><button type="button" className="outline-action" disabled={deleting} onClick={deleteProject}>{deleting ? "Eliminando…" : "Eliminar proyecto"}</button></aside></div>
+      <RobleProjectFiles projectId={id} section="documents" />
     </>}
   </AppShell>;
 }

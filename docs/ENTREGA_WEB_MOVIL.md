@@ -81,9 +81,10 @@ Los secretos y contraseñas de prueba nunca se añaden al repositorio.
   sus dos participantes ni la de `project_task_private` a miembros del equipo.
   La web filtra lo que presenta, pero esto **no protege la API directa**. No
   presentar esas tablas como privadas frente a usuarios autenticados maliciosos.
-- La web no muestra portadas ni adjuntos R2 ni permite editar tareas internas.
-  Se evita así publicar por accidente su contenido. Para estas operaciones,
-  usar la app móvil hasta completar la integración y la política de acceso.
+- La web muestra portadas R2 y documentos ya cargados por móvil a quien creó
+  el proyecto o pertenece al equipo. La carga de archivos y la edición de
+  tareas internas siguen en móvil. El contenido interno no aparece en la
+  ficha pública.
 - La web sí muestra tareas internas al creador cuando el contenido está en
   `project_task_private`; no las muestra en la ficha pública.
 - El contenido del PDF de pruebas incluye cuentas y contraseñas de referencia.
@@ -103,3 +104,5 @@ La guía visual móvil proporcionada es
 `DOCUMENTACION_VISUAL_APLICACION_MOVIL.pdf`. Esta entrega incorpora el código
 de la app y la guía de recorrido; el PDF se puede adjuntar por separado a la
 presentación si se necesita.
+
+Para grabar la explicación web, sigue `docs/GUION_VIDEO_WEB.md`.
