@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { AuthShell } from "@/components/AuthShell";
+import { AppShell } from "@/components/AppShell";
+import { Icon } from "@/components/Icon";
 
 type User = { userId: string; email: string; name: string };
 
@@ -38,25 +39,21 @@ export default function AccountPage() {
     finally { setBusy(false); }
   }
 
-  return <AuthShell headline="Tu identidad en Proyéctate." backHref="/perfil">
-    <h1>Mi cuenta</h1>
-    {status === "loading" && <p className="auth-subtitle" role="status">Verificando tu sesión con Roble…</p>}
-    {status === "signed-out" && <><p className="auth-subtitle">No hay una sesión activa.</p><Link className="auth-button primary" href="/login">Iniciar sesión</Link></>}
-    {status === "error" && <p className="auth-error" role="alert">No pudimos verificar la sesión. Recarga la página para intentarlo de nuevo.</p>}
-    {status === "ready" && user && <>
-      <p className="auth-subtitle">Esta identidad viene de Roble, el servicio compartido con la app móvil.</p>
-      <dl className="account-details">
-        {user.name && <><dt>Nombre</dt><dd>{user.name}</dd></>}
-        {user.email && <><dt>Correo</dt><dd>{user.email}</dd></>}
-        <dt>ID de usuario en Roble</dt><dd className="account-user-id">{user.userId}</dd>
-      </dl>
-      <p className="auth-pending">Esta es la misma cuenta que usas en la app móvil. Tus proyectos, solicitudes y avisos se consultan en Roble.</p>
-      {process.env.NODE_ENV === "development" && <Link className="auth-button primary" href="/perfil">Ir a mi perfil</Link>}
-      {process.env.NODE_ENV === "development" && <Link className="auth-button outline" href="/mis-proyectos/roble">Mis proyectos</Link>}
-      {process.env.NODE_ENV === "development" && <Link className="auth-button outline" href="/postulaciones/roble">Mis postulaciones</Link>}
-      {process.env.NODE_ENV === "development" && <Link className="auth-button outline" href="/notificaciones/roble">Notificaciones</Link>}
-      <button className="auth-button outline account-logout" type="button" onClick={logout} disabled={busy}>{busy ? "Cerrando sesión…" : "Cerrar sesión"}</button>
-      <p className="auth-switch"><Link href="/explorar/roble">Explorar proyectos</Link></p>
-    </>}
-  </AuthShell>;
+  return <AppShell backHref="/perfil">
+    <div className="account-page">
+      <header className="page-intro"><h1>Mi cuenta</h1><p>Tu identidad en Proyéctate</p></header>
+      {status === "loading" && <div className="empty-panel" role="status"><h2>Verificando tu sesión…</h2></div>}
+      {status === "signed-out" && <div className="empty-panel"><Icon name="user" size={36} /><h2>Inicia sesión para ver tu cuenta</h2><Link className="solid-action" href="/login">Iniciar sesión</Link></div>}
+      {status === "error" && <p className="auth-error" role="alert">No pudimos verificar la sesión. Recarga la página para intentarlo de nuevo.</p>}
+      {status === "ready" && user && <section className="surface-panel account-profile-card">
+        <div className="account-profile-heading"><span className="profile-avatar"><Icon name="user" size={30} /></span><div><h2>{user.name || "Tu cuenta"}</h2><p>Cuenta conectada a Roble</p></div></div>
+        <dl className="account-details">
+          {user.email && <><dt>Correo</dt><dd>{user.email}</dd></>}
+          <dt>ID de usuario</dt><dd className="account-user-id">{user.userId}</dd>
+        </dl>
+        <p className="account-explanation">Esta identidad es la que utilizas para consultar tus proyectos, solicitudes y mensajes.</p>
+        <button className="account-signout-link" type="button" onClick={logout} disabled={busy}>{busy ? "Cerrando sesión…" : "Cerrar sesión"}</button>
+      </section>}
+    </div>
+  </AppShell>;
 }

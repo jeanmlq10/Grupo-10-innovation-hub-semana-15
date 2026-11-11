@@ -78,6 +78,17 @@ a { color: inherit; text-decoration: none; }
 .account-details dd:last-child { margin-bottom: 0; }
 .account-user-id { color: var(--primary); font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 13px !important; }
 .account-logout { margin-top: 20px; }
+.account-page { max-width: 760px; margin: 0 auto; }
+.account-page .page-intro { margin-bottom: 28px; }
+.account-profile-card { padding: 28px; }
+.account-profile-heading { align-items: center; display: flex; gap: 16px; margin-bottom: 26px; }
+.account-profile-heading h2 { margin: 0 0 4px; }
+.account-profile-heading p { color: var(--muted); margin: 0; }
+.account-profile-card .account-details { margin-bottom: 18px; }
+.account-explanation { color: var(--muted); margin: 0 0 16px; }
+.account-signout-link { background: none; border: 0; color: var(--primary); cursor: pointer; font: inherit; font-weight: 700; padding: 8px 0; }
+.account-signout-link:hover { text-decoration: underline; }
+.account-signout-link:disabled { cursor: wait; opacity: .6; }
 .auth-switch { color: var(--muted); font-size: 14px; margin: 20px 0 0; text-align: center; }
 .auth-switch a { color: var(--primary); font-weight: 600; }
 .auth-shield { color: var(--primary); margin-bottom: 12px; }

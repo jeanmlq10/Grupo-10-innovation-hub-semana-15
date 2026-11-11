@@ -13,13 +13,12 @@ Duración sugerida: 4–5 minutos. Usa una cuenta de prueba y un proyecto de pru
 
 | Tiempo | Pantalla y acción | Qué decir |
 | --- | --- | --- |
-| 0:00–0:30 | Bienvenida e inicio de sesión. | «Esta es la versión web de Proyéctate, construida con Next.js y adaptada a escritorio y móvil. La cuenta es la misma que usa la aplicación móvil». No grabes al escribir la contraseña. |
-| 0:30–0:55 | **Mi cuenta**: muestra nombre y el identificador de Roble; puedes ocultar parte del correo. | «Ambos clientes consultan el mismo contrato de Roble; por eso la identidad y los datos del usuario se comparten». |
-| 0:55–1:35 | **Explorar**: busca por nombre o categoría, abre un proyecto y pasa por descripción, tareas y equipo. | «La web consulta proyectos publicados. Cada ficha muestra los roles, cupos y tareas disponibles; también permite seguir y comentar». Si existe portada, muéstrala aquí. |
+| 0:00–0:30 | Bienvenida e inicio de sesión; la web abre **Explorar** directamente. | «Esta es la versión web de Proyéctate, construida con Next.js y adaptada a escritorio y móvil. La cuenta es la misma que usa la aplicación móvil». No grabes al escribir la contraseña. |
+| 0:30–1:35 | **Explorar**: busca por nombre o categoría, abre un proyecto y pasa por descripción, tareas y equipo. | «La web consulta proyectos publicados. Cada ficha muestra los roles, cupos y tareas disponibles; también permite seguir y comentar». Si existe portada, muéstrala aquí. |
 | 1:35–2:10 | Con la cuenta B, pulsa **Unirme al equipo** o **Postularme a la tarea**, escribe un mensaje y envía. | «La solicitud queda registrada en Roble y la cuenta creadora recibe un aviso». Si solo tienes una cuenta, explica esta función sin simular un envío. |
 | 2:10–3:00 | Con la cuenta A, abre **Notificaciones** y **Mis proyectos → Solicitudes**; acepta la solicitud de prueba. | «La creadora decide desde la web. Al aceptar, se actualizan los cupos y el integrante aparece en el proyecto». Puedes mostrar la misma solicitud en móvil si la app está abierta. |
 | 3:00–3:40 | **Mis proyectos → Tareas**: cambia el estado de una tarea a **En progreso**. Después abre **Perfil → Trayectoria**. | «El progreso se guarda en Roble y puede verse desde los dos clientes. El perfil resume proyectos y participaciones». |
-| 3:40–4:20 | **Mensajes** o **Perfil → Editar perfil**: muestra una conversación de prueba o edita la biografía. | «Mensajes y perfil también usan la identidad compartida». No muestres conversaciones privadas de terceros. |
+| 3:40–4:20 | **Mensajes** o **Perfil → Editar perfil**: muestra una conversación de prueba o edita la biografía. Desde **Perfil → Mi cuenta de Roble** puedes mostrar el identificador compartido. | «Mensajes y perfil también usan la identidad compartida». No muestres conversaciones privadas de terceros. |
 | 4:20–4:40 | Regresa a **Explorar** o a la portada del proyecto. | «La experiencia web cubre exploración, creación, participación y seguimiento de proyectos con la identidad visual de Proyéctate». |
 
 ## Si algo falla durante la grabación
