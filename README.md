@@ -1,17 +1,31 @@
 # Proyéctate · Web y móvil
 
-Este repositorio contiene la web Next.js en la raíz y la app Expo/React Native
-en [`mobile/`](mobile/). Ambos clientes usan el mismo contrato de Roble y las
-mismas cuentas. La [guía de entrega web y móvil](docs/ENTREGA_WEB_MOVIL.md)
-explica cómo ejecutarlos, comprobar los flujos compartidos y grabar el video.
+Proyéctate reúne ideas y personas para crear proyectos universitarios. Este repositorio contiene dos clientes que usan el **mismo contrato de Roble**:
 
-El estado actualizado de vistas, diseño y conexión a Roble está en [docs/ESTADO_PROYECTATE.md](docs/ESTADO_PROYECTATE.md). El reparto previo entre Jean y Óscar queda documentado en `docs/REPARTO_JEAN_OSCAR.md`; Jean asumió la implementación web completa.
+| Carpeta | Aplicación | Cómo se abre |
+| --- | --- | --- |
+| Raíz (`src/`) | Web con Next.js y TypeScript | Navegador en `http://localhost:3000` |
+| [`mobile/`](mobile/) | App con Expo y React Native | Expo Go, emulador o compilación móvil |
 
-Cliente web de Proyéctate (Grupo 10), construido con Next.js y TypeScript. La nueva app móvil está en `mobile/`; la app Flutter original permanece en su repositorio histórico.
+Una persona puede iniciar sesión con la misma cuenta en ambos clientes y consultar los datos del contrato compartido. Cada cliente mantiene su propia sesión. La app Flutter original sigue en el [repositorio histórico](https://github.com/jeanmlq10/Grupo-10-innovation-hub).
 
-## Desarrollo local
+## Equipo y contribuciones
 
-Requiere Node.js 20.9 o superior.
+- **Jean y Óscar:** desarrollo de la parte web de Proyéctate.
+- **Andrew:** migración de la aplicación móvil de Flutter a React Native.
+- **Jean:** integración del trabajo y la documentación de ambos clientes en este repositorio único.
+
+Las partes se trabajaron localmente y Jean reunió los archivos en el repositorio final. Por eso en este repositorio solo aparecen commits de Jean: ese historial refleja quién integró y subió el trabajo, aunque el desarrollo de la web también fue de Óscar y la migración móvil fue de Andrew.
+
+## Requisitos
+
+- Node.js **24.3 o superior** y npm. Esta versión cubre los requisitos de la web y de `mobile/`.
+- Para probar en teléfono: Expo Go compatible con el SDK de `mobile/`, o un emulador/simulador.
+- Acceso al contrato `movil_flutter_dcaabc5f4e` de Roble para los flujos con datos reales.
+
+## Ejecutar la web
+
+Desde la raíz del repositorio:
 
 ```bash
 npm ci
@@ -19,39 +33,61 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Abrir `http://localhost:3000`. En desarrollo, `/login` autentica con la misma cuenta y contrato de Roble que usa la app móvil; `/cuenta` muestra el `userId` de Roble y permite cerrar sesión. Los tokens quedan solo en memoria del servidor de desarrollo y el navegador recibe una cookie protegida con un identificador aleatorio. Reiniciar el servidor termina la sesión. Este acceso está deshabilitado en compilaciones de producción.
+Abre [http://localhost:3000](http://localhost:3000). `.env.example` contiene la URL, el identificador de contrato y las opciones públicas de desarrollo; `.env.local` queda fuera de Git. No guardes contraseñas, códigos ni tokens en el repositorio.
 
-El [registro y la recuperación de contraseña](docs/FLUJOS_CUENTA_ROBLE.md) también funcionan en desarrollo: `/registro` envía el código institucional, `/verificar-correo` confirma la cuenta y permite reenviar el código, y `/recuperar-contrasena` lleva a `/restablecer-contrasena` con el token recibido. La web no persiste contraseñas ni códigos en archivos o almacenamiento del navegador.
+Al iniciar sesión, la web abre **Explorar proyectos**. Las rutas principales incluyen registro y verificación de correo, recuperación de contraseña, catálogo y detalle, creación y edición de proyectos, postulaciones, notificaciones, mensajes, perfil y cuenta.
 
-En desarrollo, después de iniciar sesión, la navegación principal usa Roble para explorar proyectos, crear y editar proyectos propios, gestionar postulaciones, ver avisos, consultar el perfil y enviar mensajes. El proyecto se guarda primero como borrador, luego sus tareas y al final se publica; si falla una etapa, se muestra el ID para revisar el resultado parcial. La web omite proyectos eliminados y tareas internas en vistas públicas. No establecer `ROBLE_PUBLIC_READ_ENABLED=true` hasta verificar y corregir la lectura pública de borradores en Roble. El archivo `.env.local` no se versiona. Ver el [guion E2E manual](docs/E2E_MANUAL_ROBLE.md) y la [guía de entrega](docs/ENTREGA_WEB_MOVIL.md).
+### Sesión web de desarrollo
 
-## Comprobaciones
+El navegador recibe una cookie `HttpOnly` con un identificador aleatorio. Los tokens de Roble se guardan en archivos privados del directorio temporal del sistema, no en el almacenamiento del navegador. La sesión dura hasta **8 horas**, salvo cierre de sesión o rechazo de autenticación de Roble. Sobrevive a la recarga de páginas y al reinicio del servidor local. Cuando varias vistas necesitan renovar el mismo token, la web coordina una sola renovación. Un rechazo de lectura de una tabla no debe cerrar la sesión.
+
+Esta implementación es **solo para desarrollo local**: los endpoints autenticados están deshabilitados fuera de `NODE_ENV=development`. Requiere una solución de sesión de producción y una revisión de permisos antes de desplegar la web con datos reales.
+
+## Ejecutar la app móvil
+
+En otra terminal, desde la raíz:
+
+```bash
+npm ci --prefix mobile
+npm run mobile:start
+```
+
+Escanea el QR con Expo Go. También puedes usar `npm run mobile:android` o `npm run mobile:ios`. Si el teléfono no comparte la red del computador, ejecuta `cd mobile && npx expo start --tunnel`. La configuración pública de Roble de la app está en `mobile/dart_defines.json`; consulta la [guía móvil](mobile/README.md) para configuración, pruebas y limitaciones de Expo Go.
+
+## Datos reales y demostración local
+
+La navegación autenticada consulta Roble para proyectos, solicitudes, avisos, perfil y mensajes. Un proyecto creado desde la web se guarda como borrador, se agregan sus tareas y luego se publica. Si el proceso falla a mitad de camino, la interfaz muestra el identificador para revisar el resultado antes de reintentar.
+
+La web conserva rutas de **demostración local** con cuentas ficticias A y B. Esos datos viven solo en el navegador y **no se sincronizan con Roble ni con móvil**. Sirven para presentar el diseño y los flujos si Roble no está disponible; no son evidencia de sincronización. Consulta [proyectos demo](docs/FLUJO_PROYECTOS_DEMO.md) y [comunicaciones demo](docs/FLUJO_COMUNICACIONES_DEMO.md).
+
+Si Roble responde con **429 (demasiados intentos)** durante el inicio de sesión, deja de reintentar hasta que el servicio permita otro acceso. Reiniciar Next.js no elimina un límite aplicado por Roble. Si una vista muestra un error de lectura, revisa la respuesta de la API y los permisos del contrato; la web no debe interpretar automáticamente ese error como cierre de sesión.
+
+## Verificación
 
 ```bash
 npm run lint
 npm test
 npm run build
+npm run mobile:check
+npm --prefix mobile run test:ci
 ```
 
-## Estado de la migración
+La [prueba E2E manual](docs/E2E_MANUAL_ROBLE.md) describe cómo comprobar los flujos con dos cuentas. El [guion del video web](docs/GUION_VIDEO_WEB.md) cubre solo la presentación en navegador. La [guía de entrega conjunta](docs/ENTREGA_WEB_MOVIL.md) explica cómo mostrar web y móvil en un mismo repositorio.
 
-La nueva identidad visual usa los logos y colores oficiales recibidos en `proyectate-identidad-visual.zip`. Ya hay rutas para las diez vistas principales del prototipo y para Mensajes y Configuración. Bienvenida y «Comencemos» se adaptaron a las nuevas capturas móviles. El [flujo de proyectos de demostración](docs/FLUJO_PROYECTOS_DEMO.md) permite crear borradores, publicarlos localmente, editarlos, seguirlos, comentar y revisar solicitudes con dos cuentas ficticias. La [guía de comunicaciones](docs/FLUJO_COMUNICACIONES_DEMO.md) cubre mensajes, avisos, leído y preferencias entre esas mismas cuentas. Esta persistencia vive solo en el navegador durante desarrollo. El inicio de sesión real y la escritura de proyectos en desarrollo están conectados con Roble.
+## Estado y límites
 
-**Pendiente antes de publicar datos reales:** la [auditoría de Roble](docs/ROBLE_ACCESS_AUDIT.md) confirmó el 9 de noviembre de 2026 que la API pública devuelve borradores y que una cuenta de prueba puede leer avisos de otros destinatarios. La consulta de proyectos propios es solo una comprobación de desarrollo: filtrar filas en Next.js no evita que alguien consulte directamente la API. El acceso privado debe protegerse en el backend para los dos clientes.
+- La interfaz usa el logo, la mascota y los colores oficiales de Proyéctate. El [estado de vistas](docs/ESTADO_PROYECTATE.md) y la [paridad visual](docs/PARIDAD_UI_WEB.md) detallan lo implementado.
+- Las portadas y los documentos de proyectos ya cargados pueden consultarse en la web según el acceso del usuario. La carga de archivos y la edición de tareas internas siguen en móvil.
+- La auditoría detectó que los permisos directos de Roble pueden exponer datos que la web oculta, incluidos borradores y datos privados. El filtrado en Next.js **no protege el acceso directo a la API**. Por eso `ROBLE_PUBLIC_READ_ENABLED` permanece en `false` y no se debe presentar el contrato como listo para producción. Véanse la [auditoría](docs/ROBLE_ACCESS_AUDIT.md) y el [plan de permisos](docs/PLAN_PERMISOS_ROBLE.md).
+- La sincronización entre clientes debe verificarse con dos cuentas y el contrato real antes de la entrega final. Un fallo temporal de Roble puede afectar las vistas reales sin afectar la demo local.
 
-La [corrección de permisos y solicitud al administrador](docs/PLAN_PERMISOS_ROBLE.md) describe la matriz de acceso y la secuencia compatible con la app móvil. La cuenta probada mostró el mismo `userId` en móvil y web; no se guarda ese identificador en Git.
+## Estructura y documentación
 
-Para presentar las capturas existentes según las cinco tareas solicitadas, usa la [guía de evidencias por tareas](docs/WIREFRAMES_POR_TAREAS.md) o su [PDF visual](docs/WIREFRAMES_POR_TAREAS_2026-11-09.pdf). Las [18 capturas completas](docs/EVIDENCIAS_FLUJOS_WEB_2026-11-09.pdf) están en un documento aparte.
+- `src/app/`: páginas y rutas API de la web.
+- `src/lib/roble/`: autenticación, sesiones y adaptación de datos de Roble.
+- `mobile/`: app Expo/React Native independiente, con sus propias dependencias.
+- `public/brand/`: recursos oficiales de marca.
+- `tests/`: pruebas de flujos, acceso y contrato.
+- `docs/`: [plan de migración](docs/MIGRACION_WEB.md), [prototipo visual](docs/disenos-web.html), [evidencias](docs/EVIDENCIAS_FLUJOS_WEB.md) y guías de prueba.
 
-Los [wireframes nuevos dibujados para esas cinco tareas](docs/WIREFRAMES_DISENADOS_POR_TAREAS.md) tienen su propio [PDF vectorial](docs/WIREFRAMES_DISENADOS_POR_TAREAS_2026-11-09.pdf). Las pantallas de gestión independiente de equipo están identificadas como propuesta, porque aún no son rutas de la aplicación.
-
-## Estructura
-
-- `src/app/`: rutas y presentación.
-- `mobile/`: app Expo/React Native independiente, con sus propios paquetes.
-- `src/lib/roble/`: adaptación de respuestas de Roble.
-- `tests/`: pruebas del contrato público.
-- `docs/disenos-web.html`: prototipo visual de referencia; sus datos y botones son demostrativos.
-- `.github/workflows/ci.yml`: lint, prueba y compilación.
-
-El plan completo está en [docs/MIGRACION_WEB.md](docs/MIGRACION_WEB.md).
+La integración continua ejecuta lint, pruebas y compilación de la web en cada push y pull request.
